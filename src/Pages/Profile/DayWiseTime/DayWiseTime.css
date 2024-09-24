@@ -1,0 +1,30 @@
+.flex-DayWiseTime{
+    display: flex;
+    flex-direction: row;
+    align-items: space-around;
+    justify-content: space-around;
+    gap: 200px;
+}
+
+.btn-DayWiseTime {
+    background-color: transparent !important;
+    border: 1px solid #c49871 !important;
+    height: 35px;
+    width: 150px;
+    outline: none !important; /* Removes the default outline */
+}
+
+.btn-DayWiseTime:active,
+.btn-DayWiseTime:focus {
+    border: 1px solid #c49871 !important;
+    outline: none !important; /* Prevents black border on focus */
+    box-shadow: none !important; /* Ensures no shadow on focus */
+}
+
+.btn-DayWiseTime:after {
+    border: 1px solid #c49871 !important;
+}
+.Main-DayWiseTime{
+    display: flex;
+    justify-content: center;
+}

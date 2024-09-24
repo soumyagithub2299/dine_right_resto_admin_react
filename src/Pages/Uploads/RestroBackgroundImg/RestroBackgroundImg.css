@@ -1,0 +1,44 @@
+.container-RestroBackgroundImg {
+  text-align: center;
+}
+.Heading-RestroBackgroundImg {
+  font-family: "Plus Jakarta Sans";
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 28px;
+  color: #c49871;
+}
+/* .image-upload-container {
+  width: "500px";
+  height: "200px";
+  border: "2px solid #ccc";
+  display: "flex";
+  justify-content: "center";
+  align-items: "center";
+  cursor: "pointer";
+  margin: "20px auto";
+} */
+.button-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  /* gap: 20px; */
+}
+.deletBtn-Backgroundimg {
+  background-color: rgb(223, 22, 22) !important;
+  color: white;
+  width: 100px;
+  margin: 6px 0;
+  border-radius: 5px;
+}
+.uploadBtn-Backgroundimg {
+  background-color: #2f4cdd !important;
+  color: white;
+  width: 100px;
+  margin: 6px 0;
+  border-radius: 5px;
+}
+.button-BackgroundImg{
+  display: flex;
+  align-items: center;
+}

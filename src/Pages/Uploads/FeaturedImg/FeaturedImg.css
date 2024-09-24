@@ -1,0 +1,42 @@
+.selected-images {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .image-thumbnail {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .image-thumbnail img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 2px;
+  }
+  
+  .remove-btn {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: black;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .flex-bookingPeriod-btn{
+    background-color: #c39873;
+    width: 520px;
+  }
+  .row-bookingPeriod{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
