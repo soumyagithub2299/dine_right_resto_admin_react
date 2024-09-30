@@ -41,7 +41,7 @@ const Guests = () => {
     <>
       {console.log('After',value)}
        <div className={`content-container ${value ? 'sidebar-open' : 'sidebar-closed'}`} >
-      {/* <div className="Headings-RestroAdmins">Guest List</div> */}
+      
      <TableGuest/>
     </div>
     </>

@@ -6,7 +6,6 @@ import MainCourse from "./MainCourse/MainCourse";
 import Dessert from "./Dessert/Dessert";
 import AddButtonMenu from "./AddButtonMenu/AddButtonMenu";
 import Appetizer from "./Appetizer/Appetizer";
-import Beverages from "./Beverages/Beverages";
 
 const Menu = () => {
 
@@ -52,7 +51,6 @@ const Menu = () => {
        <Salad/>
        <MainCourse/>
        <Dessert/>
-       <Beverages/>
     </div>
     </>
    

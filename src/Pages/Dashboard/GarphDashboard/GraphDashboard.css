@@ -8,7 +8,14 @@
     background-color: #ffffff;
 }
 /* Custom button styles */
-
+.container_Graph_Dashboard {
+    height: 300px;
+    margin-top: 120px;
+    margin-bottom: 80px;
+    border: 1px solid #E4E4E7;
+    border-radius: 5px;
+    padding: 10px;
+}
 
 /* Custom button styles */
 .custom-btn {
@@ -49,21 +56,4 @@ font-family: 'Plus Jakarta Sans';
 font-size: 11px;
 font-weight: 700;
 line-height: 18px;
-}
-.MainHeading-Graph{
-    display: flex;
-    justify-content: space-around;
-}
-
-@media (max-width: 765px){
-    .container_Graph_Dashboard{
-        height: 435px;
-    }
-    .MainHeading-Graph{
-        display: flex;
-        flex-direction: column;
-    }
-    .SalesReport_Graph_Dashboard{
-        text-align: center;
-    }
 }

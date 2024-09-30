@@ -5,12 +5,6 @@ import { FaCaretDown } from 'react-icons/fa';
 
 const AddMenuModal = ({ isOpen, onClose, onSubmit }) => {
   const [menuType, setMenuType] = useState(""); // State for menu type
-  const [beverageType, setBeverageType] = useState(""); // State for beverage type
-  const [imagePreview, setImagePreview] = useState(null); // State for image preview
-
-  const beverageOptions = ["Whisky", "Rum", "Vodka", "Gin", "Tequila","Brandy", "White Wine", "Red Wine", "Rose Wine", "Sparkling wine",
-    "Champagne", "Dessert Wine", "Beer", "Cider", "Cocktail","Mocktail","Liqueur", "Basics", 
-  ]; // Beverage types array
 
   if (!isOpen) return null;
 
@@ -19,24 +13,11 @@ const AddMenuModal = ({ isOpen, onClose, onSubmit }) => {
     const formData = new FormData(event.target);
     onSubmit({
       menuType,
-      beverageType: menuType === "Beverages" ? beverageType : null, // Submit beverage type only if "Beverages" is selected
       name: formData.get('name'),
       cost: formData.get('cost'),
       description: formData.get('description'),
-      image: formData.get('image'), // Added image to submission data
     });
     onClose(); // Close the modal after submission
-  };
-
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result); // Set the image preview URL
-      };
-      reader.readAsDataURL(file); // Read the file as a data URL
-    }
   };
 
   return (
@@ -62,25 +43,12 @@ const AddMenuModal = ({ isOpen, onClose, onSubmit }) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  fontSize: '24px', // Adjust icon size if necessary
-                  position: 'relative',
-                  overflow: 'hidden'
+                  fontSize: '24px' // Adjust icon size if necessary
                 }}
               >
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  style={{ display: 'none' }} 
-                  id="imageUpload" 
-                  name="image" // Added name for the image field
-                  onChange={handleImageChange} // Added onChange handler
-                />
+                <input type="file" accept="image/*" style={{ display: 'none' }} id="imageUpload" />
                 <label htmlFor="imageUpload" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}>
-                  {imagePreview ? (
-                    <img src={imagePreview} alt="Selected" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  ) : (
-                    <LuImagePlus />
-                  )}
+                  <LuImagePlus />
                 </label>
               </div>
             </div>
@@ -112,34 +80,14 @@ const AddMenuModal = ({ isOpen, onClose, onSubmit }) => {
                     }}
                   >
                     <option value="">Select...</option>
-                    <option value="Soup">Soup</option>
-                    <option value="Appetizer">Appetizer</option>
-                    <option value="Salad">Salad</option>
-                    <option value="Main Course">Main Course</option>
-                    <option value="Dessert">Dessert</option>
-                    <option value="Beverages">Beverages</option> {/* Added Beverages option */}
+                    <option value="Appetizer">Soup</option>
+                    <option value="Main Course">Salad</option>
+                    <option value="Dessert">Appetizer</option>
+                    <option value="Beverage">MainCourse</option>
+                    <option value="Beverage">Dessert</option>
                   </select>
                 </div>
               </div>
-
-              {/* Conditionally render Beverage Type dropdown */}
-              {menuType === "Beverages" && (
-                <div className="form-group">
-                  <label htmlFor="beverageType" className='SubHeading-Add-Menu'>Beverage Type:</label>
-                  <select
-                    className="form-control"
-                    value={beverageType}
-                    onChange={(e) => setBeverageType(e.target.value)}
-                    required
-                  >
-                    <option value="">Select Beverage Type</option>
-                    {beverageOptions.map((option, index) => (
-                      <option key={index} value={option}>{option}</option>
-                    ))}
-                  </select>
-                </div>
-              )}
-
               <div className="form-group">
                 <label htmlFor="name" className='SubHeading-Add-Menu'>Name:</label>
                 <input type="text" className="form-control" name="name" placeholder="Name" required /> {/* Added placeholder */}

@@ -26,7 +26,7 @@ const generateTimeOptions = () => {
 
 const timeOptions = generateTimeOptions();
 
-const AddService = ({ handleNext, handleBack }) => {
+const AddService = ({ handleNext }) => {
   const [hours, setHours] = useState(initialHours);
 
   const handleAddTime = (day) => {
@@ -65,15 +65,11 @@ const AddService = ({ handleNext, handleBack }) => {
     console.log('Submitted hours:', hours);
   };
 
-  const handleBackClick = () => {
-    handleBack(); // Navigate back to the previous step
-  };
-
   return (
     <div className="service-container my-5">
       <form className="service-form p-4 border rounded shadow-sm" onSubmit={handleSubmit}>
         <h2 className="login-head">
-          <FaAngleLeft onClick={handleBackClick} style={{ cursor: 'pointer' }} />
+          <FaAngleLeft style={{ cursor: 'pointer' }} />
           Add service hours
         </h2>
         <div className="row">
@@ -102,49 +98,49 @@ const AddService = ({ handleNext, handleBack }) => {
 
                 {hours[day].times.map((time, index) => (
                   <div className="time-label" key={index}>
-                    <div className="time-box mb-3">
-                      <label className="service-label">Start at</label>
-                      <div className="time-container d-flex align-items-center">
-                        <FaRegClock className="clock-icon" />
-                        <select
-                          className="form-control time-select"
-                          value={time.open}
-                          onChange={(e) => handleChange(day, index, 'open', e.target.value)}
-                          disabled={!hours[day].isOpen}
-                        >
-                          <option value="">_ _ : _ _</option>
-                          {timeOptions.map((timeOption) => (
-                            <option key={timeOption} value={timeOption}>
-                              {timeOption}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="time-box mb-3">
-                      <label className="service-label">End at</label>
-                      <div className="time-container d-flex align-items-center">
-                        <FaRegClock className="clock-icon2" />
-                        <select
-                          className="form-control time-select"
-                          value={time.close}
-                          onChange={(e) => handleChange(day, index, 'close', e.target.value)}
-                          disabled={!hours[day].isOpen}
-                        >
-                          <option value="">_ _ : _ _</option>
-                          {timeOptions.map((timeOption) => (
-                            <option key={timeOption} value={timeOption}>
-                              {timeOption}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+                  <div className="time-box mb-3">
+                    <label className="service-label">Start at</label>
+                    <div className="time-container d-flex align-items-center">
+                      <FaRegClock className="clock-icon" />
+                      <select
+                        className="form-control time-select"
+                        value={time.open}
+                        onChange={(e) => handleChange(day, index, 'open', e.target.value)}
+                        disabled={!hours[day].isOpen}
+                      >
+                        <option value="">_ _ : _ _</option>
+                        {timeOptions.map((timeOption) => (
+                          <option key={timeOption} value={timeOption}>
+                            {timeOption}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
+
+                  <div className="time-box mb-3">
+                    <label className="service-label">End at</label>
+                    <div className="time-container d-flex align-items-center">
+                      <FaRegClock className="clock-icon2" />
+                      <select
+                        className="form-control time-select"
+                        value={time.close}
+                        onChange={(e) => handleChange(day, index, 'close', e.target.value)}
+                        disabled={!hours[day].isOpen}
+                      >
+                        <option value="">_ _ : _ _</option>
+                        {timeOptions.map((timeOption) => (
+                          <option key={timeOption} value={timeOption}>
+                            {timeOption}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  </div>
                 ))}
-                {/* Uncomment to allow adding more service hours */}
-                {/* {hours[day].isOpen && (
+
+                {hours[day].isOpen && (
                   <button
                     type="button"
                     className="plus-btn"
@@ -152,7 +148,7 @@ const AddService = ({ handleNext, handleBack }) => {
                   >
                     <GoPlusCircle className='plus-icon'/>Add a new service hour
                   </button>
-                )} */}
+                )}
               </div>
             </div>
           ))}

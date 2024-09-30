@@ -1,50 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
-import LogoutModal from "./LogoutModal/LogoutModal";
+import React from "react";
 import "./DashboardNavbar.css";
 
 const DashboardNavbar = ({ toggleSidebar, isSidebarOpen }) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
-  const [notificationCount, setNotificationCount] = useState(0); // State to manage notification count
-  const dropdownRef = useRef(null); // To detect clicks outside the dropdown
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
-  // Open modal when logout is clicked
-  const handleLogoutClick = () => {
-    setIsModalOpen(true); // Open the modal
-    setIsDropdownOpen(false); // Close the dropdown
-  };
-
-  // Close modal
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false); // Close the dropdown
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   return (
     <nav className="navbar">
       <div className="leftside_navbar_dashboard">
         <div className="DineRightLogo_Dashboard">
           <img src="./assets/images/Dashboard_Navbar/Dine_icon.png" alt="Dine Icon" />
+          {/* Conditionally render DINERIGHT.png */}
           {isSidebarOpen && <img src="./assets/images/Dashboard_Navbar/DINERIGHT.png" alt="DineRight Logo" />}
         </div>
         <div className="Hamburger_Dashboard">
+          {/* Conditionally render Hamburger or Arrow based on isSidebarOpen */}
           {isSidebarOpen ? (
             <img
               className="Hamburger_MobileResponsive"
@@ -67,29 +34,12 @@ const DashboardNavbar = ({ toggleSidebar, isSidebarOpen }) => {
         <input className="Search_dashboard" type="text" placeholder="Search.." />
       </div>
 
-      <div className="Rightside_navbar_dashboard">
-        <div className="notification-bell">
-          <img src="./assets/images/Dashboard_Navbar/bell.png" alt="Bell Icon" className="notification-bell-img" />
-          <span className="notification-count">{notificationCount}</span> {/* Add the notification count */}
-        </div>
-        <div className="profile-dropdown" ref={dropdownRef}>
-          <img
-            src="./assets/images/Dashboard_Navbar/profile_nav.png"
-            alt="Profile"
-            onClick={toggleDropdown}
-            className="profile-img"
-          />
-          {isDropdownOpen && (
-            <ul className="dropdown-menu">
-              <li><a href="/profile">Profile</a></li>
-              <li><a onClick={handleLogoutClick}>Logout</a></li> {/* Open modal on logout */}
-            </ul>
-          )}
-        </div>
-      </div>
 
-      {/* Render the LogoutModal and pass the props to control it */}
-      <LogoutModal isOpen={isModalOpen} onClose={closeModal} />
+      <div className="Rightside_navbar_dashboard">
+        <img src="./assets/images/Dashboard_Navbar/bell.png" alt="" />
+        <img src="./assets/images/Dashboard_Navbar/profile_nav.png" alt="" />
+
+      </div>
     </nav>
   );
 };

@@ -36,17 +36,10 @@ const Login = () => {
         setStep(0); 
     };
 
-    const handleSignIn = () => {
-        // Add any sign-in logic if needed, such as validation or API calls
-
-        // After successful sign-in, navigate to the dashboard
-        navigate('/dashboard');
-    };
-
     return (
         <div className='main-container'>
             <div className="login-container">
-                <form className="login-form" onSubmit={(e) => { e.preventDefault(); handleSignIn(); }}>
+                <form className="login-form" onSubmit={(e) => e.preventDefault()}>
                     <h2 className='login-head'><FaAngleLeft /> Welcome Back </h2>
                     <label htmlFor="email" className='login-label'>Email</label>
                     <input

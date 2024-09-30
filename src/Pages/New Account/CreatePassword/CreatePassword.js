@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Form } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { FaAngleLeft } from 'react-icons/fa';
 import './CreatePassword.css'; 
 
-const CreatePassword = ({ handleNext, handleBack }) => { // Add handleBack here
+const CreatePassword = ({ handleNext }) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState([]);
@@ -30,26 +30,25 @@ const CreatePassword = ({ handleNext, handleBack }) => { // Add handleBack here
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setErrors([]); // Reset errors before validating
-        setSuccess(''); // Clear success message
+        handleNext();
+        setErrors([]);
+        setSuccess('');
 
         const { isValid, errors: validationErrors } = validatePassword(password);
 
-        // If the password doesn't meet the validation criteria, show the errors
         if (!isValid) {
             setErrors(validationErrors);
             return;
         }
 
-        // Check if passwords match
         if (password !== confirmPassword) {
             setErrors(prevErrors => [...prevErrors, 'Passwords do not match.']);
             return;
         }
 
-        // If validation passes, show success message and reset the form
+        
         setSuccess('Password has been reset successfully!');
-        handleNext(); // Move to the next step only after successful validation
+        
         setPassword('');
         setConfirmPassword('');
     };
@@ -58,10 +57,7 @@ const CreatePassword = ({ handleNext, handleBack }) => { // Add handleBack here
         <div className='new-verify-form'>
             <div className="verify-form-container">
                  <h2 className='login-head'>
-                     <FaAngleLeft 
-                         onClick={handleBack}  // Use handleBack for going back to previous step
-                         style={{ cursor: 'pointer' }} 
-                     /> 
+                     <FaAngleLeft  style={{ cursor: 'pointer' }} /> 
                      Create password 
                  </h2>
             <Form onSubmit={handleSubmit}>
@@ -74,7 +70,16 @@ const CreatePassword = ({ handleNext, handleBack }) => { // Add handleBack here
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                    
+                    {errors.length > 0 && (
+                        <div className="error-messages">
+                        {/* <p className='error-txt'></p> */}
+                            {errors.map((error, index) => (
+                                <div key={index} className="error-msg-txt">
+                                    {error}
+                                </div>
+                            ))}
+                        </div>
+                    )}
                     <Form.Label className='pass-label'>Confirm New Password</Form.Label>
                     <input
                         type="password"
@@ -84,21 +89,8 @@ const CreatePassword = ({ handleNext, handleBack }) => { // Add handleBack here
                         required
                     />
                     
-                    {/* Show error messages */}
-                    {errors.length > 0 && (
-                        <div className="error-messages">
-                            {errors.map((error, index) => (
-                                <div key={index} className="error-msg-txt">
-                                    {error}
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                    
-                    {/* Show success message */}
-                    {success && <div className="success-message">{success}</div>}
+                    {success && <div>{success}</div>}
                 </Form.Group>
-                
                 <button variant="primary" type="submit" className='login-btn'>
                     Save Changes
                 </button>

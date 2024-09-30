@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Stepper, Step, StepLabel, Box, StepConnector } from '@mui/material';
 import './NewAccount.css';
 import CreateAccount from './CreateAccount/CreateAccount';
-import RestroDetails from './RestroDetails/RestroDetails';
+import RestroDetails from './RestroDetails';
 import Verify from './VerifyAll/Verify';
 import CreatePassword from './CreatePassword/CreatePassword';
 import AddService from './AddServices/AddService';

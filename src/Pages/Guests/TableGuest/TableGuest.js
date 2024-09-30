@@ -5,7 +5,6 @@ import { RxCross2 } from "react-icons/rx";
 import { TbCornerUpLeft } from "react-icons/tb";
 import EditGuestModal from '../EditGuestModal/EditGuestModal';
 import ReactPaginate from 'react-paginate';
-import OrdersModal from '../OrdersModal/OrdersModal';
 
 const initialGuestData = [
   {
@@ -173,9 +172,6 @@ const TableGuest = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedGuest, setSelectedGuest] = useState(null);
 
-  const [showOrdersModal, setShowOrdersModal] = useState(false); // For Orders Modal
-  const [selectedOrderDetails, setSelectedOrderDetails] = useState(null); // Order Details
-
   const pageCount = Math.ceil(guestData.length / guestsPerPage);
 
   // Function to handle page change
@@ -219,21 +215,6 @@ const TableGuest = () => {
     handleCloseModal();
   };
 
-  const handleOrdersClick = (guest) => {
-    // Set order details dynamically (sample data here)
-    const orderDetails = {
-      items: ['Spinach Salad', 'Red Sauce Pasta', 'Margarita Pizza'],
-      comment: 'Birthday Celebration'
-    };
-    setSelectedOrderDetails(orderDetails);
-    setShowOrdersModal(true);
-  };
-
-  const handleCloseOrdersModal = () => {
-    setShowOrdersModal(false);
-    setSelectedOrderDetails(null);
-  };
-
   // Logic for displaying the current guests on the page
   const indexOfLastGuest = (currentPage + 1) * guestsPerPage;
   const indexOfFirstGuest = indexOfLastGuest - guestsPerPage;
@@ -253,8 +234,7 @@ const TableGuest = () => {
               <th scope="col">Status</th>
               <th scope="col">People</th>
               <th scope="col">Table</th>
-              {/* <th scope="col">Edit</th> Commented out Edit column */}
-              <th scope="col">Orders</th> {/* New Orders column */}
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
@@ -286,14 +266,13 @@ const TableGuest = () => {
                 </td>
                 <td className='text-guest'>{guest.people}</td>
                 <td className='text-guest'>{guest.table}</td>
-                {/* <td className='edit_guests' onClick={() => handleEditClick(guest)}>Edit</td> Commented out Edit link */}
-                <td className='edit_guests' onClick={() => handleOrdersClick(guest)}>Orders</td> {/* New Orders link */}
+                <td className='edit_guests' onClick={() => handleEditClick(guest)}>Edit</td>
               </tr>
             ))}
 
             {/* Pagination row */}
             <tr>
-              <td colSpan="10" className='pagination-row'>
+              <td colSpan="9" className='pagination-row'>
                 <ReactPaginate
                   previousLabel={'Previous'}
                   nextLabel={'Next'}
@@ -326,14 +305,6 @@ const TableGuest = () => {
           guest={selectedGuest}
           setGuest={setSelectedGuest}
           handleSubmit={handleSubmit}
-        />
-      )}
-
-      {selectedOrderDetails && (
-        <OrdersModal
-          show={showOrdersModal}
-          handleClose={handleCloseOrdersModal}
-          orderDetails={selectedOrderDetails} // Pass the order details
         />
       )}
     </div>

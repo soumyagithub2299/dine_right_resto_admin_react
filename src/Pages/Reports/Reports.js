@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../../Template/LayoutMain/LayoutMain/Layout.css";
-// import FullCalendarRestro from "./FullCalenderRestro/FullCalenderRestro";
 
-const BookSlot = () => {
+const Reports = () => {
 
   const [value, setValue] = useState(() => {
     const storedValue = localStorage.getItem('isSidebarOpen');
@@ -41,11 +40,11 @@ const BookSlot = () => {
       {console.log('After',value)}
        <div className={`content-container ${value ? 'sidebar-open' : 'sidebar-closed'}`} >
       
-     {/* <FullCalendarRestro/> */}
+     Bookings
     </div>
     </>
    
   );
 };
 
-export default BookSlot;
+export default Reports;

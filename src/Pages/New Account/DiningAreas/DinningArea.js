@@ -3,7 +3,7 @@ import { FaAngleLeft } from 'react-icons/fa';
 import { MdOutlineCancel } from "react-icons/md";
 import './DinningArea.css'; 
 
-const DinningArea = ({ handleNext, handleBack }) => { // Added handleBack prop
+const DinningArea = ({ handleNext }) => {
   const [selectedAreas, setSelectedAreas] = useState([]);
   const [availableAreas, setAvailableAreas] = useState([
     'Indoor',
@@ -36,22 +36,18 @@ const DinningArea = ({ handleNext, handleBack }) => { // Added handleBack prop
     setHoveredArea(area);
   };
 
-  const handleBackClick = () => {
-    handleBack(); // Navigate back to the previous step
-  };
-
   return (
     <div className='new-verify-form'>
       <div className='verify-form-container'>
         <h2 className='login-head'>
-          <FaAngleLeft onClick={handleBackClick} style={{ cursor: 'pointer' }} /> {/* Updated back icon */}
+          <FaAngleLeft className='back-icon' /> 
           Dining Areas
         </h2>
         <div className='selected-container'>
-          <p className='selected-txt'>
-            Add a minimum of 1 dining area. Once you finish creating 
-            your account, you will be able to add, remove or rename dining areas in settings.
-          </p>
+        <p className='selected-txt'>
+        Add a minimum of 1 dining area. Once you finish creating 
+        your account, you will be able to add, remove or rename dining areas in settings.
+        </p>
           <ul className='selected-areas'>
             {selectedAreas.map((area) => (
               <li key={area} className='select-list-item'>
