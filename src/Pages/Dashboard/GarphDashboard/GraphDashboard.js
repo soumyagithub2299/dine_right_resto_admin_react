@@ -147,7 +147,7 @@ const Graph_Dashboard = () => {
         <div className="container_Graph_Dashboard">
 
           {/* Time Range Buttons */}
-          <div className="d-flex justify-content-around mb-4">
+          <div className="MainHeading-Graph mb-4">
           <h2 className="SalesReport_Graph_Dashboard">Sales Report</h2>
             <button
               className={`custom-btn mx-2 ${timeRange === '12 Months' ? 'active' : ''}`}

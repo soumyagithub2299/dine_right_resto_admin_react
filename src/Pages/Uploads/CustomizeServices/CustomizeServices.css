@@ -1,0 +1,220 @@
+.service-button {
+  display: flex;
+  justify-content: center;
+}
+
+.service-btn {
+  display: block;
+  width: 50%;
+  padding: 10px;
+  border: none;
+  background-color: #007bff !important;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.service-btn:active {
+  outline: none;
+}
+.service-btn:hover {
+  background-color: #0056b3 !important;
+}
+
+.service-container {
+  display: flex;
+  width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.service-form {
+  background-color: #fff;
+}
+
+.day-box {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.day-name {
+  font-size: 19px;
+  font-weight: 500;
+}
+
+.CustomizeServices-box {
+  padding-left: 35px;
+  padding-right: 40px;
+}
+.service-label {
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 400;
+}
+.time-label {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.time-box {
+  margin-right: 35px;
+}
+
+.switch-container {
+  display: flex;
+  align-items: center;
+}
+
+.status {
+  margin-right: 10px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ffffff;
+  border: 3px solid black;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  right: 17px;
+  bottom: 1px;
+  background-color: rgb(0, 0, 0);
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #ffffff;
+  border: 3px solid black;
+  margin-bottom: 0;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(13px);
+}
+
+.slider.round {
+  border-radius: 34px;
+  margin-bottom: 0px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.status-label {
+  margin-left: 30px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #333;
+}
+
+.time-container {
+  position: relative; /* Allows positioning of children relative to this container */
+  display: flex;
+  align-items: center;
+}
+
+.time-select {
+  padding-left: 40px; /* Add padding to the left to make room for the icon */
+  flex-grow: 1;
+}
+
+.clock-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #f49b33;
+  width: 22px;
+  height: 20px;
+}
+.clock-icon2 {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #f49b33;
+  width: 22px;
+  height: 20px;
+}
+
+.plus-btn {
+  padding: 10px 0px;
+  display: inline-block;
+  font-weight: 400;
+  color: #00c689;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  transition: none;
+}
+.plus-btn:focus {
+  outline: none;
+}
+
+.plus-icon {
+  margin: 0px 9px 1px;
+}
+.row-CustomizeServices {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 765px) {
+  .day-box {
+    margin-bottom: 15px;
+  }
+
+  .service-form {
+    width: 100%;
+  }
+  .service-container {
+    width: 100%;
+  }
+  .CustomizeServices-box {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
+  .time-label {
+    display: block;
+  }
+}

@@ -89,7 +89,7 @@ const Sidebar = ({ isOpen }) => {
               <span>Guests</span>
             </li>
           </Link>
-
+{/* 
           <Link to="/orders" className="link">
             <li
               className={`menu-item ${
@@ -97,22 +97,10 @@ const Sidebar = ({ isOpen }) => {
               }`}
               onClick={() => handleItemClick("/orders")}
             >
-              {/* <img src="./assets/images/Sidebar/bell.png" alt="Orders" /> */}
               <IoNotificationsOutline />
               <span>Orders</span>
             </li>
-          </Link>
-
-          <Link to="/menu">
-            <li
-              className={`menu-item ${activeItem === "/menu" ? "active" : ""}`}
-              onClick={() => handleItemClick("/menu")}
-            >
-              {/* <img src="./assets/images/Sidebar/menu.png" alt="Menu" /> */}
-              <PiCookingPot />
-              <span>Menu</span>
-            </li>
-          </Link>
+          </Link> */}
 
           <Link to="/course">
             <li
@@ -121,9 +109,18 @@ const Sidebar = ({ isOpen }) => {
               }`}
               onClick={() => handleItemClick("/course")}
             >
-              {/* <img src="./assets/images/Sidebar/Course.png" alt="Course" /> */}
               <MdOutlineFolder />
               <span>Course</span>
+            </li>
+          </Link>
+
+          <Link to="/menu">
+            <li
+              className={`menu-item ${activeItem === "/menu" ? "active" : ""}`}
+              onClick={() => handleItemClick("/menu")}
+            >
+              <PiCookingPot />
+              <span>Menu</span>
             </li>
           </Link>
 
@@ -140,16 +137,15 @@ const Sidebar = ({ isOpen }) => {
             </li>
           </Link>
 
-          <Link to="/reports">
+          <Link to="/uploads">
             <li
               className={`menu-item ${
-                activeItem === "/reports" ? "active" : ""
+                activeItem === "/uploads" ? "active" : ""
               }`}
-              onClick={() => handleItemClick("/reports")}
+              onClick={() => handleItemClick("/uploads")}
             >
-              {/* <img src="./assets/images/Sidebar/reports.png" alt="Reports" /> */}
               <TbGraph />
-              <span>Reports</span>
+              <span>Uploads</span>
             </li>
           </Link>
 
@@ -171,20 +167,20 @@ const Sidebar = ({ isOpen }) => {
         {/* Bottom Section */}
         <div className="sidebar-bottom">
           <ul className="sidebar-menu">
-            <Link to="/settings">
+            {/* <Link to="/settings">
               <li
                 className={`menu-item ${
                   activeItem === "/settings" ? "active" : ""
                 }`}
                 onClick={() => handleItemClick("/settings")}
               >
-                {/* <img src="./assets/images/Sidebar/settings.png" alt="Settings" /> */}
+               
                 <IoSettingsOutline />
                 <span>Settings</span>
               </li>
-            </Link>
+            </Link> */}
 
-            <Link to="/logout">
+            <Link to="/login">
               <li
                 className={`menu-item ${
                   activeItem === "/logout" ? "active" : ""

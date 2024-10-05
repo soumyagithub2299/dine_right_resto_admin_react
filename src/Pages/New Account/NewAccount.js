@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import { Stepper, Step, StepLabel, Box, StepConnector } from '@mui/material';
 import './NewAccount.css';
 import CreateAccount from './CreateAccount/CreateAccount';
-import RestroDetails from './RestroDetails';
-import Verify from './VerifyAll/Verify';
+import RestroDetails from './RestroDetails/RestroDetails';
 import CreatePassword from './CreatePassword/CreatePassword';
 import AddService from './AddServices/AddService';
 import DinningArea from './DiningAreas/DinningArea';
-import VerifyEmail from './VerifyAll/VerifyEmail';
 import AddTable from './AddTable/AddTable';
+import VerifyEmailOTP from './VerifyAll/VerifyEmailOTP';
 
 const CustomStepConnector = (props) => (
   <StepConnector {...props} className="custom-step-connector" />
@@ -42,7 +41,7 @@ const NewAccount = () => {
   const stepContents = [
     <CreateAccount handleNext={handleNext} />,
     <RestroDetails handleNext={handleNext} handleBack={handleBack} />,
-    <Verify handleNext={handleNext} handleBack={handleBack} />,
+    <VerifyEmailOTP handleNext={handleNext} handleBack={handleBack} />,
     <CreatePassword handleNext={handleNext} handleBack={handleBack} />,
     <AddService handleNext={handleNext} handleBack={handleBack} />,
     <DinningArea handleNext={handleNext} handleBack={handleBack} />,

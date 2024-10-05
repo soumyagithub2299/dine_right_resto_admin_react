@@ -1,0 +1,49 @@
+.modal-body-Add-Menu {
+  overflow-y: auto; /* Allow vertical scrolling */
+  max-height: 70vh;
+  scrollbar-width: none;
+}
+
+.modal-body-Add-Menu::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for WebKit browsers (Chrome, Safari) */
+}
+
+/* modal btn  */
+.btn-AddMenuModal {
+  background-color: #2f4cdd !important;
+  color: white;
+  width: 400px;
+  height: 41px;
+  border-radius: 8px;
+  font-family: "Inter";
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+.Main-btn-AddMenuModal {
+  text-align: center;
+  position: relative;
+  top: 9px;
+}
+.modal-header-Add-menu {
+  text-align: center;
+}
+.modal-title-Add-menu {
+  font-family: "Inter";
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 44px;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: #101828;
+}
+.SubHeading-Add-Menu {
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #101828;
+}
+
+
+/* cenerd  */

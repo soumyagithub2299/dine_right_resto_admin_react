@@ -1,0 +1,17 @@
+.Update-EditMenuModal {
+  background-color: #2f4cdd !important;
+  color: white;
+  width: 120px;
+    height: 41px;
+    border-radius: 8px;
+}
+.Close-EditMenuModal {
+    width: 100px;
+    height: 41px;
+    border-radius: 8px;
+  background-color: rgb(223, 22, 22) !important;
+  color: white;
+}
+.Modal {
+  cursor: pointer;
+}

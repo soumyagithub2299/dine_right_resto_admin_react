@@ -7,22 +7,18 @@ import { HiPlusSmall } from "react-icons/hi2";
 import { BiMinus } from "react-icons/bi";
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
-const AddTable = () => {
-    // Separate state for Main Dining and Bar Area
-    const [mainDiningRows, setMainDiningRows] = useState([{ number: 1 }]);
-    const [barAreaRows, setBarAreaRows] = useState([{ number: 1 }]);
+const AddTable = ({ handleBack }) => { // Added handleBack prop
+    const [mainDiningRows, setMainDiningRows] = useState([{ number: 1, name: '' }]); // Added name property
+    const [barAreaRows, setBarAreaRows] = useState([{ number: 1, name: '' }]); // Added name property
 
-    // Initialize useNavigate hook
     const navigate = useNavigate();
 
-    // Function to handle increment for a specific row in a specific section
     const handleIncrement = (section, index) => {
         const newRows = section === 'mainDining' ? [...mainDiningRows] : [...barAreaRows];
         newRows[index].number += 1;
         section === 'mainDining' ? setMainDiningRows(newRows) : setBarAreaRows(newRows);
     };
 
-    // Function to handle decrement for a specific row in a specific section
     const handleDecrement = (section, index) => {
         const newRows = section === 'mainDining' ? [...mainDiningRows] : [...barAreaRows];
         if (newRows[index].number > 1) {
@@ -31,14 +27,12 @@ const AddTable = () => {
         }
     };
 
-    // Function to add a new row to a specific section
     const addRow = (section) => {
         section === 'mainDining'
-            ? setMainDiningRows([...mainDiningRows, { number: 1 }])
-            : setBarAreaRows([...barAreaRows, { number: 1 }]);
+            ? setMainDiningRows([...mainDiningRows, { number: 1, name: '' }]) // Added name property
+            : setBarAreaRows([...barAreaRows, { number: 1, name: '' }]); // Added name property
     };
 
-    // Function to remove the last row from a specific section
     const removeRow = (section) => {
         if (section === 'mainDining') {
             if (mainDiningRows.length > 1) {
@@ -51,16 +45,30 @@ const AddTable = () => {
         }
     };
 
-    // Function to handle confirm button click and navigate to /dashboard
     const handleConfirm = () => {
         navigate('/dashboard');
     };
 
+    const handleBackClick = () => {
+        handleBack(); // Navigate back to the previous step
+    };
+
+    const handleTableNameChange = (section, index, value) => {
+        const newRows = section === 'mainDining' ? [...mainDiningRows] : [...barAreaRows];
+        newRows[index].name = value; // Update the table name
+        section === 'mainDining' ? setMainDiningRows(newRows) : setBarAreaRows(newRows);
+    };
+
     return (
         <div className='container Main_AddTable my-5'>
-            <p className='Heading_AddTable mb-4'><IoIosArrowBack className='icon_heading_AdTable' />ADD TABLE</p>
-            <p className='Paragraph_AddTable mb-3'> &nbsp; Add at least 1 table per dining area. Once you finish creating your account,
-                you will be able to add or remove tables in your Floor Map settings.</p>
+            <p className='Heading_AddTable mb-4'>
+                <IoIosArrowBack onClick={handleBackClick} style={{ cursor: 'pointer' }} /> {/* Updated back icon */}
+                ADD TABLE
+            </p>
+            <p className='Paragraph_AddTable mb-3'>
+                &nbsp; Add at least 1 table per dining area. Once you finish creating your account,
+                you will be able to add or remove tables in your Floor Map settings.
+            </p>
 
             {/* Main Dining Section */}
             <div className='MainDining_AddTable mb-5'>
@@ -72,7 +80,13 @@ const AddTable = () => {
                                 <div>
                                     <div className='Subheading2_AddTable'>TABLE NAME</div>
                                     <div className='component1'>
-                                        E.g.: Table {index + 1}
+                                        <input
+                                            type='text'
+                                            value={row.name} // Get the table name from state
+                                            placeholder={`E.g.: Table ${index + 1}`} // Placeholder
+                                            onChange={(e) => handleTableNameChange('mainDining', index, e.target.value)} // Handle input change
+                                            className='table-name-input' // Add a class for styling if needed
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -108,7 +122,13 @@ const AddTable = () => {
                                 <div>
                                     <div className='Subheading2_AddTable'>TABLE NAME</div>
                                     <div className='component1'>
-                                        E.g.: Table {index + 1}
+                                        <input
+                                            type='text'
+                                            value={row.name} // Get the table name from state
+                                            placeholder={`E.g.: Table ${index + 1}`} // Placeholder
+                                            onChange={(e) => handleTableNameChange('barArea', index, e.target.value)} // Handle input change
+                                            className='table-name-input' // Add a class for styling if needed
+                                        />
                                     </div>
                                 </div>
                             </div>

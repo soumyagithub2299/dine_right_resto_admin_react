@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "../../Template/LayoutMain/LayoutMain/Layout.css";
+import AddButtonMenu from "./AddButtonMenu/AddButtonMenu";
+import Course2 from "./Course2/Course2";
+import Course3 from "./Course3/Course3";
+import Course4 from "./Course4/Course4";
+import Course5 from "./Course5/Course5";
+// import Customize from "./Customize/Customize";
 
 const Course = () => {
 
@@ -39,8 +45,14 @@ const Course = () => {
     <>
       {console.log('After',value)}
        <div className={`content-container ${value ? 'sidebar-open' : 'sidebar-closed'}`} >
-      
-     Bookings
+        <div className="mt-5">
+       {/* <AddButtonMenu/> */}
+       <Course2/>
+       <Course3/>
+       <Course4/>
+       <Course5/>
+       {/* <Customize/> */}
+       </div>
     </div>
     </>
    

@@ -1,0 +1,14 @@
+.fc-direction-ltr .fc-button-group > .fc-button:not(:last-child) {
+  color: black !important;
+  background-color: transparent !important;
+  border: none !important;
+}
+.fc-direction-ltr .fc-button-group > .fc-button:not(:first-child) {
+  color: black !important;
+  background-color: transparent !important;
+  border: none !important;
+}
+.fc-license-message {
+    display: none !important;
+  }
+  

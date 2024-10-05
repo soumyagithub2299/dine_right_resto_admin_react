@@ -1,0 +1,70 @@
+.heading-Profile {
+  font-family: "Plus Jakarta Sans";
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 28px;
+  color: #c49871;
+  /* text-decoration: underline; */
+}
+.SubHeading-Profile {
+  font-family: "Plus Jakarta Sans";
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 28px;
+  text-align: left;
+  color: #c49871;
+  text-decoration: underline;
+}
+.MainInfo-Owner {
+  display: flex;
+  justify-content: space-between;
+}
+.CommisionField-Owner {
+  font-family: "Plus Jakarta Sans";
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 28px;
+  color: #c49871;
+}
+.Approved-Owner {
+  font-family: "Inter";
+  font-size: 16px;
+  font-weight: 600;
+  color: #027a48;
+  background: #ecfdf3;
+  border-radius: 16px;
+  padding: 2px 8px 2px 6px;
+  width: 110px;
+  text-align: center;
+}
+.Unapproved-Owner {
+  font-family: "Inter";
+  font-size: 16px;
+  font-weight: 600;
+  color: #b42318;
+  background: #fef3f2;
+  border-radius: 16px;
+  padding: 2px 8px 2px 6px;
+  width: 120px;
+  text-align: center;
+}
+@media (max-width: 765px) {
+  .heading-Profile {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .CommisionField-Owner {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .Unapproved-Owner {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 13px 8px 2px 6px;
+  }
+  .Approved-Owner {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 13px 8px 2px 6px;
+  }
+}

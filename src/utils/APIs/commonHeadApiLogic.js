@@ -1,17 +1,17 @@
 import axios from "axios";
-import { decryptData } from "./CRYPTO/cryptoFunction";
+import { decryptData } from "../CRYPTO/cryptoFunction";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import React, { useEffect } from "react";
 
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_DINE_RIGHT_USER_WEBSITE_BASE_API_URL,
+  baseURL: process.env.REACT_APP_DINE_RIGHT_RESTRO_ADMIN_WEBSITE_BASE_API_URL,
   timeout: 30000,
 });
 
 // Create a new Axios instance without setting the Authorization header
 const axiosInstanceNoAuth = axios.create({
-  baseURL: process.env.REACT_APP_DINE_RIGHT_USER_WEBSITE_BASE_API_URL,
+  baseURL: process.env.REACT_APP_DINE_RIGHT_RESTRO_ADMIN_WEBSITE_BASE_API_URL,
   timeout: 30000,
 });
 
@@ -36,7 +36,9 @@ axiosInstance.interceptors.response.use(
 );
 
 export function authorizeMe() {
-  const encryptedTokenForDineRightUser = localStorage.getItem("encryptedTokenForDineRightUser");
+  const encryptedTokenForDineRightUser = localStorage.getItem(
+    "encryptedTokenForDineRightUser"
+  );
 
   const token = decryptData(encryptedTokenForDineRightUser);
 
@@ -53,7 +55,6 @@ axiosInstance.interceptors.request.use(async (config) => {
   return config;
 });
 
-
 const App = () => {
   useEffect(() => {
     authorizeMe();
@@ -61,11 +62,8 @@ const App = () => {
 
   // Your component code here
 
-  return (
-  <>
-  </>
-  );
+  return <></>;
 };
 
 export default App;
-export { axiosInstance , axiosInstanceNoAuth};
+export { axiosInstance, axiosInstanceNoAuth };

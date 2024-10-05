@@ -1,0 +1,25 @@
+.row-bookingPeriod {
+  display: flex;
+  flex-direction: column;
+}
+.btn-bookingPeriod {
+  background-color: transparent !important;
+  border: 1px solid #c49871 !important;
+  height: 35px;
+  width: 95px;
+}
+.btn-bookingPeriod:hover {
+  background-color: #c49871 !important;
+}
+.flex-bookingPeriod-btn {
+  display: flex;
+  justify-content: space-between;
+}
+@media (max-width: 700px) {
+  .flex-bookingPeriod-btn {
+    display: block;
+  }
+  .btn-bookingPeriod{
+    margin: 9px;
+  }
+}

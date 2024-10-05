@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "../../Template/LayoutMain/LayoutMain/Layout.css";
+import Owner from "./Owner/Owner";
+import RestroDetailsAdmin from "./RestroDetailsAdmin/RestroDetailsAdmin";
+import Savebtn from "./Savebtn/Savebtn";
 
 
 const Profile = () => {
@@ -41,7 +44,9 @@ const Profile = () => {
       {console.log('After',value)}
        <div className={`content-container ${value ? 'sidebar-open' : 'sidebar-closed'}`} >
       
-     Bookings
+     <Owner/>
+     {/* <RestroDetailsAdmin/> */}
+     {/* <Savebtn/> */}
     </div>
     </>
    

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../Template/LayoutMain/LayoutMain/Layout.css";
+import BookingTable from "./BookingTable/BookingTable";
 
 const Bookings = () => {
 
@@ -40,7 +41,7 @@ const Bookings = () => {
       {console.log('After',value)}
        <div className={`content-container ${value ? 'sidebar-open' : 'sidebar-closed'}`} >
       
-     Bookings
+     <BookingTable/>
     </div>
     </>
    

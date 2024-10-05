@@ -1,0 +1,214 @@
+.table-guest {
+    border-radius: 8px;
+    background-color: #ffffff;
+    border: 1px solid #EAECF0 !important;
+    /* overflow: hidden;  */
+  }
+  
+  .heading_guest {
+    background-color: #F9FAFB;
+    font-family: 'Inter';
+    font-weight: 500;
+    font-size: 12px;
+    color: #667085;
+  }
+  .id-guest{
+    font-family: 'Inter';
+    font-weight: 500;
+    font-size: 12px;
+    color: #667085;
+  }
+  /* for table border  */
+  .table-guest th,
+  .table-guest td {
+    border-top: 1px solid #EAECF0;
+    border-bottom: 1px solid #EAECF0;
+    border-left: none;
+    border-right: none;
+    cursor: pointer;
+  }
+  .table-guest td {
+    position: relative;
+    top: 6px;
+  }
+  
+  
+  /* css for table component  */
+  .edit_guests {
+    font-family: 'Inter';
+    color: #6941C6;
+    font-weight: 500;
+    font-size: 12px;
+  }
+  
+  /* for status  */
+  /* General styles for status cells */
+  
+  
+  /* Status specific colors */
+  .status.booked {
+    font-family: 'Inter';
+    color: #027A48;
+    font-weight: 500;
+    font-size: 12px;
+  }
+  
+  .status.cancelled {
+    font-family: 'Inter';
+    color: #B42318;
+    font-weight: 500;
+    font-size: 12px;
+  }
+  
+  .status.waiting {
+    font-family: 'Inter';
+    color: #344054;
+    font-weight: 500;
+    font-size: 12px;
+  }
+  
+  .status-background-booked {
+    background: #ECFDF3;
+    border-radius: 16px;
+    padding: 2px 8px 2px 6px;
+    width: 110px;
+    text-align: center;
+  }
+  
+  .status-background-cancelled {
+    font-family: 'Inter';
+    background: #FEF3F2;
+    border-radius: 16px;
+    padding: 2px 8px 2px 6px;
+    width: 110px;
+    text-align: center;
+  }
+  
+  .status-background-waiting {
+    font-family: 'Inter';
+    background: #F2F4F7;
+    border-radius: 16px;
+    padding: 2px 8px 2px 6px;
+    width: 110px;
+    text-align: center;
+  }
+  
+  
+  /* for name section  */
+  .pic-email-guest {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 22px;
+  }
+  
+  .name-email-guest {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-content: flex-start;
+  }
+  .img-guest{
+    width: 32px;
+    height: 32px;
+    border-radius: 200px;
+  }
+  .name-guest{
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 12px;
+    color: #101828;
+  
+  }
+  .email-guest{
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 11px;
+    color: #667085;
+  }
+  .container-guest{
+    position: relative;
+    right: 30px;
+  }
+  .text-guest{
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 14px;
+    color: #667085;
+  }
+  
+  /* pagination css */
+  .pagination-row {
+    text-align: center; /* Center the pagination container */
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center; /* Center the pagination items */
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    gap: 3px;
+  }
+  
+  .page-item {
+    display: inline;
+  }
+  
+  .page-link {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin: 0;
+    line-height: 1.25;
+    color: #EAECF0; /* Adjust color as needed */
+    text-align: center;
+    /* background-color: #7F56D9; */
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    z-index: 0;
+  }
+  
+  .page-item:first-child {
+    margin-right: auto; /* Push the previous button to the left */
+  }
+  
+  .page-item:last-child {
+    margin-left: auto; /* Push the next button to the right */
+  }
+  
+  .page-item.active .page-link {
+    background-color: #EAECF0;
+    border-color: #EAECF0;
+    color: #7F56D9;
+    z-index: 0;
+  }
+  
+  .page-item.disabled .page-link {
+    color: #6c757d;
+    cursor: not-allowed;
+    background-color: #fff;
+    border-color: #dee2e6;
+  }
+  
+  .page-item.disabled .page-link:hover {
+    background-color: #fff;
+    z-index: 0;
+  }
+  
+  .pagination .page-link {
+    /* color: #007bff; */
+    border: none;
+    color:#667085;
+  }
+  
+  .pagination .page-item + .page-item {
+    /* margin-left: 40%; */
+  }
+  
+  .pagination .page-item {
+    /* margin: 0 0.25rem; */
+  }
+  

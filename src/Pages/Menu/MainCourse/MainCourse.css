@@ -1,92 +1,132 @@
-[type=button]:not(:disabled),
-[type=reset]:not(:disabled),
-[type=submit]:not(:disabled),
+[type="button"]:not(:disabled),
+[type="reset"]:not(:disabled),
+[type="submit"]:not(:disabled),
 button:not(:disabled) {
-    cursor: pointer;
-    border: none;
-    background-color: transparent;
-    outline: none;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  outline: none;
 }
 
-[type=button]:not(:disabled):focus,
-[type=reset]:not(:disabled):focus,
-[type=submit]:not(:disabled):focus,
+[type="button"]:not(:disabled):focus,
+[type="reset"]:not(:disabled):focus,
+[type="submit"]:not(:disabled):focus,
 button:not(:disabled):focus {
-    outline: none;
-    box-shadow: none;
+  outline: none;
+  box-shadow: none;
 }
 
-[type=button]:not(:disabled):active,
-[type=reset]:not(:disabled):active,
-[type=submit]:not(:disabled):active,
+[type="button"]:not(:disabled):active,
+[type="reset"]:not(:disabled):active,
+[type="submit"]:not(:disabled):active,
 button:not(:disabled):active {
-    outline: none;
-    box-shadow: none;
-    border: none;
+  outline: none;
+  box-shadow: none;
+  border: none;
 }
-
-
 
 .AccordionHeader {
-    font-family: 'Plus Jakarta Sans';
-    font-size: 20px;
-    font-weight: 400;
-    line-height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  font-family: "Plus Jakarta Sans";
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .icon {
-    margin-left: 10px;
+  margin-left: 10px;
 }
 
 /* ----------------------------------------------------------------------------------------------------------------- */
 /* image css */
-.container-main{
-    padding: 0px;
+.container-main {
+  padding: 0px;
 }
 .startter-img {
-    width: 50px;
-    height: 50px;
-    border-radius: 5px;
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
 }
 
 .container-starter {
-    display: flex;
+  display: flex;
+  margin-top: 10px;
 }
-
+.container-mainCourse {
+  display: flex;
+  margin-top: 10px;
+}
+.container-Dessert {
+  display: flex;
+  margin-top: 10px;
+}
+.container-salad {
+  display: flex;
+  margin-top: 10px;
+}
+.container-soup{
+  display: flex;
+  margin-top: 10px;
+}
 .StarterDetails-Starter {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .starter-name {
-    font-family: 'Inter';
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 20px;
-    letter-spacing: 1px;
-    color: #000000;
+  font-family: "Inter";
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 1px;
+  color: #000000;
 }
 
-.starter-details{
-    font-family: Inter;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 20px;
-    color: #667085;
+.starter-details {
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #667085;
 }
 
-.starter-price{
-    font-family: 'Plus Jakarta Sans';
-    font-size: 11.31px;
-    font-weight: 400;
-    line-height: 19.79px;
-    letter-spacing: 1.1306666135787964px;
-    color: #000000;
+.starter-price {
+  font-family: "Plus Jakarta Sans";
+  font-size: 11.31px;
+  font-weight: 400;
+  line-height: 19.79px;
+  letter-spacing: 1.1306666135787964px;
+  color: #000000;
 }
 
-.hr-menu-accordian{
-  background-color: #C49871 !important;
+.hr-menu-accordian {
+  background-color: #c49871 !important;
+}
+.section {
+  margin-bottom: 10px;
+}
+.svg-Menu {
+  font-size: 18px;
+  cursor: pointer;
+}
+.Main-row-Course {
+  display: flex;
+  justify-content: space-between;
+}
+.Header-flex-Course {
+  display: flex;
+  gap: 900px;
+}
+
+@media (max-width: 700px) {
+  .Header-flex-Course {
+    gap: 0px;
+  }
+}
+@media (min-width: 700px) and (max-width: 1025px) {
+  .Header-flex-Course {
+    gap: 0px;
+  }
 }

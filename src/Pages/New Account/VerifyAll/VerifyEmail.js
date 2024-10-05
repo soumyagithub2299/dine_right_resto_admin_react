@@ -5,17 +5,16 @@ import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
 import '../VerifyAll/VerifyNumber.css';
 
-const VerifyEmail = ({ isOpen, onResendOtp, handleNext,switchToPhoneVerification }) => {
+const VerifyEmail = ({ isOpen, onResendOtp, handleNext, switchToPhoneVerification, handleBack }) => {
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        handleNext();
-        // onOtpSubmit(otp.join(''));
+        handleNext(); // Proceed to the next step
     };
 
     const handleBackClick = () => {
-        // navigate('/verifyNumber');
+        handleBack(); // Navigate back to the previous step
     };
 
     return (
@@ -36,7 +35,7 @@ const VerifyEmail = ({ isOpen, onResendOtp, handleNext,switchToPhoneVerification
                         Verify Now
                     </button>
                     <div className='mail-verify-msg'>
-                        <p><IoMdCheckmarkCircleOutline /> Email Verification send. Please check your inbox.(Email demo@gmail.com)</p>
+                        <p><IoMdCheckmarkCircleOutline /> Email Verification sent. Please check your inbox (Email demo@gmail.com).</p>
                     </div>
                     <div className='verify-content'>
                         <p className='verify-txt'>Verification not working? Switch to:</p>

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "../../Template/LayoutMain/LayoutMain/Layout.css";
-// import FullCalendarRestro from "./FullCalenderRestro/FullCalenderRestro";
+import FullCalender from "./FullCalender/FullCalender";
+// import EventCalendar from "./EventCalendar/EventCalendar";
+// import CalenderComponent from "./CalenderComponent/CalenderComponent";
 
 const BookSlot = () => {
 
@@ -39,9 +41,11 @@ const BookSlot = () => {
   return (
     <>
       {console.log('After',value)}
-       <div className={`content-container ${value ? 'sidebar-open' : 'sidebar-closed'}`} >
+       <div className={`content-container ${value ? 'sidebar-open' : 'sidebar-closed'}`}>
       
-     {/* <FullCalendarRestro/> */}
+        {/* <CalenderComponent/> */}
+     {/* <EventCalendar/> */}
+     <FullCalender/>
     </div>
     </>
    

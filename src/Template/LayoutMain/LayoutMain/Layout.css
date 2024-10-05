@@ -14,11 +14,11 @@
 }
 
 .content-container {
-  margin-top: 60px; /* Space for the navbar */
+  margin-top: 50px; /* Space for the navbar */
 }
 
 .main-content {
-  padding: 20px;
+  /* padding: 20px; */
   flex: 1;
   transition: margin-left 0.3s ease-in-out;
   overflow-y: auto;
@@ -31,7 +31,15 @@
 .sidebar-closed {
   margin-left: 35px; 
 }
+.Headings-RestroAdmins{
+text-align: center;
+font-family: 'Plus Jakarta Sans';
+font-size: 20px;
+font-weight: 500;
+line-height: 28px;
+color: #667085;
 
+}
 
 @media (min-width: 769px)and(max-width: 1024px) {
   .sidebar-open {
