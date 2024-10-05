@@ -28,8 +28,6 @@ const EventTable = ({ initialBookings }) => {
   const [newBookingModal, setNewBookingModal] = useState(false);
   const [newSelectedBookingTable, setNewSelectedBookingTable] = useState(null);
 
-
-
   // Generate time slots for the x-axis
   const timeSlots = [];
   for (let i = 0; i < 24; i++) {
@@ -63,13 +61,13 @@ const EventTable = ({ initialBookings }) => {
   // };
 
   const handleCellClick = (table, timeSlot) => {
-    const booking = isTableBooked(table.name, timeSlot); 
+    const booking = isTableBooked(table.name, timeSlot);
     if (booking) {
       setSelectedBooking(booking);
       setOpenDialog(true);
     } else {
       setNewSelectedBookingTable({ table, timeSlot });
-      setNewBookingModal(true); 
+      setNewBookingModal(true);
     }
   };
 
@@ -434,17 +432,6 @@ const EventTable = ({ initialBookings }) => {
                     </TableCell>
                     {/* Cells for the time slots */}
 
-
-
-
-
-
-
-
-
-
-
-                    
                     {timeZones[selectedTimeZone].map((timeSlot, cellIndex) => {
                       const booking = isTableBooked(table.name, timeSlot);
                       let backgroundColor = "#ffffff"; // Default color
@@ -467,7 +454,9 @@ const EventTable = ({ initialBookings }) => {
                           key={cellIndex}
                           style={{
                             width: "80px",
-                            backgroundColor: booking ? backgroundColor : "transparent",
+                            backgroundColor: booking
+                              ? backgroundColor
+                              : "transparent",
                             textAlign: "center",
                             // cursor: booking ? "pointer" : "default",
                             cursor: booking ? "pointer" : "pointer",
@@ -478,12 +467,14 @@ const EventTable = ({ initialBookings }) => {
                           onClick={() => handleCellClick(table, timeSlot)}
                           onMouseEnter={(e) => {
                             if (!booking) {
-                              e.currentTarget.style.backgroundColor = "lightyellow"; 
+                              e.currentTarget.style.backgroundColor =
+                                "lightyellow";
                             }
                           }}
                           onMouseLeave={(e) => {
                             if (!booking) {
-                              e.currentTarget.style.backgroundColor = "transparent";
+                              e.currentTarget.style.backgroundColor =
+                                "transparent";
                             }
                           }}
                         >
@@ -495,21 +486,6 @@ const EventTable = ({ initialBookings }) => {
                         </TableCell>
                       );
                     })}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                   </TableRow>
                 ))}
               </React.Fragment>
@@ -749,12 +725,10 @@ const EventTable = ({ initialBookings }) => {
           handleClose={handleCloseNewBookingModal}
           onSave={handleSaveBooking}
           newSelectedBookingTable={newSelectedBookingTable}
-          bookings={bookings}  
-          setBookings={setBookings} 
+          bookings={bookings}
+          setBookings={setBookings}
         />
       )}
-
-
     </>
   );
 };

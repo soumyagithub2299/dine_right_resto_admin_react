@@ -149,6 +149,33 @@ const EventTable = ({ initialBookings }) => {
     },
   ];
 
+
+
+
+
+
+
+  const getBackgroundColor = (booking, timeSlot) => {
+    if (!booking) return "transparent";
+
+    const bookingStartTime = new Date(booking.time);
+    const bookedForLimitInMinutes = booking.booked_for_limit || 0;
+    const bookingEndTime = new Date(
+      bookingStartTime.getTime() + bookedForLimitInMinutes * 60000 // Convert minutes to milliseconds
+    );
+
+    const currentTime = new Date();
+
+    // Check if the time slot falls within the booking period
+    if (currentTime >= bookingStartTime && currentTime <= bookingEndTime) {
+      return "lightgreen"; // Color for the time limit
+    }
+
+    return "lightcoral"; // Default booked color
+  };
+
+
+  
   return (
     <>
       {/* Button group for selecting time zones */}
