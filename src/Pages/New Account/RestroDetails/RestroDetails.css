@@ -19,3 +19,8 @@
     /* height: 100%; */
     border: 0;
 }
+.Rendering-Login-newAccount{
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+  }

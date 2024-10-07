@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaAngleLeft } from "react-icons/fa";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { AiFillPlusSquare } from "react-icons/ai";
-import "./../CreatePassword/CreatePassword.css";
+import "../GuestTimeSlot/CreatePassword.css";
 
 const CreateAccount = ({ handleNext }) => {
   const [email, setEmail] = useState("");
@@ -116,7 +116,7 @@ const CreateAccount = ({ handleNext }) => {
           </div>
 
           <button type="submit" className="login-btn">Create account</button>
-          <p onClick={() => navigate("/")} className="Rendering-Login-new">
+          <p onClick={() => navigate("/")} className="Rendering-Login-newAccount">
             Already have an account? Login
           </p>
         </form>
@@ -126,7 +126,6 @@ const CreateAccount = ({ handleNext }) => {
 };
 
 export default CreateAccount;
-
 
 
 // import React, { useState } from "react";
@@ -146,9 +145,9 @@ export default CreateAccount;
 //   const [phone, setPhone] = useState("");
 //   const [panno, setPanno] = useState("");
 //   const [gstno, setGstno] = useState("");
-//   const [uploadedImage, setUploadedImage] = useState(null);
+//   const [uploadedImage, setUploadedImage] = useState(null); 
 //   const [errors, setErrors] = useState({});
-//   const [loading, setLoading] = useState(false); // Added loading state
+//   const [loading, setLoading] = useState(false);
 
 //   const navigate = useNavigate();
 
@@ -191,14 +190,14 @@ export default CreateAccount;
 //       toast.error("All fields are required");
 //     } else {
 //       setErrors({});
-      
+
 //       try {
 //         const formData = new FormData();
 //         formData.append("username", name);
 //         formData.append("email", email);
 //         formData.append("phone", phone);
 //         formData.append("pancard", panno);
-//         formData.append("image", uploadedImage); // Ensure this is a File object
+//         formData.append("image", uploadedImage); 
 //         formData.append("gst_no", gstno);
 
 //         setLoading(true);
@@ -207,7 +206,6 @@ export default CreateAccount;
 //           formData
 //         );
 
-//         console.log("sign up", response);
 //         if (response?.data?.response?.response) {
 //           const otpResponse = await SignUpSendOTPApi({ email });
 //           if (otpResponse?.data?.response?.response) {
@@ -230,7 +228,7 @@ export default CreateAccount;
 //   const handleFileUpload = (files) => {
 //     const file = files[0];
 //     if (file) {
-//       setUploadedImage(file); // Directly store the file object
+//       setUploadedImage(URL.createObjectURL(file)); 
 //     }
 //   };
 
@@ -242,64 +240,63 @@ export default CreateAccount;
 //             <FaAngleLeft onClick={handleBackClick} style={{ cursor: "pointer" }} />
 //             Create an account
 //           </h2>
-//           <label htmlFor="name" className="login-label">Full Name</label>
+
+//           {/* Full Name Field */}
+//           <label className="login-label">Full Name</label>
 //           <input
 //             type="text"
-//             id="name"
 //             className="login-input"
+//             placeholder="Enter your full name"
 //             value={name}
 //             onChange={(e) => setName(e.target.value)}
-//             required
 //           />
 //           {errors.name && <span className="error">{errors.name}</span>}
 
-//           <label htmlFor="email" className="login-label">Email</label>
+//           {/* Email Field */}
+//           <label className="login-label">Email</label>
 //           <input
 //             type="email"
-//             id="email"
 //             className="login-input"
+//             placeholder="Enter your email"
 //             value={email}
 //             onChange={(e) => setEmail(e.target.value)}
-//             required
 //           />
 //           {errors.email && <span className="error">{errors.email}</span>}
 
-//           <label htmlFor="phone" className="login-label">Phone</label>
+//           {/* Phone Number Field */}
+//           <label className="login-label">Phone Number</label>
 //           <input
-//             type="number"
-//             id="phone"
+//             type="text"
 //             className="login-input"
+//             placeholder="Enter your phone number"
 //             value={phone}
 //             onChange={(e) => setPhone(e.target.value)}
-//             required
-//             maxLength={10}
 //           />
 //           {errors.phone && <span className="error">{errors.phone}</span>}
 
-//           <label htmlFor="pan" className="login-label">PAN card number</label>
+//           {/* PAN Card Field */}
+//           <label className="login-label">PAN Card Number</label>
 //           <input
 //             type="text"
-//             id="pan"
 //             className="login-input"
+//             placeholder="Enter your PAN card number"
 //             value={panno}
 //             onChange={(e) => setPanno(e.target.value)}
-//             required
-//             maxLength={10}
 //           />
 //           {errors.panno && <span className="error">{errors.panno}</span>}
 
-//           <label htmlFor="gstno" className="login-label">GSTIN Number</label>
+//           {/* GST Number Field */}
+//           <label className="login-label">GSTIN Number</label>
 //           <input
 //             type="text"
-//             id="gstno"
 //             className="login-input"
+//             placeholder="Enter your GSTIN number"
 //             value={gstno}
 //             onChange={(e) => setGstno(e.target.value)}
-//             required
-//             maxLength={15}
 //           />
 //           {errors.gstno && <span className="error">{errors.gstno}</span>}
 
+//           {/* File Upload Field */}
 //           <label htmlFor="file-upload" className="login-label">FSSAI license copy</label>
 //           <div className="file-upload-container">
 //             <input
@@ -316,25 +313,26 @@ export default CreateAccount;
 //                 <AiFillPlusSquare className="upload-btn" />
 //               </div>
 //             </label>
+
+//             {/* Display uploaded file preview */}
 //             {uploadedImage && (
 //               <div className="uploaded-image-container">
-//                 <p>{uploadedImage.name}</p> {/* Display the file name */}
+//                 <img src={uploadedImage} alt="Uploaded Preview" className="uploaded-image" />
 //               </div>
 //             )}
+
 //             {errors.uploadedImage && <span className="error">{errors.uploadedImage}</span>}
 //           </div>
 
-//           <button type="submit" className="login-btn" disabled={loading}>
-//             Create account
-//           </button>
+//           <button type="submit" className="login-btn">Create account</button>
 //           <p onClick={() => navigate("/")} className="Rendering-Login-newAccount">
 //             Already have an account? Login
 //           </p>
 //         </form>
 //       </div>
-//       <ToastContainer />
 //     </div>
 //   );
 // };
 
 // export default CreateAccount;
+

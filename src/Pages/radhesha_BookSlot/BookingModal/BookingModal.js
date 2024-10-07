@@ -28,11 +28,7 @@ const BookingModal = ({ show, handleClose, onSave, newSelectedBookingTable, book
   useEffect(() => {
     if (show && newSelectedBookingTable) {
       setTable(newSelectedBookingTable.table.name);
-
-
-      setTime(newSelectedBookingTable.bookingStartTime);
-
-      
+      setTime(newSelectedBookingTable.timeSlot);
     } else {
       setTable("");
       setTime("");

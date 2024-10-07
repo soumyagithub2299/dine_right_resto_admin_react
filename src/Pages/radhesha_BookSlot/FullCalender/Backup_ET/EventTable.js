@@ -21,8 +21,6 @@ import BookingModal from "../BookingModal/BookingModal";
 const EventTable = ({ initialBookings }) => {
   const [bookings, setBookings] = useState(initialBookings);
   const [selectedTimeZone, setSelectedTimeZone] = useState("Morning");
-  // const [selectedTimeZone, setSelectedTimeZone] = useState("All");
-
   const [openDialog, setOpenDialog] = useState(false);
   const [openClearDialog, setOpenClearDialog] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
@@ -30,6 +28,7 @@ const EventTable = ({ initialBookings }) => {
   const [newBookingModal, setNewBookingModal] = useState(false);
   const [newSelectedBookingTable, setNewSelectedBookingTable] = useState(null);
 
+  // Generate time slots for the x-axis
   const timeSlots = [];
   for (let i = 0; i < 24; i++) {
     const hours = i < 10 ? `0${i}` : i;
@@ -39,13 +38,12 @@ const EventTable = ({ initialBookings }) => {
     timeSlots.push(`${hours}:45`); // Add 45 minutes
   }
 
-  // Define time zones with the corrected ranges
   const timeZones = {
-    All: timeSlots, // All 24 hours
     Morning: timeSlots.slice(6 * 4, 12 * 4), // 06:00 - 12:00
     Afternoon: timeSlots.slice(12 * 4, 17 * 4), // 12:00 - 17:00
-    Evening: timeSlots.slice(17 * 4, 22 * 4), // 17:00 - 22:00
-    Night: timeSlots.slice(22 * 4).concat(timeSlots.slice(0, 6 * 4)), // 22:00 - 06:00
+    Evening: timeSlots.slice(17 * 4, 21 * 4), // 17:00 - 21:00
+    Night: timeSlots.slice(21 * 4).concat(timeSlots.slice(0, 6 * 4)), // 21:00 - 06:00 (Wraps around)
+    All: timeSlots, // Display all time slots
   };
 
   const isTableBooked = (tableName, timeSlot) => {
@@ -59,23 +57,16 @@ const EventTable = ({ initialBookings }) => {
   //   if (booking) {
   //     setSelectedBooking(booking);
   //     setOpenDialog(true);
-  //   } else {
-  //     setNewSelectedBookingTable({ table, timeSlot });
-  //     setNewBookingModal(true);
   //   }
   // };
 
-  const handleCellClick = (table, bookingStartTime, bookingEndTime) => {
-    const booking = isTableBooked(table.name, bookingStartTime); // Check booking at the start time
+  const handleCellClick = (table, timeSlot) => {
+    const booking = isTableBooked(table.name, timeSlot);
     if (booking) {
-      setSelectedBooking({
-        ...booking,
-        startTime: bookingStartTime,
-        endTime: bookingEndTime,
-      });
+      setSelectedBooking(booking);
       setOpenDialog(true);
     } else {
-      setNewSelectedBookingTable({ table, bookingStartTime, bookingEndTime });
+      setNewSelectedBookingTable({ table, timeSlot });
       setNewBookingModal(true);
     }
   };
@@ -157,20 +148,6 @@ const EventTable = ({ initialBookings }) => {
       ],
     },
   ];
-
-  function calculateTimeDifference(slot1, slot2) {
-    const [hours1, minutes1] = slot1.split(":").map(Number);
-    const [hours2, minutes2] = slot2.split(":").map(Number);
-
-    const date1 = new Date();
-    const date2 = new Date();
-
-    date1.setHours(hours1, minutes1);
-    date2.setHours(hours2, minutes2);
-
-    const diffInMs = date2 - date1;
-    return Math.round(diffInMs / 60000); // Convert milliseconds to minutes
-  }
 
   return (
     <>
@@ -310,7 +287,7 @@ const EventTable = ({ initialBookings }) => {
                     width: "100%",
                     height: "100%",
                     background:
-                      "linear-gradient(to bottom left, #ffcccb 50%, lavender 50%)", // Diagonal from A to C
+                      "linear-gradient(to bottom left, lightsalmon 50%, lavender 50%)", // Diagonal from A to C
                     zIndex: -1,
                   }}
                 />
@@ -374,41 +351,25 @@ const EventTable = ({ initialBookings }) => {
               >
                 Capacity
               </TableCell>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
               {timeZones[selectedTimeZone].map((time, index) => {
-                const isHour = time.endsWith(":00"); // Check if it's the start of an hour
-                const displayTime = isHour ? time : time.split(":")[1]; // Format display time
+                const isHour = time.endsWith(":00");
+                const displayTime = isHour ? time : time.split(":")[1];
 
                 return (
                   <TableCell
                     key={index}
                     style={{
-                      width: isHour ? "60px" : "60px",
-
-                      // background: isHour ? "#ffcccb" : "#f0f0f0",
-                      background: "#ffcccb",
+                      width: isHour ? "58px" : "15px",
+                      // backgroundColor: "#e0e0e0",
+                      background: "lightsalmon",
 
                       textAlign: "center",
-                      fontSize: isHour ? "15px" : "12px", // Font size adjustment
+                      fontSize: isHour ? "16px" : "10px",
                       fontWeight: isHour ? "bold" : "normal",
                       borderBottom: "1px solid #cccccc",
                     }}
                   >
-                    {isHour ? displayTime : displayTime}{" "}
-                    {/* Show the time in the cell */}
+                    {isHour ? displayTime : displayTime}
                   </TableCell>
                 );
               })}
@@ -425,7 +386,6 @@ const EventTable = ({ initialBookings }) => {
                       width: "180px",
                       backgroundColor: "#d0d0d0",
                       fontWeight: "bold",
-                      padding: "5px",
                     }}
                   >
                     {group.heading}
@@ -437,7 +397,6 @@ const EventTable = ({ initialBookings }) => {
                       // backgroundColor: "#ffffff",
                       background: "Azure",
                       fontWeight: "bold",
-                      padding: "5px",
                     }}
                   >
                     ( {group.totalCapacity} )
@@ -457,11 +416,7 @@ const EventTable = ({ initialBookings }) => {
                 {group.tables.map((table, tableIndex) => (
                   <TableRow key={tableIndex}>
                     <TableCell
-                      style={{
-                        width: "180px",
-                        background: "lavender",
-                        padding: "5px",
-                      }}
+                      style={{ width: "180px", background: "lavender" }}
                     >
                       {table.name} {/* Display table name */}
                     </TableCell>
@@ -471,45 +426,18 @@ const EventTable = ({ initialBookings }) => {
                         textAlign: "center",
                         // backgroundColor: "#ffffff",
                         background: "Azure",
-                        padding: "5px",
                       }}
                     >
                       {table.capacity} {/* Display table capacity */}
                     </TableCell>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    {/* Cells for the time slots */}
 
                     {timeZones[selectedTimeZone].map((timeSlot, cellIndex) => {
                       const booking = isTableBooked(table.name, timeSlot);
-                      let backgroundColor = "transparent"; // Default color
-                      let fillNextCells = 0; // Variable to keep track of how many extra cells to fill
-                      let bookingStartTime = timeSlot; // Initialize booking start time
-                      let bookingEndTime = timeSlot; // Initialize booking end time
-                      let cellWidth = "80px"; // Default width, adjust as needed
+                      let backgroundColor = "#ffffff"; // Default color
 
                       if (booking) {
-                        const { status, guests, booked_for_limit } = booking; // Destructure guests and booked_for_limit
-
-                        // Set background color based on status
+                        const { status, guests } = booking; // Destructure guests from booking
                         if (status === "ongoing") {
                           backgroundColor = "#90ee90"; // Green for ongoing
                         } else if (status === "upcoming") {
@@ -519,131 +447,45 @@ const EventTable = ({ initialBookings }) => {
                         } else if (status === "canceled") {
                           backgroundColor = "#ff6347"; // Red for canceled
                         }
-
-                        // Calculate how many extra cells to fill based on booking duration
-                        let remainingTime = booked_for_limit; // Time to fill in minutes
-                        for (
-                          let i = cellIndex + 1;
-                          i < timeZones[selectedTimeZone].length &&
-                          remainingTime > 0;
-                          i++
-                        ) {
-                          const currentSlot =
-                            timeZones[selectedTimeZone][i - 1]; // Previous slot
-                          const nextSlot = timeZones[selectedTimeZone][i]; // Current slot
-                          const slotDuration = calculateTimeDifference(
-                            currentSlot,
-                            nextSlot
-                          ); // Calculate duration between slots
-                          remainingTime -= slotDuration;
-                          if (remainingTime >= 0) {
-                            fillNextCells += 1; // Increase the count of additional cells to fill
-                            bookingEndTime = nextSlot; // Update booking end time
-                          }
-                        }
                       }
 
                       return (
-                        <React.Fragment key={cellIndex}>
-                          <TableCell
-                            style={{
-                              width: cellWidth,
-                              backgroundColor: booking
-                                ? backgroundColor
-                                : "transparent",
-                              textAlign: "center",
-                              cursor: booking ? "pointer" : "pointer",
-                              borderBottom: "1.5px solid rgba(0, 0, 0, 0.2)",
-                              position: "relative", // Use relative positioning for the cell
-                              padding: "0px", // Remove padding for line alignment
-                            }}
-                            onClick={() =>
-                              handleCellClick(
-                                table,
-                                bookingStartTime,
-                                bookingEndTime
-                              )
-                            }
-                            onMouseEnter={(e) => {
-                              if (!booking) {
-                                e.currentTarget.style.backgroundColor =
-                                  "lightyellow";
-                              }
-                            }}
-                            onMouseLeave={(e) => {
-                              if (!booking) {
-                                e.currentTarget.style.backgroundColor =
-                                  "transparent";
-                              }
-                            }}
-                          >
-                            <div
-                              style={{
-                                position: "absolute",
-                                left: 0, // Align it to the left of the cell
-                                top: 0,
-                                bottom: 0,
-                                width: "1.5px",
-                                backgroundColor: "rgba(0, 0, 0, 0.2)", // Color for the vertical line
-                                zIndex: 1, // Ensure the line is above the cell background
-                              }}
-                            />
-                            <span style={{ position: "relative", zIndex: 2 }}>
-                              {booking ? `${booking.guests}` : ""}
-                            </span>
-                          </TableCell>
+                        <TableCell
+                          key={cellIndex}
+                          style={{
+                            width: "80px",
+                            backgroundColor: booking
+                              ? backgroundColor
+                              : "transparent",
+                            textAlign: "center",
+                            // cursor: booking ? "pointer" : "default",
+                            cursor: booking ? "pointer" : "pointer",
 
-                          {Array.from({ length: fillNextCells }).map(
-                            (_, index) => {
-                              const nextCellIndex = cellIndex + index + 1;
-                              return (
-                                <TableCell
-                                  key={nextCellIndex}
-                                  style={{
-                                    width: cellWidth,
-                                    backgroundColor: backgroundColor,
-                                    textAlign: "center",
-                                    cursor: "pointer",
-                                    borderBottom:
-                                      "1.5px solid rgba(0, 0, 0, 0.2)", // Bottom border for the next cells
-                                    position: "relative", // Use relative positioning for the cell
-                                    padding: "0px", // Remove padding for line alignment
-                                  }}
-                                  onClick={() =>
-                                    handleCellClick(
-                                      table,
-                                      bookingStartTime,
-                                      bookingEndTime
-                                    )
-                                  }
-                                >
-                                  <div
-                                    style={{
-                                      position: "absolute",
-                                      left: 0, // Align it to the left of the cell
-                                      top: 0,
-                                      bottom: 0,
-                                      // width: "1.5px",
-                                      backgroundColor: "rgba(0, 0, 0, 0.2)", // Color for the vertical line
-                                      zIndex: 1, // Ensure the line is above the cell background
-                                    }}
-                                  />
-                                </TableCell>
-                              );
+                            // border: "0.5px solid black",
+                            border: "0.5px solid rgba(0, 0, 0, 0.2)",
+                          }}
+                          onClick={() => handleCellClick(table, timeSlot)}
+                          onMouseEnter={(e) => {
+                            if (!booking) {
+                              e.currentTarget.style.backgroundColor =
+                                "lightyellow";
                             }
-                          )}
-                        </React.Fragment>
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!booking) {
+                              e.currentTarget.style.backgroundColor =
+                                "transparent";
+                            }
+                          }}
+                        >
+                          {booking
+                            ? // ? `${booking.table} (${booking.guests} guests)`
+                              `${booking.guests}`
+                            : // : table.name
+                              ""}
+                        </TableCell>
                       );
                     })}
-
-
-
-
-
-
-
-
-                    
                   </TableRow>
                 ))}
               </React.Fragment>

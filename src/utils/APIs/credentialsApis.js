@@ -1,6 +1,7 @@
 import { axiosInstance, axiosInstanceNoAuth } from "./commonHeadApiLogic.js";
 import { authorizeMe } from "./commonHeadApiLogic.js"; // Ensure you import this function
 
+// console.log('Base URL:', axiosInstance.defaults.baseURL);
 // Ensure authorization header is set before making authenticated requests
 const withAuthorization = async (apiFunction, ...args) => {
   try {
@@ -69,7 +70,7 @@ export async function SignUpRestroDetailsStepTwo(data) {
 // http://localhost:3000/api/auth/send-otp
 export async function SignUpSendOTPApi(data) {
   return withAuthorization(async () => {
-    const response = await axiosInstanceNoAuth.post("https://dineright.techfluxsolutions.com/api/auth/send-otp", data);
+    const response = await axiosInstanceNoAuth.post("/api/auth/send-otp", data);
     return response;
   });
 }
@@ -86,9 +87,8 @@ export async function OTPVerificationAPI(data) {
   });
 }
 
-// for create password
-// http://localhost:3000/api/auth/set-password
-export async function CreatePasswordAPI(data) {
+// for Guest Time slot
+export async function GuestTimeSlotAPI(data) {
   return withAuthorization(async () => {
     const response = await axiosInstanceNoAuth.post(
       "/api/auth/set-password",
@@ -137,7 +137,7 @@ export async function AddTableAPI(data) {
 // http://localhost:3000/api/auth/login
 export async function UserLoginAPI(data) {
   return withAuthorization(async () => {
-    const response = await axiosInstanceNoAuth.post("https://dineright.techfluxsolutions.com/api/auth/login", data);
+    const response = await axiosInstanceNoAuth.post("/api/auth/login", data);
     return response;
   });
 }

@@ -3,7 +3,7 @@ import { Stepper, Step, StepLabel, Box, StepConnector } from '@mui/material';
 import './NewAccount.css';
 import CreateAccount from './CreateAccount/CreateAccount';
 import RestroDetails from './RestroDetails/RestroDetails';
-import CreatePassword from './CreatePassword/CreatePassword';
+import GuestTimeSlot from './GuestTimeSlot/GuestTimeSlot';
 import AddService from './AddServices/AddService';
 import DinningArea from './DiningAreas/DinningArea';
 import AddTable from './AddTable/AddTable';
@@ -17,7 +17,7 @@ const steps = [
   'Create a new account',
   'Add restaurant details',
   'Verify account',
-  'Create password',
+  'Guest Time',
   'Add service hours',
   'Add dining area',
   'Add Tables',
@@ -42,7 +42,7 @@ const NewAccount = () => {
     <CreateAccount handleNext={handleNext} />,
     <RestroDetails handleNext={handleNext} handleBack={handleBack} />,
     <VerifyEmailOTP handleNext={handleNext} handleBack={handleBack} />,
-    <CreatePassword handleNext={handleNext} handleBack={handleBack} />,
+    <GuestTimeSlot handleNext={handleNext} handleBack={handleBack} />,
     <AddService handleNext={handleNext} handleBack={handleBack} />,
     <DinningArea handleNext={handleNext} handleBack={handleBack} />,
     <AddTable handleNext={handleNext} handleBack={handleBack} />

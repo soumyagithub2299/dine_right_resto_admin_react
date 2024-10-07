@@ -425,6 +425,28 @@ const bookingsssssssssssss = [
         </div>
       </div>
 
+      
+    
+
+      {/* Booking Modal for table */}
+      <BookingModal
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+        onSave={handleSaveBooking} // Ensure this function is passed correctly
+      />
+
+      {/* Slot Booking Modal */}
+      <SlotBookingModal
+        show={showSlotBookingModal}
+        handleClose={handleSlotModalClose}
+      />
+
+
+
+
+
+
+
 
 
 
@@ -480,22 +502,6 @@ const bookingsssssssssssss = [
 
 
 
-
-      
-    
-
-      {/* Booking Modal for table */}
-      <BookingModal
-        show={showModal}
-        handleClose={() => setShowModal(false)}
-        onSave={handleSaveBooking} // Ensure this function is passed correctly
-      />
-
-      {/* Slot Booking Modal */}
-      <SlotBookingModal
-        show={showSlotBookingModal}
-        handleClose={handleSlotModalClose}
-      />
 
 
 

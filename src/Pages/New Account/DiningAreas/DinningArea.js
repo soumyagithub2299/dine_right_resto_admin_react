@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { FaAngleLeft } from 'react-icons/fa'; 
 import { MdOutlineCancel } from "react-icons/md";
+import { useNavigate } from 'react-router-dom'; 
 import './DinningArea.css'; 
 
-const DinningArea = ({ handleNext, handleBack }) => { // Added handleBack prop
+const DinningArea = ({ handleNext, handleBack }) => {
+  const navigate = useNavigate(); 
   const [selectedAreas, setSelectedAreas] = useState([]);
   const [availableAreas, setAvailableAreas] = useState([
     'Indoor',
@@ -29,7 +31,7 @@ const DinningArea = ({ handleNext, handleBack }) => { // Added handleBack prop
 
   const handleAreaRemove = (area) => {
     setSelectedAreas(selectedAreas.filter(selectedArea => selectedArea !== area));
-    setAvailableAreas([...availableAreas, area]); // Add the removed area back to the available areas
+    setAvailableAreas([...availableAreas, area]);
   };
 
   const handleAreaHover = (area) => {
@@ -37,14 +39,14 @@ const DinningArea = ({ handleNext, handleBack }) => { // Added handleBack prop
   };
 
   const handleBackClick = () => {
-    handleBack(); // Navigate back to the previous step
+    handleBack();
   };
 
   return (
     <div className='new-verify-form'>
       <div className='verify-form-container'>
         <h2 className='login-head'>
-          <FaAngleLeft onClick={handleBackClick} style={{ cursor: 'pointer' }} /> {/* Updated back icon */}
+          <FaAngleLeft onClick={handleBackClick} style={{ cursor: 'pointer' }} />
           Dining Areas
         </h2>
         <div className='selected-container'>
@@ -92,6 +94,13 @@ const DinningArea = ({ handleNext, handleBack }) => { // Added handleBack prop
             </button>
           </div>
         )}
+        <p 
+          className="Rendering-Login-newAccount mt-2" 
+          style={{ cursor: 'pointer', textAlign:'center'}} 
+          onClick={() => navigate('/')} 
+        >
+          Already have an account? Login
+        </p>
       </div>
     </div>
   );
@@ -100,14 +109,18 @@ const DinningArea = ({ handleNext, handleBack }) => { // Added handleBack prop
 export default DinningArea;
 
 
+
+
 // import React, { useState } from 'react';
 // import { FaAngleLeft } from 'react-icons/fa'; 
 // import { MdOutlineCancel } from "react-icons/md";
+// import { useNavigate } from 'react-router-dom'; 
+// import { toast } from 'react-toastify'; 
+// import { DiningAreasAPI } from './../../../utils/APIs/credentialsApis'; 
 // import './DinningArea.css'; 
-// import { DiningAreasAPI } from '../../../utils/APIs/credentialsApis';
-// import { ToastContainer, toast } from 'react-toastify'; 
 
-// const DinningArea = ({ handleNext, handleBack }) => { 
+// const DinningArea = ({ handleNext, handleBack }) => {
+//   const navigate = useNavigate(); 
 //   const [selectedAreas, setSelectedAreas] = useState([]);
 //   const [availableAreas, setAvailableAreas] = useState([
 //     'Indoor',
@@ -123,7 +136,7 @@ export default DinningArea;
 //     'Pool Side'
 //   ]);
 //   const [hoveredArea, setHoveredArea] = useState("");
-//   const [loading, setLoading] = useState(false); // Loading state
+//   const [loading, setLoading] = useState(false); 
 
 //   const handleAreaClick = (area) => {
 //     if (!selectedAreas.includes(area)) {
@@ -142,26 +155,45 @@ export default DinningArea;
 //   };
 
 //   const handleBackClick = () => {
-//     handleBack(); 
+//     handleBack();
 //   };
 
-//   const handleNextClick = async () => {
-//     if (selectedAreas.length < 1) {
-//       toast.error('Please select at least one dining area.');
+//   const handleSubmit = async () => {
+//     // Validate selected areas
+//     if (selectedAreas.length === 0) {
+//       toast.error("Please select at least one dining area.");
 //       return;
 //     }
 
-//     setLoading(true);
-
 //     try {
-//       const response = await DiningAreasAPI({ diningAreas: selectedAreas }); // Call the API
-//       toast.success('Dining areas added successfully!');
-//       handleNext(); 
-//     } catch (error) {
-//       toast.error('Failed to add dining areas. Please try again.'); // error message
-//       console.error('Error adding dining areas:', error);
-//     } finally {
+//       setLoading(true);
+
+      
+//       const data = {
+//         dining_areas: selectedAreas
+//       };
+
+//       const response = await DiningAreasAPI(data);
+
 //       setLoading(false);
+
+//       if (
+//         response &&
+//         response.data &&
+//         response.data.response &&
+//         response.data.response.response === true
+//       ) {
+        
+//         toast.success("Dining areas added successfully.");
+//         handleNext(); 
+//       } else {
+//         setLoading(false);
+//         toast.error(response.data.response.error_msg || "Failed to add dining areas.");
+//       }
+//     } catch (error) {
+//       setLoading(false);
+//       console.error("Error adding dining areas:", error);
+//       toast.error("An error occurred while adding dining areas.");
 //     }
 //   };
 
@@ -169,7 +201,7 @@ export default DinningArea;
 //     <div className='new-verify-form'>
 //       <div className='verify-form-container'>
 //         <h2 className='login-head'>
-//           <FaAngleLeft onClick={handleBackClick} style={{ cursor: 'pointer' }} /> 
+//           <FaAngleLeft onClick={handleBackClick} style={{ cursor: 'pointer' }} />
 //           Dining Areas
 //         </h2>
 //         <div className='selected-container'>
@@ -210,19 +242,21 @@ export default DinningArea;
 //             ))}
 //           </ul>
 //         </div>
-        
-//         {/* Loading indicator */}
-//         {loading && <div className="loading-spinner">Loading...</div>}
-
 //         {selectedAreas.length > 0 && (
 //           <div className="service-button">
-//             <button className='confirm-button' onClick={handleNextClick}>
-//               Next
+//             <button className='confirm-button' onClick={handleSubmit} disabled={loading}>
+//               {loading ? 'Loading...' : 'Next'}
 //             </button>
 //           </div>
 //         )}
+//         <p 
+//           className="Rendering-Login-newAccount mt-2" 
+//           style={{ cursor: 'pointer', textAlign:'center'}} 
+//           onClick={() => navigate('/')} 
+//         >
+//           Already have an account? Login
+//         </p>
 //       </div>
-//       <ToastContainer /> 
 //     </div>
 //   );
 // };

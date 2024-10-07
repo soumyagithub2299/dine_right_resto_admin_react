@@ -1,0 +1,53 @@
+.event-table-container {
+    overflow-x: auto; /* Enable horizontal scrolling */
+    max-width: 100%; /* Set a max width to limit the table size */
+}
+
+.header {
+    display: table-header-group; /* Make header sticky */
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+.body {
+    display: table-row-group; /* Group rows together */
+}
+
+.row {
+    display: table-row; /* Each row is a table row */
+}
+
+.cell {
+    border: 1px solid #ddd;
+    height: 50px;
+    display: table-cell; /* Each cell is a table cell */
+    vertical-align: middle; /* Center align content */
+    text-align: center; /* Center align text */
+}
+
+.empty-corner-cell {
+    width: 100px; /* Increased width for the empty corner cell */
+}
+
+.time-slot {
+    background-color: #e0e0e0;
+    font-size: 12px;
+    width: 100px; /* Increased width for time slot cells */
+}
+
+.heading {
+    background-color: #d0d0d0;
+    font-weight: bold;
+    width: 100px; /* Increased width for heading cells */
+}
+
+.event-cell {
+    background-color: #ffffff; /* White by default */
+    width: 100px; /* Increased width for event cells */
+}
+
+/* Optional: Add hover effects */
+.event-cell:hover {
+    background-color: lightyellow;
+    cursor: pointer;
+}

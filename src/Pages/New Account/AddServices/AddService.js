@@ -3,7 +3,7 @@ import './AddService.css';
 import { FaAngleLeft, FaRegClock } from 'react-icons/fa';
 import { GoPlusCircle } from "react-icons/go";
 
-// Initial hours setup for all days of the week
+
 const initialHours = {
   Monday: { isOpen: true, times: [{ open: '', close: '' }] },
   Tuesday: { isOpen: true, times: [{ open: '', close: '' }] },
@@ -14,11 +14,11 @@ const initialHours = {
   Sunday: { isOpen: true, times: [{ open: '', close: '' }] },
 };
 
-// Generate time options between 10:00 AM and 10:00 PM in 30-minute intervals
+
 const generateTimeOptions = () => {
   const times = [];
-  for (let i = 10; i <= 22; i++) { // Time range from 10:00 AM to 10:00 PM
-    for (let j = 0; j < 60; j += 30) { // 30-minute intervals
+  for (let i = 10; i <= 22; i++) { 
+    for (let j = 0; j < 60; j += 30) { 
       const time = `${i.toString().padStart(2, '0')}:${j.toString().padStart(2, '0')}`;
       times.push(time);
     }
@@ -26,13 +26,13 @@ const generateTimeOptions = () => {
   return times;
 };
 
-// Get the time options
+
 const timeOptions = generateTimeOptions();
 
 const AddService = ({ handleNext, handleBack }) => {
   const [hours, setHours] = useState(initialHours);
 
-  // Handle adding a new time slot for a specific day
+  
   const handleAddTime = (day) => {
     setHours((prevHours) => ({
       ...prevHours,
@@ -43,7 +43,7 @@ const AddService = ({ handleNext, handleBack }) => {
     }));
   };
 
-  // Handle changing a specific time slot for a specific day
+ 
   const handleChange = (day, index, type, value) => {
     const updatedTimes = hours[day].times.map((time, i) =>
       i === index ? { ...time, [type]: value } : time
@@ -54,7 +54,7 @@ const AddService = ({ handleNext, handleBack }) => {
     }));
   };
 
-  // Handle toggling the "isOpen" status for a specific day
+  
   const handleToggle = (day) => {
     setHours((prevHours) => ({
       ...prevHours,
@@ -65,16 +65,16 @@ const AddService = ({ handleNext, handleBack }) => {
     }));
   };
 
-  // Handle form submission
+ 
   const handleSubmit = (e) => {
     e.preventDefault();
     handleNext();
     console.log('Submitted hours:', hours);
   };
 
-  // Handle navigating back to the previous step
+  
   const handleBackClick = () => {
-    handleBack(); // Navigate back to the previous step
+    handleBack(); 
   };
 
   return (
@@ -108,7 +108,7 @@ const AddService = ({ handleNext, handleBack }) => {
                   </div>
                 </div>
 
-                {/* Time selection dropdowns for each day */}
+                
                 {hours[day].times.map((time, index) => (
                   <div className="time-label" key={index}>
                     <div className="time-box mb-3">
@@ -171,6 +171,12 @@ const AddService = ({ handleNext, handleBack }) => {
             Confirm
           </button>
         </div>
+        <p
+            className="Rendering-Login-newAccount mt-2"
+            style={{ cursor: "pointer", textAlign:"center" }}
+          >
+            Already have an account? Login
+          </p>
       </form>
     </div>
   );
@@ -179,13 +185,12 @@ const AddService = ({ handleNext, handleBack }) => {
 export default AddService;
 
 
-
 // import React, { useState } from 'react';
 // import './AddService.css'; 
 // import { FaAngleLeft, FaRegClock } from 'react-icons/fa';
 // import { GoPlusCircle } from "react-icons/go";
-// import { AddServiceHoursOTP } from '../../../utils/APIs/credentialsApis';
-// import { ToastContainer, toast } from 'react-toastify'; // Import react-toastify
+// import { toast } from 'react-toastify'; 
+// import { AddServiceHoursOTP } from './../../../utils/APIs/credentialsApis'; 
 
 
 // const initialHours = {
@@ -198,10 +203,11 @@ export default AddService;
 //   Sunday: { isOpen: true, times: [{ open: '', close: '' }] },
 // };
 
+
 // const generateTimeOptions = () => {
 //   const times = [];
-//   for (let i = 0; i < 24; i++) {
-//     for (let j = 0; j < 60; j += 30) {
+//   for (let i = 10; i <= 22; i++) { 
+//     for (let j = 0; j < 60; j += 30) { 
 //       const time = `${i.toString().padStart(2, '0')}:${j.toString().padStart(2, '0')}`;
 //       times.push(time);
 //     }
@@ -209,12 +215,14 @@ export default AddService;
 //   return times;
 // };
 
+
 // const timeOptions = generateTimeOptions();
 
 // const AddService = ({ handleNext, handleBack }) => {
 //   const [hours, setHours] = useState(initialHours);
-//   const [loading, setLoading] = useState(false); // State for loading
+//   const [loading, setLoading] = useState(false); 
 
+ 
 //   const handleAddTime = (day) => {
 //     setHours((prevHours) => ({
 //       ...prevHours,
@@ -225,6 +233,7 @@ export default AddService;
 //     }));
 //   };
 
+  
 //   const handleChange = (day, index, type, value) => {
 //     const updatedTimes = hours[day].times.map((time, i) =>
 //       i === index ? { ...time, [type]: value } : time
@@ -235,6 +244,7 @@ export default AddService;
 //     }));
 //   };
 
+  
 //   const handleToggle = (day) => {
 //     setHours((prevHours) => ({
 //       ...prevHours,
@@ -245,25 +255,52 @@ export default AddService;
 //     }));
 //   };
 
+ 
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
-//     setLoading(true);
+
+    
+//     const serviceHours = {};
+//     for (const day in hours) {
+//       serviceHours[day] = {
+//         isOpen: hours[day].isOpen,
+//         times: hours[day].isOpen ? hours[day].times : [], 
+//       };
+//     }
+
+   
+//     const isValid = Object.values(hours).every(day => 
+//       !day.isOpen || (day.isOpen && day.times.some(time => time.open && time.close))
+//     );
+
+//     if (!isValid) {
+//       toast.error("Please fill in all fields properly.");
+//       return;
+//     }
 
 //     try {
-//       const response = await AddServiceHoursOTP(hours); // API call with service hours data
-//       console.log('API response:', response.data);
-//       toast.success('Service hours added successfully!'); // Success toast
-//       handleNext(); // Proceed to the next step
-//     } catch (error) {
-//       toast.error('Failed to submit service hours. Please try again.'); // Error toast
-//       console.error('Error submitting hours:', error);
-//     } finally {
+//       setLoading(true);
+
+//       const response = await AddServiceHoursOTP(serviceHours); 
+
 //       setLoading(false);
+
+//       if (response?.data?.response?.response === true) {
+//         toast.success(response.data.response.success_msg || "Service hours added successfully.");
+//         handleNext(); 
+//       } else {
+//         toast.error(response?.data?.response?.error_msg || "Unknown Error.");
+//       }
+//     } catch (error) {
+//       setLoading(false);
+//       console.error("Error submitting service hours:", error);
+//       toast.error("An error occurred while adding service hours.");
 //     }
 //   };
 
+ 
 //   const handleBackClick = () => {
-//     handleBack(); // Navigate back to the previous step
+//     handleBack();
 //   };
 
 //   return (
@@ -297,6 +334,7 @@ export default AddService;
 //                   </div>
 //                 </div>
 
+              
 //                 {hours[day].times.map((time, index) => (
 //                   <div className="time-label" key={index}>
 //                     <div className="time-box mb-3">
@@ -340,20 +378,32 @@ export default AddService;
 //                     </div>
 //                   </div>
 //                 ))}
+//                 {/* Uncomment to allow adding more service hours */}
+//                 {/* {hours[day].isOpen && (
+//                   <button
+//                     type="button"
+//                     className="plus-btn"
+//                     onClick={() => handleAddTime(day)}
+//                   >
+//                     <GoPlusCircle className='plus-icon'/>Add a new service hour
+//                   </button>
+//                 )} */}
 //               </div>
 //             </div>
 //           ))}
 //         </div>
-
-//         {loading && <p className="loading-message">Submitting...</p>} {/* Loading message */}
-
 //         <div className="service-button">
 //           <button type="submit" className="service-btn" disabled={loading}>
-//             Confirm
+//             {loading ? 'Loading...' : 'Confirm'}
 //           </button>
 //         </div>
+//         <p
+//           className="Rendering-Login-newAccount mt-2"
+//           style={{ cursor: "pointer", textAlign:"center" }}
+//         >
+//           Already have an account? Login
+//         </p>
 //       </form>
-//       <ToastContainer /> {/* Toast container to display the toasts */}
 //     </div>
 //   );
 // };

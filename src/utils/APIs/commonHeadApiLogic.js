@@ -8,6 +8,8 @@ const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_DINE_RIGHT_RESTRO_ADMIN_WEBSITE_BASE_API_URL,
   timeout: 30000,
 });
+console.log('Base URL:', axiosInstance.defaults.baseURL);
+
 
 // Create a new Axios instance without setting the Authorization header
 const axiosInstanceNoAuth = axios.create({

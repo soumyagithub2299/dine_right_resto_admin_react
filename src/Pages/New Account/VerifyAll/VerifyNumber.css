@@ -95,7 +95,11 @@
     text-align: center;
 }
 
-
+.Rendering-Login-newAccount{
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+  }
 @media (max-width: 576px) {
 
     .verify-form-container{
