@@ -1,0 +1,101 @@
+.stepper{
+  margin-top: 45px;
+}
+
+.stepper-icon-active .MuiStepIcon-root.Mui-active {
+    /* color: #15293A;  */
+    color: #007bff ;
+    height: 40px;
+    width: 40px;
+    /* fill: #C49871; */
+  }
+.stepper-icon-active .MuiStepIcon-root{
+  /* color: #15293A;  */
+  color: #007bff ;
+    height: 40px;
+    width: 40px;
+}
+
+.stepper-icon-active .MuiStepIcon-root.Mui-completed{
+  /* color: #15293A; */
+  color: #007bff ;
+}
+
+.stepper-icon-active .MuiStepIcon-text .Mui-active{
+  fill: #C49871;
+}
+
+.stepper-icon-active .MuiStepLabel-label.Mui-active {
+  color: #C49871;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.stepper-icon-active .MuiStepLabel-label.Mui-completed {
+  color: #5E5E5E;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.stepper-icon-active .MuiStepLabel-label {
+  margin-top: 16px;
+  color: #5E5E5E;
+}
+
+.stepper-icon-active  .MuiStepConnector-root {
+    -webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    position: absolute;
+    top: 18px;
+    left: calc(-50% + 15px);
+    right: calc(50% + 15px);
+    /* border-color: #15293A; */
+    border-color: #007bff ;
+}
+
+.stepper-icon-active .MuiStepConnector-line{
+    /* border-color: #15293A;  */
+    border-color: #007bff ;
+    border-width: 3px;
+}
+.stepper-icon-active .MuiStep-root {
+  padding-left: 8px; 
+  padding-right: 8px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  position: relative;
+}
+
+
+
+@media (max-width: 576px) {
+  .stepper-icon-active .MuiStep-root {
+    padding-left: 2px; 
+    padding-right: 2px;
+  }
+
+  .stepper-icon-active .MuiStepLabel-label {
+    font-size: 11px;
+  }
+
+  .stepper-icon-active .MuiStepLabel-label.Mui-active {
+    font-size: 12px;
+  }
+
+  .stepper-icon-active .MuiStepLabel-label.Mui-completed {
+    font-size: 11px;
+  }
+  .stepper-icon-active .MuiStepIcon-root {
+    height: 30px;
+    width: 30px;
+ }
+  .stepper-icon-active .MuiStepIcon-root.Mui-active {
+    height: 30px;
+    width: 30px;
+  }
+  .stepper-icon-active .MuiStepConnector-root {
+    top: 13px;
+  }
+}
