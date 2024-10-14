@@ -172,11 +172,11 @@ const CustomizeServices = ({ handleNext, handleBack }) => {
             </div>
           ))}
         </div>
-        <div className="service-button">
+        {/* <div className="service-button">
           <button type="submit" className="service-btn">
             Confirm
           </button>
-        </div>
+        </div> */}
       </form>
     </div>
   );

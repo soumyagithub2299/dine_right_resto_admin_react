@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import './FeaturedImg.css'; 
+import { MdDelete } from "react-icons/md";
 
 const FeaturedImg = () => {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -25,23 +26,11 @@ const FeaturedImg = () => {
     }
   };
 
-  // Handler for removing the last image in the list
-  const removeLastImage = () => {
-    if (selectedImages.length > 0) {
-      setSelectedImages((prevImages) => prevImages.slice(0, -1));
-    }
-
-    // Clear the input when no images are left
-    if (selectedImages.length === 1) {
-      fileInputRef.current.value = ''; // Clear the file input
-    }
-  };
-
   return (
     <div className='container'>
       <p className='Heading-RestroBackgroundImg' style={{ textAlign: 'center' }}>Upload Gallery Images</p> {/* Centered Heading */}
       <div className='row row-bookingPeriod'>
-        <div className='col-12 col-md-7'>
+        <div className='col-12 col-md-12'>
           <div className='SubHeading-Profile mb-2'>Featured Images:</div>
           
           {/* Image Upload Input */}
@@ -55,15 +44,18 @@ const FeaturedImg = () => {
             />
           </div>
           
-          {/* Display Selected Images */}
+          {/* Display Selected Images in rows of 5 */}
           <div className='selected-images mt-3'>
             {selectedImages.map((image, index) => (
-              <div key={index} className='image-thumbnail'>
-                <img src={image} alt={`Selected ${index}`} width={50} height={50} />
-                <button className='remove-btn' onClick={() => removeImage(index)}>
-                  &times;
-                </button>
-              </div>
+              <React.Fragment key={index}>
+                {index % 5 === 0 && index !== 0 && <hr className='hr-menu-accordian-preview' />} {/* Add hr tag after every 5 images */}
+                <div className='image-item'>
+                  <img src={image} alt={`Selected ${index}`} className='image-thumbnail' />
+                  <button className='remove-btn' onClick={() => removeImage(index)}>
+                    <MdDelete />
+                  </button>
+                </div>
+              </React.Fragment>
             ))}
           </div>
 
@@ -72,13 +64,6 @@ const FeaturedImg = () => {
             <div className='no-file-chosen'>No file chosen</div>
           )}
         </div>
-
-        <div className='col-12 col-md-3'>
-          {/* Delete Button to remove the last image */}
-          <button className="deleteBtn-Featuredimg" onClick={removeLastImage}>
-            Delete
-          </button>
-        </div>
       </div>
       <hr className='hr-menu-accordian' />
     </div>
@@ -86,6 +71,9 @@ const FeaturedImg = () => {
 };
 
 export default FeaturedImg;
+
+
+
 
 
     

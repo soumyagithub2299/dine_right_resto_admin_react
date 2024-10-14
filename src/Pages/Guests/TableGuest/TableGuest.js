@@ -13,7 +13,6 @@ const initialGuestData = [
     name: 'Olivia Rhye',
     email: 'olivia@untitledui.com',
     image: './assets/images/Guests/guest-img-1.jpg',
-    mobile: '123456789',
     time: '21:00-22:00',
     date: 'Jan 6, 2022',
     status: 'confirmed',
@@ -26,7 +25,6 @@ const initialGuestData = [
     name: 'Olivia Rhye',
     email: 'olivia@untitledui.com',
     image: './assets/images/Guests/guest-img-2.jpg',
-    mobile: '923456781',
     time: '10:00-22:00',
     date: 'Jan 7, 2022',
     status: 'cancelled',
@@ -39,7 +37,6 @@ const initialGuestData = [
     name: 'Olivia Rhye',
     email: 'olivia@untitledui.com',
     image: './assets/images/Guests/guest-img-1.jpg',
-    mobile: '823456789',
     time: '9:00-22:00',
     date: 'Jan 8, 2022',
     status: 'refund',
@@ -52,7 +49,6 @@ const initialGuestData = [
     name: 'Olivia Rhye',
     email: 'olivia@untitledui.com',
     image: './assets/images/Guests/guest-img-1.jpg',
-    mobile: '823456789',
     time: '9:00-22:00',
     date: 'Jan 8, 2022',
     status: 'refund',
@@ -65,7 +61,6 @@ const initialGuestData = [
     name: 'Olivia Rhye',
     email: 'olivia@untitledui.com',
     image: './assets/images/Guests/guest-img-1.jpg',
-    mobile: '823456789',
     time: '9:00-22:00',
     date: 'Jan 8, 2022',
     status: 'confirmed',
@@ -78,7 +73,6 @@ const initialGuestData = [
     name: 'Olivia Rhye',
     email: 'olivia@untitledui.com',
     image: './assets/images/Guests/guest-img-1.jpg',
-    mobile: '823456789',
     time: '9:00-22:00',
     date: 'Jan 8, 2022',
    status: 'confirmed',
@@ -91,7 +85,6 @@ const initialGuestData = [
     name: 'Olivia Rhye',
     email: 'olivia@untitledui.com',
     image: './assets/images/Guests/guest-img-1.jpg',
-    mobile: '823456789',
     time: '9:00-22:00',
     date: 'Jan 8, 2022',
     status: 'refund',
@@ -104,7 +97,6 @@ const initialGuestData = [
     name: 'Olivia Rhye',
     email: 'olivia@untitledui.com',
     image: './assets/images/Guests/guest-img-1.jpg',
-    mobile: '823456789',
     time: '9:00-22:00',
     date: 'Jan 8, 2022',
    status: 'confirmed',
@@ -117,7 +109,6 @@ const initialGuestData = [
     name: 'Olivia Rhye',
     email: 'olivia@untitledui.com',
     image: './assets/images/Guests/guest-img-1.jpg',
-    mobile: '823456789',
     time: '9:00-22:00',
     date: 'Jan 8, 2022',
    status: 'confirmed',
@@ -130,7 +121,6 @@ const initialGuestData = [
     name: 'Olivia Rhye',
     email: 'olivia@untitledui.com',
     image: './assets/images/Guests/guest-img-1.jpg',
-    mobile: '823456789',
     time: '9:00-22:00',
     date: 'Jan 8, 2022',
     status: 'confirmed',
@@ -143,7 +133,6 @@ const initialGuestData = [
     name: 'Olivia Rhye',
     email: 'olivia@untitledui.com',
     image: './assets/images/Guests/guest-img-1.jpg',
-    mobile: '823456789',
     time: '9:00-22:00',
     date: 'Jan 8, 2022',
     status: 'confirmed',
@@ -156,7 +145,6 @@ const initialGuestData = [
     name: 'Olivia Rhye',
     email: 'olivia@untitledui.com',
     image: './assets/images/Guests/guest-img-1.jpg',
-    mobile: '823456789',
     time: '9:00-22:00',
     date: 'Jan 8, 2022',
     status: 'confirmed',
@@ -247,7 +235,7 @@ const TableGuest = () => {
             <tr>
               <th scope="col">Sr No.</th>
               <th scope="col">Guest Name</th>
-              <th scope="col">Mobile No.</th>
+              {/* <th scope="col">Mobile No.</th> */}
               <th scope="col">Time</th>
               <th scope="col">Date</th>
               <th scope="col">Status</th>
@@ -276,7 +264,7 @@ const TableGuest = () => {
                     </div>
                   </div>
                 </td>
-                <td className='text-guest'>{guest.mobile}</td>
+                {/* <td className='text-guest'>{guest.mobile}</td> */}
                 <td className='text-guest'>{guest.time}</td>
                 <td className='text-guest'>{guest.date}</td>
                 <td className={`status ${guest.status}`}>

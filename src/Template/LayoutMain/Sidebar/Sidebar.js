@@ -181,16 +181,15 @@ const Sidebar = ({ isOpen }) => {
             </Link> */}
 
             <Link to="/login">
-              <li
+              {/* <li
                 className={`menu-item ${
                   activeItem === "/logout" ? "active" : ""
                 }`}
                 onClick={() => handleItemClick("/logout")}
               >
-                {/* <img src="./assets/images/Sidebar/logout.png" alt="Logout" /> */}
                 <TbLogout />
                 <span>Logout</span>
-              </li>
+              </li> */}
             </Link>
           </ul>
         </div>

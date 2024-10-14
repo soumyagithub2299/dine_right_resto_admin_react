@@ -49,7 +49,6 @@ const Uploads = () => {
         {/* <BannerVideo/> */}
         <FeaturedImg />
         <ServiceHours />
-        <SaveBtnUplod />
       </div>
     </>
   );

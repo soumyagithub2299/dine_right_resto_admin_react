@@ -25,8 +25,14 @@ const steps = [
 
 const NewAccount = () => {
   const [activeStep, setActiveStep] = useState(0);
+  const [userId, setUserId] = useState(null); // State to store userId or any other data
 
-  const handleNext = () => {
+
+  const handleNext = (data) => {
+    console.log("handleNext",data)
+    if (data?.userId) {
+      setUserId(data.userId); // Store userId when passed
+    }
     setActiveStep((prevActiveStep) => Math.min(prevActiveStep + 1, steps.length - 1));
   };
 
@@ -40,12 +46,12 @@ const NewAccount = () => {
 
   const stepContents = [
     <CreateAccount handleNext={handleNext} />,
-    <RestroDetails handleNext={handleNext} handleBack={handleBack} />,
-    <VerifyEmailOTP handleNext={handleNext} handleBack={handleBack} />,
-    <GuestTimeSlot handleNext={handleNext} handleBack={handleBack} />,
-    <AddService handleNext={handleNext} handleBack={handleBack} />,
-    <DinningArea handleNext={handleNext} handleBack={handleBack} />,
-    <AddTable handleNext={handleNext} handleBack={handleBack} />
+    <RestroDetails handleNext={handleNext} handleBack={handleBack}  userId={userId}/>,
+    <VerifyEmailOTP handleNext={handleNext} handleBack={handleBack} userId={userId}/>,
+    <GuestTimeSlot handleNext={handleNext} handleBack={handleBack} userId={userId}/>,
+    <AddService handleNext={handleNext} handleBack={handleBack} userId={userId}/>,
+    <DinningArea handleNext={handleNext} handleBack={handleBack} userId={userId}/>,
+    <AddTable handleNext={handleNext} handleBack={handleBack} userId={userId}/>
   ];
 
   return (

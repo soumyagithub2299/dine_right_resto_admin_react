@@ -163,3 +163,19 @@ export async function SignInOTPAPI(data) {
     return response;
   });
 }
+
+// get restaurant  type in restro details
+export async function getRestroTypeAPI() {
+  return withAuthorization(async () => {
+    const response = await axiosInstance.get("/api/auth/getRestaurantType");
+    return response;
+  });
+}
+
+// get cuisines list in restro details 
+export async function getCuisinesTypeAPI() {
+  return withAuthorization(async () => {
+    const response = await axiosInstance.get("/api/auth/getCuisines");
+    return response;
+  });
+}

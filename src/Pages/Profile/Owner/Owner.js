@@ -12,7 +12,7 @@ const Owner = () => {
     <div className="container">
       <div className="MainInfo-Owner">
         <div className="heading-Profile">PERSONAL INFORMATION</div>
-        <div className="CommisionField-Owner">Commission to DineRight-25%</div>
+        <div className="CommisionField-Owner">Commission to DineRight:25%</div>
         
         {/* Conditionally render based on approval status */}
         {isApproved ? (

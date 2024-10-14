@@ -18,7 +18,7 @@ const AddButtonMenu = () => {
     <div className='mb-5'>
       <div className='add-menu-btn'>
         <button type='button' className='AddMenu-Restro-Admin' onClick={toggleModal}>
-          +Add Menu
+          +Add Menu Item
         </button>
       </div>
 

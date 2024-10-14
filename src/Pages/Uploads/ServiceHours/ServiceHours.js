@@ -19,7 +19,7 @@ const ServiceHours = () => {
   };
 
   return (
-    <div className='container container-ServiceHours-Uplod'>
+    <div className='container container-ServiceHours-Uplod mb-5'>
       <button className='btn-ServiceHours-Uplod' onClick={handleShow}>
         Add Service Hours
       </button>

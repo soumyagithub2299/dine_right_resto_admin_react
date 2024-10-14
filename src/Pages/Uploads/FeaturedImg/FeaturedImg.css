@@ -1,4 +1,4 @@
-.selected-images {
+/* .selected-images {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
@@ -29,7 +29,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-  }
+  } */
   .flex-bookingPeriod-btn{
     background-color: #c39873;
     /* width: 520px; */
@@ -46,4 +46,45 @@
     width: 100px;
     margin: 6px 0;
     border-radius: 5px;
+  }
+
+  .selected-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+  }
+  
+  .image-item {
+    display: flex;
+    align-items: center; /* Align the delete button vertically centered with the image */
+    gap: 10px; /* Add some space between the image and the delete button */
+    flex-direction: column;
+  }
+  
+  /* .hr-after-first-row {
+    width: 100%;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+  } */
+  .image-thumbnail {
+    width: 180px;
+    height: 100px;
+    object-fit: cover;
+  }
+  
+  .remove-btn {
+    /* background-color: red ; */
+    color: red;
+    border: none;
+    font-size: 25px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  
+ 
+  .hr-menu-accordian-preview{
+    width: 100%;
+    margin-top: 20px;
+    border: 1px solid #c39873 !important;
   }

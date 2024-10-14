@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../Template/LayoutMain/LayoutMain/Layout.css";
 import Owner from "./Owner/Owner";
-import RestroDetailsAdmin from "./RestroDetailsAdmin/RestroDetailsAdmin";
 import Savebtn from "./Savebtn/Savebtn";
 
 
