@@ -8,27 +8,27 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
-import { Close as CloseIcon } from "@mui/icons-material"; // Importing Close Icon
+import { Close as CloseIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { styled } from "@mui/system"; // For styled components
+import { styled } from "@mui/system"; 
 
 // Styled components
 const StyledDialog = styled(Dialog)({
   "& .MuiDialog-paper": {
-    boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.2)", // Background shadow
-    borderRadius: "8px", // Rounded corners
+    boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.2)", 
+    borderRadius: "8px",
   },
 });
 
 const StyledDialogContent = styled(DialogContent)({
-  overflowX: "hidden", // Prevent horizontal scroll
+  overflowX: "hidden",
 });
 
 const StyledCloseButton = styled(IconButton)({
   position: "absolute",
   right: 8,
   top: 8,
-  color: "#f50057", // Color for the close button
+  color: "#f50057", 
 });
 
 const ModalBackground = styled("div")({
@@ -37,8 +37,8 @@ const ModalBackground = styled("div")({
   left: 0,
   right: 0,
   bottom: 0,
-  backgroundColor: "rgba(0, 0, 0, 0.5)", // Background opacity behind modal
-  zIndex: 1, // Behind the modal
+  backgroundColor: "rgba(0, 0, 0, 0.5)", 
+  zIndex: 1,
 });
 
 const SignUpSuccessModal = () => {
@@ -50,18 +50,22 @@ const SignUpSuccessModal = () => {
     navigate("/");
   };
 
+  // Prevent closing on backdrop click
+  const handleCloseDialog = (event, reason) => {
+    if (reason !== "backdropClick") {
+      handleClose();
+    }
+  };
+
   return (
     <>
-      {open && <ModalBackground />} {/* Background opacity behind modal */}
-      <StyledDialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+      {open && <ModalBackground />}
+      <StyledDialog open={open} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
         <DialogTitle>
           <Typography variant="h6" component="span">
             Congratulations!
           </Typography>
-          <StyledCloseButton
-            onClick={handleClose}
-            aria-label="close"
-          >
+          <StyledCloseButton onClick={handleClose} aria-label="close">
             <CloseIcon />
           </StyledCloseButton>
         </DialogTitle>
@@ -77,15 +81,15 @@ const SignUpSuccessModal = () => {
             onClick={handleClose}
             variant="contained"
             style={{
-              color: '#FFFFFF', // White text color
-              backgroundColor: '#007BFF', // Dark blue background color
-              transition: 'background-color 0.3s ease', // Smooth transition for hover effect
+              color: '#FFFFFF', 
+              backgroundColor: '#007BFF', 
+              transition: 'background-color 0.3s ease',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#0056b3'; // Darker blue on hover
+              e.currentTarget.style.backgroundColor = '#0056b3'; 
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#007BFF'; // Original blue when not hovering
+              e.currentTarget.style.backgroundColor = '#007BFF'; 
             }}
           >
             Okay 🤝

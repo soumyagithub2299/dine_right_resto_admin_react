@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import Accordion from "react-bootstrap/Accordion";
-import { MdKeyboardArrowDown, MdKeyboardArrowUp, MdDelete } from "react-icons/md";
+import {
+  MdKeyboardArrowDown,
+  MdKeyboardArrowUp,
+  MdDelete,
+} from "react-icons/md";
 import DeleteCourseModal from "../DeleteCourseModal/DeleteCourseModal";
 import "./../../Menu/MainCourse/MainCourse.css";
 
@@ -36,6 +40,9 @@ const CourceListingDynamic = ({ AllData }) => {
     <div className="container">
       <Accordion activeKey={activeKey}>
         <Accordion.Item eventKey="0">
+
+
+
           <Accordion.Header
             onClick={() => handleToggle("0")}
             className="AccordionHeader"
@@ -50,34 +57,44 @@ const CourceListingDynamic = ({ AllData }) => {
               alignItems: "center",
             }}
           >
-            <div className="Header-flex-Course">
-              <div>{course_name}</div>
-              <div style={{ display: "flex", alignItems: "center" }}>
+            <div
+              className="Header-flex-Course"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <div style={{ flex: 1 }}>{course_name}</div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginLeft: "auto",
+                }}
+              >
                 <span className="icon" style={{ marginRight: "10px" }}>
-                  {activeKey === "0" ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
-                </span>
-
+                  {activeKey === "0" ? (
+                    <MdKeyboardArrowUp />
+                  ) : (
+                    <MdKeyboardArrowDown />
+                  )}
+                </span> 
 
                 {/* <MdDelete
                   style={{ color: "rgb(223, 22, 22)", cursor: "pointer" }}
                   onClick={handleDeleteClick}
                 /> */}
-
-
-
               </div>
             </div>
           </Accordion.Header>
+
+
+
+
+          
           <hr className="hr-menu-accordian" />
           <Accordion.Body>
-            <div className="container">
-              {/* Iterate over the menus */}
-              {menus.map((menu) => (
-                <div key={menu.menu_id} className="row Main-row-Course" style={{ marginBottom: "20px" }}>
-                  <div className="section">
-                    <h6 style={{ fontWeight: "bold", fontSize: "1.2rem", color: "#333" }}>
-                      {menu.menu_name}
-                    </h6>
 
 
 
@@ -88,69 +105,151 @@ const CourceListingDynamic = ({ AllData }) => {
 
 
 
+          <div className="container-fluid">
+  {menus.map((menu) => (
+    <div
+      key={menu.menu_id}
+      className="row Main-row-Course"
+      style={{ marginBottom: "20px", width: "100%" }}
+    >
+      <div className="section">
+        <h6
+          style={{
+            fontWeight: "bold",
+            fontSize: "1.2rem",
+            color: "#333",
+          }}
+        >
+          {menu.menu_name}
+        </h6>
 
-
-
-
-                    <div className="container-starter" style={{ border: "1px solid #dee2e6", borderRadius: "5px", padding: "10px", backgroundColor: "#ffffff" }}>
-                      {menu.menu_items && menu.menu_items.length > 0 ? (
-                        menu.menu_items.map((item, index) => (
-
-                          <div key={item.master_item_id} className="row" style={{ alignItems: "center", marginBottom: "10px" }}>
-                            <div className="col-1 col-md-1" style={{ textAlign: "center" }}>
-                              <span style={{ fontWeight: "bold" }}>{index + 1}</span>
-                            </div>
-                            <div className="col-3 col-md-2">
-                              <img
-                                className="startter-img"
-                                src={item.master_item_image}
-                                alt={item.master_item_name}
-                                style={{ width: "100%", borderRadius: "5px" }}
-                              />
-                            </div>
-                            <div className="col-7 col-md-8">
-                              <div className="row StarterDetails-Starter">
-                                <div className="col-12 col-md-12 starter-name" style={{ fontWeight: "bold", fontSize: "1rem" }}>
-                                  {item.master_item_name}
-                                </div>
-                                <div className="col-12 col-md-12 starter-details" style={{ color: "#555" }}>
-                                  {item.master_item_description}
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-2 col-md-2 starter-price" style={{ fontWeight: "bold", color: "#28a745" }}>
-                              ₹{item.master_item_price}
-                            </div>
-                          </div>
-
-
-                        ))
-                      ) : (
-                        <p>No items available for {menu.menu_name}</p>
-                      )}
+        <div className="row">
+          <div
+            className="col-12"
+            style={{
+              border: "1px solid #dee2e6",
+              borderRadius: "5px",
+              padding: "10px",
+              backgroundColor: "#ffffff",
+              marginBottom: "20px",
+            }}
+          >
+            <div
+              style={{
+                margin: "0px auto",
+                padding: "5px", // Optional for spacing
+                width: "100%", // Use the full width available
+              }}
+            >
+              {menu.menu_items && menu.menu_items.length > 0 ? (
+                menu.menu_items.map((item, index) => (
+                  <div
+                    key={item.master_item_id}
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-start", // Align items to the top
+                      marginBottom: "15px", // Increased space between items
+                      borderBottom: "1px solid #ddd", // Optional for item separation
+                      paddingBottom: "10px", // Optional for spacing
+                      width: "100%", // Ensure each item takes full width
+                    }}
+                  >
+                    <div
+                      style={{
+                        flex: "0 0 5%", // Numbering column
+                        textAlign: "center", // Center align the numbering
+                      }}
+                    >
+                      <span style={{ fontWeight: "bold" }}>{index + 1}.</span>
                     </div>
-
-
-
-
-
-
-
-
-
-
-                    
+                    <div
+                      style={{
+                        flex: "0 0 15%", // Image column
+                        marginLeft: "20px",
+                      }}
+                    >
+                      <img
+                        src={item.master_item_image}
+                        alt={item.master_item_name}
+                        style={{
+                          width: "125px",
+                          height: "80px",
+                          borderRadius: "5px",
+                          objectFit: "contain",
+                          border: "1px solid rgba(255, 0, 0, 0.5)",
+                        }}
+                      />
+                    </div>
+                    <div
+                      style={{
+                        flex: "0 0 55%", // Details column
+                      }}
+                    >
+                      <div style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+                        {item.master_item_name}
+                      </div>
+                      <div
+                        style={{
+                          color: "#555",
+                          fontSize: "0.9rem",
+                          marginBottom: "5px", // Decreased space below description
+                        }}
+                      >
+                        {item.master_item_description}
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        flex: "0 0 15%", // Price column
+                        fontWeight: "bold",
+                        color: "#28a745",
+                        fontSize: "1.1rem", // Adjusted font size for better visibility
+                      }}
+                    >
+                      Price: ₹{item.master_item_price}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p>No items available for {menu.menu_name}</p>
+              )}
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
 
-      <DeleteCourseModal show={showDeleteModal} handleClose={handleCloseModal} />
-
-
+      <DeleteCourseModal
+        show={showDeleteModal}
+        handleClose={handleCloseModal}
+      />
     </div>
   );
 };

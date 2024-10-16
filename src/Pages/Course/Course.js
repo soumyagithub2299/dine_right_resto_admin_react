@@ -60,7 +60,7 @@ const Course = () => {
       );
   
       setLoading(false);
-      console.log(response.data); // Log the response to check its structure
+  
   
       if (response?.data?.response === true) {
         setAllDataOfAPI(response?.data?.data);
