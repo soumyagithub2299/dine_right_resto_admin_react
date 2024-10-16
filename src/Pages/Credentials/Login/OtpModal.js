@@ -1,289 +1,295 @@
-// import React, { useState, useEffect, useRef } from 'react';
-// import { Modal, Button, Form } from 'react-bootstrap';
-// import { FaAngleLeft } from "react-icons/fa6";
-// import { useNavigate } from 'react-router-dom'; 
-// import './Modal.css';
+import React, { useState, useEffect, useRef } from "react";
+import { Modal, Button, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "./Modal.css";
+import axios from "axios";
+import Loader from "../../../Loader/Loader/Loader";
 
-// const OtpModal = ({ isOpen, onHide, onOtpSubmit, onResendOtp }) => {
-//     const [otp, setOtp] = useState(['', '', '', '']);
-//     const [minutes, setMinutes] = useState(5);
-//     const [seconds, setSeconds] = useState(15);
-//     const [isResendEnabled, setIsResendEnabled] = useState(true);
-//     const inputRefs = useRef([]);
-//     const navigate = useNavigate(); 
+const OtpModal = ({ isOpen, onHide, email }) => {
+  const [otp, setOtp] = useState(["", "", "", ""]);
 
-//     useEffect(() => {
-//         let timer = null;
+  const userId = sessionStorage.getItem("newSignUpRestoUserId");
 
-//         if (isOpen && (minutes > 0 || seconds > 0)) {
-//             setIsResendEnabled(true); 
-//             timer = setInterval(() => {
-//                 if (seconds === 0) {
-//                     if (minutes === 0) {
-//                         clearInterval(timer);
-//                         setIsResendEnabled(true); 
-//                     } else {
-//                         setMinutes(minutes - 1);
-//                         setSeconds(59);
-//                     }
-//                 } else {
-//                     setSeconds(seconds - 1);
-//                 }
-//             }, 1000);
-//         }
 
-//         return () => clearInterval(timer);
-//     }, [isOpen, minutes, seconds]);
+  const [timeRemaining, setTimeRemaining] = useState(20);
+  const [showResend, setShowResend] = useState(false); // New state for resend button
+  const [loading, setLoading] = useState(false);
+  const inputRefs = useRef([]);
+  const navigate = useNavigate();
 
-//     const handleChange = (e, index) => {
-//         const value = e.target.value.slice(0, 1); 
-//         const newOtp = [...otp];
-//         newOtp[index] = value;
-//         setOtp(newOtp);
+  const handleChange = (e, index) => {
+    const value = e.target.value.slice(0, 1);
 
-//         if (value && index < 3) {
-//             inputRefs.current[index + 1].focus();
-//         }
+    // Only accept numbers
+    if (!/^[0-9]$/.test(value) && value !== "") {
+      return;
+    }
 
-//         if (!value && index > 0) {
-//             inputRefs.current[index - 1].focus();
-//         }
-//     };
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
 
-//     const handleSubmit = (event) => {
-//         event.preventDefault();
-//         onOtpSubmit(otp); // Call the function to handle OTP submission
-//         navigate('/dashboard'); // Redirect to /dashboard on submit
-//     };
+    if (value && index < 3) {
+      inputRefs.current[index + 1].focus();
+    }
 
-//     const handleResendOtp = () => {
-//         setMinutes(5);
-//         setSeconds(15);
-//         setIsResendEnabled(false);
-//     };
+    if (!value && index > 0) {
+      inputRefs.current[index - 1].focus();
+    }
+  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-//     const formatTime = (minutes, seconds) => {
-//         return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-//     };
+    if (otp.some((digit) => digit === "")) {
+      toast.error("Please enter all 4 digits of the OTP.");
+      return;
+    }
 
-//     const handleSignInClick = () => {
-//         onHide(); // Close the modal when "Sign In" button is clicked
-//     };
+    try {
 
-//     return (
-//         <Modal show={isOpen} onHide={onHide} centered>
-//             <Modal.Header>
-//                 <Modal.Title>
-//                     {/* <FaAngleLeft />  */}
-//                     Verify account</Modal.Title>
-//             </Modal.Header>
-//             <Modal.Body>
-//                 <Form onSubmit={handleSubmit}>
-//                     <Form.Group controlId="otp">
-//                         <label className='otp-label'>
-//                         We have sent you a verification code to your email. Please confirm
-//                         it now.
-//                         </label>
-//                         <div className="otp-input-container">
-//                             {otp.map((digit, index) => (
-//                                 <Form.Control
-//                                     key={index}
-//                                     type="text"
-//                                     value={digit}
-//                                     onChange={(e) => handleChange(e, index)}
-//                                     maxLength="1"
-//                                     className="otp-input"
-//                                     ref={(el) => (inputRefs.current[index] = el)}
-//                                 />
-//                             ))}
-//                         </div>
-//                     </Form.Group>
-//                     <p className='resend-txt'> Resend verification in <span>{formatTime(minutes, seconds)}</span></p>
-//                     <hr />
-//                     <Button variant="primary" type="submit" className='login-btn'>
-//                         Submit
-//                     </Button>
-//                     <div className='modal-sign-btn'>
-//                         <Button type="button" className='SignIn-btn' onClick={handleSignInClick}>
-//                             Sign In
-//                         </Button>
-//                     </div>
-//                 </Form>
-//             </Modal.Body>
-//         </Modal>
-//     );
-// };
 
-// export default OtpModal;
+
+      const body = {
+        email:email,
+        otp: Number(otp.join("")),
+      };
+
+      setLoading(true);
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/verifyLoginOtp`,
+        body
+      );
+
+      setLoading(false);
+
+
+
+      if (response.data.response === true) {
+
+
+        toast.success(response?.data?.success_msg || "Login Successfully!");
+
+        sessionStorage.clear();
+
+        sessionStorage.setItem("newSignUpRestoUserId",userId);
+
+        sessionStorage.setItem("isDineRightRestoAdminLoggedIn", true);
+
+        sessionStorage.setItem(
+          "TokenForDineRightRestoAdmin",
+          response?.data?.token
+        );
+
+        sessionStorage.setItem(
+          "NameOfDineRightRestoAdmin",
+          response?.data?.restorantName
+        );
+
+
+        navigate("/dashboard");
 
 
 
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
-import { FaAngleLeft } from "react-icons/fa6";
-import { useNavigate } from 'react-router-dom'; 
-import { toast } from 'react-toastify'; 
-import './Modal.css';
-import { SignInOTPAPI } from './../../../utils/APIs/credentialsApis'; 
-import axios from 'axios';
 
-const OtpModal = ({ isOpen, onHide, onOtpSubmit, onResendOtp }) => {
-    const [otp, setOtp] = useState(['', '', '', '']);
-    const [minutes, setMinutes] = useState(5);
-    const [seconds, setSeconds] = useState(15);
-    const [isResendEnabled, setIsResendEnabled] = useState(true);
-    const [loading, setLoading] = useState(false); 
-    const inputRefs = useRef([]);
-    const navigate = useNavigate(); 
+        onHide();
 
-    useEffect(() => {
-        let timer = null;
+      } else {
+        toast.error(
+          response.data.response.error_msg || "Invalid OTP. Please try again."
+        );
+      }
 
-        if (isOpen && (minutes > 0 || seconds > 0)) {
-            setIsResendEnabled(true); 
-            timer = setInterval(() => {
-                if (seconds === 0) {
-                    if (minutes === 0) {
-                        clearInterval(timer);
-                        setIsResendEnabled(true); 
-                    } else {
-                        setMinutes(minutes - 1);
-                        setSeconds(59);
-                    }
-                } else {
-                    setSeconds(seconds - 1);
-                }
-            }, 1000);
-        }
 
-        return () => clearInterval(timer);
-    }, [isOpen, minutes, seconds]);
 
-    const handleChange = (e, index) => {
-        const value = e.target.value.slice(0, 1);
 
-        // Only accept numbers
-        if (!/^[0-9]$/.test(value) && value !== '') {
-            return;
-        }
 
-        const newOtp = [...otp];
-        newOtp[index] = value;
-        setOtp(newOtp);
+    } catch (error) {
+      setLoading(false);
+      console.error("Error during OTP verification:", error);
+      toast.error("Error verifying OTP. Please try again.");
+    }
+  };
 
-        if (value && index < 3) {
-            inputRefs.current[index + 1].focus();
-        }
+  const handleSignInClick = () => {
+    onHide();
+  };
 
-        if (!value && index > 0) {
-            inputRefs.current[index - 1].focus();
-        }
-    };
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+  const handleResend = async () => {
+    try {
+      const body = {
+
+        // email: email,
+        userId:userId,
         
-        if (otp.some((digit) => digit === '')) {
-            toast.error("Please enter all 4 digits of the OTP.");
-            return;
-        }
-    
-        try {
-            const body = {
-                otp: otp.join(''), // Creating the structured body object
-            };
-    
-            setLoading(true);
-    
-            // Send a POST request to the API
-            const response = await axios.post(
-                "https://dineright.techfluxsolutions.com/api/auth/verifyLoginOtp",
-                body
-            );
-    
-            setLoading(false);
-    
-            // Check if the OTP verification was successful
-            if (response.data.response && response.data.response.response === true) {
-                toast.success(response.data.response.success_msg || "OTP verified successfully.");
-    
-                // Store token in session storage
-                const token = response.data.response.token; 
-                sessionStorage.setItem('otpToken', token);
-    
-                onOtpSubmit(body.otp); // Pass the OTP value as part of the submission callback
-                navigate('/dashboard'); // Navigate to dashboard on success
-            } else {
-                toast.error(response.data.response.error_msg || "Invalid OTP. Please try again.");
-            }
-        } catch (error) {
-            setLoading(false);
-            console.error("Error during OTP verification:", error);
-            toast.error("Error verifying OTP. Please try again.");
-        }
-    };
-    ;
-    
+      };
 
-    const handleResendOtp = () => {
-        setMinutes(5);
-        setSeconds(15);
-        setIsResendEnabled(false);
-        onResendOtp(); // Assuming there's an external resend function
-    };
+      setLoading(true);
 
-    const formatTime = (minutes, seconds) => {
-        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    };
+      const response = await axios.post(
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/resendrestaurantOtpAfterRegister`,
+        body
+      );
 
-    const handleSignInClick = () => {
-        onHide(); 
-    };
+      setLoading(false);
 
-    return (
-        <Modal show={isOpen} onHide={onHide} centered>
-            <Modal.Header>
-                <Modal.Title>
-                    {/* <FaAngleLeft />  */}
-                    Verify account</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group controlId="otp">
-                        <label className='otp-label'>
-                            We have sent you a verification code to your email. Please confirm it now.
-                        </label>
-                        <div className="otp-input-container">
-                            {otp.map((digit, index) => (
-                                <Form.Control
-                                    key={index}
-                                    type="text"
-                                    value={digit}
-                                    onChange={(e) => handleChange(e, index)}
-                                    maxLength="1"
-                                    className="otp-input"
-                                    ref={(el) => (inputRefs.current[index] = el)}
-                                />
-                            ))}
-                        </div>
-                    </Form.Group>
-                    <p className='resend-txt'>
-                        Resend verification in <span>{formatTime(minutes, seconds)}</span>
-                    </p>
-                    <hr />
-                    <Button variant="primary" type="submit" className='login-btn' disabled={loading}>
-                        {loading ? 'Submitting...' : 'Submit'}
-                    </Button>
-                    <div className='modal-sign-btn'>
-                        <Button type="button" className='SignIn-btn' onClick={handleSignInClick}>
-                            Sign In
-                        </Button>
-                    </div>
-                </Form>
-            </Modal.Body>
-        </Modal>
-    );
+      if (response.data.response === true) {
+        setTimeRemaining(20);
+        setShowResend(false);
+
+        // toast.info("Verification code resent to your email.");
+
+             toast.info(response.data.success_msg || "Verification code resent to your email.");
+
+
+      } else {
+        toast.error(response.data.error_msg || "Failed. Please try again.");
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Error", error);
+      toast.error("An error occurred. Please try again later.");
+    }
+  };
+
+  useEffect(() => {
+    if (timeRemaining > 0) {
+      const timer = setInterval(() => {
+        setTimeRemaining((prevTime) => {
+          if (prevTime <= 1) {
+            clearInterval(timer);
+            setShowResend(true); // Show "Resend OTP" when the timer ends
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [timeRemaining]);
+
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${String(minutes).padStart(2, "0")}:${String(
+      remainingSeconds
+    ).padStart(2, "0")}`;
+  };
+
+  return (
+    <>
+      <Modal show={isOpen} onHide={onHide} centered>
+        {loading && <Loader />}
+
+        <Modal.Header style={{ padding: "0" }}>
+          {" "}
+   
+          <Modal.Title
+            style={{
+              width: "100%",
+              padding: "10px",
+              textAlign: "center",
+            }}
+          >
+            <h2
+              style={{
+                margin: "0",
+                fontSize: "24px",
+                background: "linear-gradient(90deg, #fffacd, #ffebcd)",
+                padding: "10px 0",
+                borderRadius: "8px",
+                textAlign: "center",
+              }}
+            >
+              Verify Account
+            </h2>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* Modal Body Content */}
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="otp">
+              <label className="otp-label">
+                Your verification code has been sent to your email. Please enter
+                it here to verify.
+              </label>
+              <div className="otp-input-container">
+                {otp.map((digit, index) => (
+                  <Form.Control
+                    key={index}
+                    type="text"
+                    value={digit}
+                    onChange={(e) => handleChange(e, index)}
+                    maxLength="1"
+                    className="otp-input"
+                    ref={(el) => (inputRefs.current[index] = el)}
+                    required
+                  />
+                ))}
+              </div>
+            </Form.Group>
+
+            {showResend ? (
+              <p
+                className="timer resend-txt"
+                onClick={handleResend}
+                style={{
+                  cursor: "pointer",
+                  textDecoration: "none",
+                }}
+                onMouseEnter={(e) =>
+                  (e.target.style.textDecoration = "underline")
+                }
+                onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
+              >
+                Resend OTP
+              </p>
+            ) : (
+              <p style={{ cursor: "default" }} className="timer resend-txt">
+                {formatTime(timeRemaining)}
+              </p>
+            )}
+
+            <hr />
+
+            <div className="login-btn-container">
+              <button
+                type="submit"
+                style={{ width: "50%" }}
+                className="login-btn"
+                disabled={loading}
+              >
+                {loading ? "Loading..." : "Verify"}
+              </button>
+            </div>
+
+            <span
+              style={{
+                display: "block",
+                textAlign: "center",
+              }}
+              className="CreateAccount-text"
+            >
+              OR
+            </span>
+
+            <div className="modal-sign-btn">
+              <Button
+                type="button"
+                className="SignIn-btn"
+                onClick={handleSignInClick}
+              >
+                Cancel
+              </Button>
+            </div>
+          </Form>
+        </Modal.Body>
+      </Modal>
+    </>
+  );
 };
 
 export default OtpModal;
-

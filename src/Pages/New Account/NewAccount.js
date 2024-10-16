@@ -25,14 +25,14 @@ const steps = [
 
 const NewAccount = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const [userId, setUserId] = useState(null); // State to store userId or any other data
+  const [userId, setUserId] = useState(null);
 
 
-  const handleNext = (data) => {
-    console.log("handleNext",data)
-    if (data?.userId) {
-      setUserId(data.userId); // Store userId when passed
-    }
+  const handleNext = () => {
+
+    const userId = sessionStorage.getItem("newSignUpRestoUserId");
+    setUserId(userId);
+
     setActiveStep((prevActiveStep) => Math.min(prevActiveStep + 1, steps.length - 1));
   };
 
@@ -45,6 +45,8 @@ const NewAccount = () => {
   };
 
   const stepContents = [
+
+
     <CreateAccount handleNext={handleNext} />,
     <RestroDetails handleNext={handleNext} handleBack={handleBack}  userId={userId}/>,
     <VerifyEmailOTP handleNext={handleNext} handleBack={handleBack} userId={userId}/>,
@@ -52,6 +54,8 @@ const NewAccount = () => {
     <AddService handleNext={handleNext} handleBack={handleBack} userId={userId}/>,
     <DinningArea handleNext={handleNext} handleBack={handleBack} userId={userId}/>,
     <AddTable handleNext={handleNext} handleBack={handleBack} userId={userId}/>
+
+
   ];
 
   return (

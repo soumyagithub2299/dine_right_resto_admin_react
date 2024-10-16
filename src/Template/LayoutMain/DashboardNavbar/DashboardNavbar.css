@@ -97,9 +97,10 @@
   text-decoration: none;
 }
 
+
 .dropdown-menu li:hover {
-  background-color: #2f4cdd;
-  color: white !important;
+  background-color: #ffffe0;
+  color: black !important;
   width: 80px !important;
   height: 40px;
   border-radius: 5px;

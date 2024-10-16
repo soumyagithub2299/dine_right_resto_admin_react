@@ -1,147 +1,34 @@
-// import React, { useState } from 'react';
-// import { FaAngleLeft } from 'react-icons/fa';
-// import { MdOutlineCancel } from "react-icons/md";
-// import { useNavigate } from 'react-router-dom';
-// import './DinningArea.css';
-
-// const DinningArea = ({ handleNext, handleBack }) => {
-//   const navigate = useNavigate();
-//   const [selectedAreas, setSelectedAreas] = useState([]);
-//   const [availableAreas, setAvailableAreas] = useState([
-//     'Indoor',
-//     'Outdoor',
-//     'Terrace',
-//     'Private Dining',
-//     'Outdoor Courtyard',
-//     'Outdoor (Smoking)',
-//     'Indoor Bar Area',
-//     'Outdoor Under Canopy',
-//     'Bar Area',
-//     'Main Dining',
-//     'Pool Side'
-//   ]);
-//   const [hoveredArea, setHoveredArea] = useState("");
-
-//   const handleAreaClick = (area) => {
-//     if (!selectedAreas.includes(area)) {
-//       setSelectedAreas([...selectedAreas, area]);
-//       setAvailableAreas(availableAreas.filter(availableArea => availableArea !== area));
-//     }
-//   };
-
-//   const handleAreaRemove = (area) => {
-//     setSelectedAreas(selectedAreas.filter(selectedArea => selectedArea !== area));
-//     setAvailableAreas([...availableAreas, area]);
-//   };
-
-//   const handleAreaHover = (area) => {
-//     setHoveredArea(area);
-//   };
-
-//   const handleBackClick = () => {
-//     handleBack();
-//   };
-
-//   return (
-//     <div className='new-verify-form'>
-//       <div className='verify-form-container'>
-//         <h2 className='login-head'>
-//           <FaAngleLeft onClick={handleBackClick} style={{ cursor: 'pointer' }} />
-//           Dining Areas
-//         </h2>
-//         <div className='selected-container'>
-//           <p className='selected-txt'>
-//             Add a minimum of 1 dining area. Once you finish creating
-//             your account, you will be able to add, remove or rename dining areas in settings.
-//           </p>
-//           <ul className='selected-areas'>
-//             {selectedAreas.map((area) => (
-//               <li key={area} className='select-list-item'>
-//                 {typeof area === 'string' ? area : 'Invalid Area'}
-//                 <MdOutlineCancel
-//                   onClick={() => handleAreaRemove(area)}
-//                   className='remove-icon'
-//                 />
-//               </li>
-//             ))}
-//           </ul>
-//         </div>
-//         <div className='available-container'>
-//           <h3>Available Dining Areas</h3>
-//           <ul className='available-areas'>
-//             {availableAreas.map((area) => (
-//               <li
-//                 key={area}
-//                 onMouseEnter={() => handleAreaHover(area)}
-//                 onMouseLeave={() => setHoveredArea(null)}
-//                 className='list-item'
-//               >
-//                 {area}
-//                 <button
-//                   onClick={() => handleAreaClick(area)}
-//                   className='add-button'
-//                 >
-//                   Add
-//                 </button>
-//               </li>
-//             ))}
-//           </ul>
-//         </div>
-//         {selectedAreas.length > 0 && (
-//           <div className="service-button">
-//             <button className='confirm-button' onClick={handleNext}>
-//               Next
-//             </button>
-//           </div>
-//         )}
-//         <p
-//           className="Rendering-Login-newAccount mt-2"
-//           style={{ cursor: 'pointer', textAlign:'center'}}
-//           onClick={() => navigate('/')}
-//         >
-//           Already have an account? Login
-//         </p>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default DinningArea;
-
-
-
 import React, { useState, useEffect } from "react";
-import { FaAngleLeft } from "react-icons/fa";
 import { MdOutlineCancel } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./DinningArea.css";
 import Loader from "./../../../Loader/Loader/Loader";
+import { toast } from "react-toastify";
 
-const DinningArea = ({ handleNext, handleBack, userId }) => {
+const DinningArea = ({ handleNext, handleBack }) => {
+  const userId = sessionStorage.getItem("newSignUpRestoUserId");
   const navigate = useNavigate();
-  const [selectedAreas, setSelectedAreas] = useState([]);
-  const [availableAreas, setAvailableAreas] = useState([]);
-  const [diningAreas, setDiningAreas] = useState([]); // State to store all dining areas
-  const [hoveredArea, setHoveredArea] = useState("");
+  const [selectedAreas, setSelectedAreas] = useState([]); // Track selected areas
+  const [diningAreas, setDiningAreas] = useState([]); // Store all dining areas from the API
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Fetch dining areas on component mount
   useEffect(() => {
     const fetchDiningAreas = async () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "https://dineright.techfluxsolutions.com/api/auth/getAllDiningAreas"
+          `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getAllDiningAreas`
         );
         setLoading(false);
         if (response.data.response === true) {
-          setDiningAreas(response.data.diningAreas); // Store all dining areas
-          setAvailableAreas(
-            response.data.diningAreas.map((area) => area.dining_area_type) || []
-          );
+          setDiningAreas(response.data.diningAreas);
         } else {
-          setError(response.data.error_msg || "Failed to fetch dining areas.");
+          console.log(
+            response.data.error_msg || "Failed to fetch dining areas."
+          );
         }
       } catch (error) {
         setLoading(false);
@@ -153,59 +40,45 @@ const DinningArea = ({ handleNext, handleBack, userId }) => {
     fetchDiningAreas();
   }, []);
 
+  // Handle selection of an area
   const handleAreaClick = (area) => {
-    if (!selectedAreas.includes(area)) {
-      setSelectedAreas([...selectedAreas, area]);
-      setAvailableAreas(
-        availableAreas.filter((availableArea) => availableArea !== area)
-      );
+    if (!selectedAreas.includes(area.dining_area_id)) {
+      setSelectedAreas([...selectedAreas, area.dining_area_id]);
     }
   };
 
-  const handleAreaRemove = (area) => {
-    setSelectedAreas(
-      selectedAreas.filter((selectedArea) => selectedArea !== area)
-    );
-    setAvailableAreas([...availableAreas, area]);
+  // Handle removing a selected area
+  const handleAreaRemove = (areaId) => {
+    setSelectedAreas(selectedAreas.filter((id) => id !== areaId));
   };
 
-  const handleAreaHover = (area) => {
-    setHoveredArea(area);
-  };
-
-  const handleBackClick = () => {
-    handleBack();
-  };
-
+  // Handle form submission for dining areas
   const handleSubmitDiningAreas = async () => {
+    if (selectedAreas.length === 0) {
+      toast.error("Please select at least one dining area.");
+      return;
+    }
+
     try {
       setLoading(true);
-      // Create a mapping of dining area types to their corresponding IDs
-      const areaIdMap = diningAreas.reduce((acc, area) => {
-        acc[area.dining_area_type] = area.id; // Map area type to its ID
-        return acc;
-      }, {});
-
-      // Map the selected areas to their corresponding IDs
-      const diningAreaIds = selectedAreas
-        .map((area) => areaIdMap[area]) // Get the ID from the map
-        .filter((id) => id !== undefined); // Filter out undefined values
-
       const response = await axios.post(
-        "https://dineright.techfluxsolutions.com/api/auth/insertDiningArea",
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/insertDiningArea`,
         {
           userId: userId,
-          dining_area_ids: diningAreaIds,
+          dining_area_ids: selectedAreas, // Use selected area IDs directly
         }
       );
-
-      console.log("Radha response", response?.status);
-
       setLoading(false);
-      if (response.data.response === true) {
+
+      if (response?.data?.response === true) {
+        toast.success(
+          response?.data?.success_msg || "Dining areas submitted successfully."
+        );
         handleNext();
       } else {
-        setError(response.data.error_msg || "Failed to submit dining areas.");
+        toast.error(
+          response.data.error_msg || "Failed to submit dining areas."
+        );
       }
     } catch (error) {
       setLoading(false);
@@ -219,13 +92,7 @@ const DinningArea = ({ handleNext, handleBack, userId }) => {
       {loading && <Loader />}
       <div className="new-verify-form">
         <div className="verify-form-container">
-          <h2 className="login-head">
-            <FaAngleLeft
-              onClick={handleBackClick}
-              style={{ cursor: "pointer" }}
-            />
-            Dining Areas
-          </h2>
+          <h2 className="login-head">Dining Areas</h2>
           <div className="selected-container">
             <p className="selected-txt">
               Add a minimum of 1 dining area. Once you finish creating your
@@ -233,15 +100,29 @@ const DinningArea = ({ handleNext, handleBack, userId }) => {
               settings.
             </p>
             <ul className="selected-areas">
-              {selectedAreas.map((area) => (
-                <li key={area} className="select-list-item">
-                  {typeof area === "string" ? area : "Invalid Area"}
-                  <MdOutlineCancel
-                    onClick={() => handleAreaRemove(area)}
-                    className="remove-icon"
-                  />
-                </li>
-              ))}
+              {selectedAreas.map((areaId) => {
+                const area = diningAreas.find(
+                  (area) => area.dining_area_id === areaId
+                );
+                return (
+                  <li
+                    key={areaId}
+                    className="select-list-item"
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    {area?.dining_area_type || "Unknown Area"}
+                    <MdOutlineCancel
+                      onClick={() => handleAreaRemove(areaId)}
+                      style={{
+                        cursor: "pointer",
+                        marginLeft: "10px",
+                        color: "#ff4d4f",
+                        fontSize: "1.5rem",
+                      }} // Inline CSS
+                    />
+                  </li>
+                );
+              })}
             </ul>
           </div>
           <div className="available-container">
@@ -250,22 +131,21 @@ const DinningArea = ({ handleNext, handleBack, userId }) => {
             {error && <p className="error-message">{error}</p>}
             {!loading && !error && (
               <ul className="available-areas">
-                {availableAreas.map((area) => (
-                  <li
-                    key={area}
-                    onMouseEnter={() => handleAreaHover(area)}
-                    onMouseLeave={() => setHoveredArea(null)}
-                    className="list-item"
-                  >
-                    {area}
-                    <button
-                      onClick={() => handleAreaClick(area)}
-                      className="add-button"
-                    >
-                      Add
-                    </button>
-                  </li>
-                ))}
+                {diningAreas
+                  .filter(
+                    (area) => !selectedAreas.includes(area.dining_area_id)
+                  )
+                  .map((area) => (
+                    <li key={area.dining_area_id} className="list-item">
+                      {area.dining_area_type}
+                      <button
+                        onClick={() => handleAreaClick(area)}
+                        className="add-button"
+                      >
+                        Add
+                      </button>
+                    </li>
+                  ))}
               </ul>
             )}
           </div>
@@ -279,13 +159,6 @@ const DinningArea = ({ handleNext, handleBack, userId }) => {
               </button>
             </div>
           )}
-          <p
-            className="Rendering-Login-newAccount mt-2"
-            style={{ cursor: "pointer", textAlign: "center" }}
-            onClick={() => navigate("/")}
-          >
-            Already have an account? Login
-          </p>
         </div>
       </div>
     </>

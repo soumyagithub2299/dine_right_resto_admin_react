@@ -6,17 +6,17 @@ import { Outlet } from "react-router-dom";
 
 const Layout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(
-    // Check if sidebar state exists in localStorage, if not, default to true
-    JSON.parse(localStorage.getItem('isSidebarOpen')) || true
+    // Check if sidebar state exists in sessionStorage, if not, default to true
+    JSON.parse(sessionStorage.getItem('isSidebarOpen')) || true
   );
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  // Use effect to store the sidebar status in localStorage whenever it changes
+  // Use effect to store the sidebar status in sessionStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('isSidebarOpen', isSidebarOpen);
+    sessionStorage.setItem('isSidebarOpen', isSidebarOpen);
   }, [isSidebarOpen]);
 
   return (

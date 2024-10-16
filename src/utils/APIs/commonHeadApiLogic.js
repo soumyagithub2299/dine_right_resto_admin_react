@@ -30,7 +30,7 @@ axiosInstance.interceptors.response.use(
     ) {
       toast.error("Time elapsed, Please log in again!");
       console.log("Expired token error....");
-      localStorage.clear();
+      sessionStorage.clear();
       navigate("/");
     }
     return Promise.reject(error);
@@ -38,7 +38,7 @@ axiosInstance.interceptors.response.use(
 );
 
 export function authorizeMe() {
-  const encryptedTokenForDineRightUser = localStorage.getItem(
+  const encryptedTokenForDineRightUser = sessionStorage.getItem(
     "encryptedTokenForDineRightUser"
   );
 

@@ -35,8 +35,8 @@ function App() {
   const [isOffline, setIsOffline] = useState(false);
 
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem("isDineRightUserLoggedIn");
-    const encryptedToken = localStorage.getItem(
+    const isLoggedIn = sessionStorage.getItem("isDineRightUserLoggedIn");
+    const encryptedToken = sessionStorage.getItem(
       "encryptedTokenForDineRightUser"
     );
 

@@ -1,190 +1,40 @@
-// import React, { useState, useEffect, useRef } from "react";
-// import { Form } from "react-bootstrap";
-// import { FaAngleLeft } from "react-icons/fa";
-// import { useNavigate } from "react-router-dom"; // Import useNavigate
-// import "./VerifyNumber.css";
-
-// const VerifyEmailOTP = ({ isOpen, onResendOtp, handleNext, handleBack }) => {
-//   const [otp, setOtp] = useState(["", "", "", ""]);
-//   const [minutes, setMinutes] = useState(5);
-//   const [seconds, setSeconds] = useState(0);
-//   const [isResendEnabled, setIsResendEnabled] = useState(false);
-//   const inputRefs = useRef([]);
-//   const navigate = useNavigate(); // Initialize useNavigate
-
-//   useEffect(() => {
-//     let timer = null;
-
-//     if (isOpen) {
-//       if (minutes > 0 || seconds > 0) {
-//         setIsResendEnabled(false);
-//         timer = setInterval(() => {
-//           if (seconds === 0) {
-//             if (minutes === 0) {
-//               clearInterval(timer);
-//               setIsResendEnabled(true);
-//             } else {
-//               setMinutes(minutes - 1);
-//               setSeconds(59);
-//             }
-//           } else {
-//             setSeconds(seconds - 1);
-//           }
-//         }, 1000);
-//       } else {
-//         setIsResendEnabled(true);
-//       }
-//     } else {
-//       clearInterval(timer);
-//       setMinutes(5);
-//       setSeconds(0);
-//       setIsResendEnabled(false);
-//     }
-
-//     return () => clearInterval(timer);
-//   }, [isOpen, minutes, seconds]);
-
-//   const handleChange = (e, index) => {
-//     const value = e.target.value.slice(0, 1);
-//     const newOtp = [...otp];
-//     newOtp[index] = value;
-//     setOtp(newOtp);
-
-//     if (value && index < 3) {
-//       inputRefs.current[index + 1].focus();
-//     }
-
-//     if (!value && index > 0) {
-//       inputRefs.current[index - 1].focus();
-//     }
-//   };
-
-//   const handleSubmit = (event) => {
-//     event.preventDefault();
-//     handleNext(); // Proceed to the next step
-//   };
-
-//   const handleResendOtp = () => {
-//     onResendOtp();
-//     setMinutes(5);
-//     setSeconds(0);
-//     setIsResendEnabled(false);
-//   };
-
-//   const formatTime = (minutes, seconds) => {
-//     return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
-//       2,
-//       "0"
-//     )}`;
-//   };
-
-//   // Navigate to the home page
-//   const handleLoginNavigation = () => {
-//     navigate("/"); // Navigate to the home page
-//   };
-
-//   return (
-//     <div className="new-verify-form">
-//       <div className="verify-form-container">
-//         <h2 className="login-head">
-//           <FaAngleLeft onClick={handleBack} style={{ cursor: "pointer" }} />{" "}
-//           {/* Calls handleBack */}
-//           Verify account
-//         </h2>
-//         <Form onSubmit={handleSubmit}>
-//           <Form.Group controlId="otp">
-//             <label className="verify-label">
-//               We have sent you a verification code to your email. Please confirm
-//               it now.
-//             </label>
-//             <div className="verify-input-container">
-//               {otp.map((digit, index) => (
-//                 <input
-//                   key={index}
-//                   type="text"
-//                   value={digit}
-//                   onChange={(e) => handleChange(e, index)}
-//                   maxLength="1"
-//                   className="verify-input"
-//                   ref={(el) => (inputRefs.current[index] = el)}
-//                 />
-//               ))}
-//             </div>
-//           </Form.Group>
-//           <p className="resend-txt">
-//             Resend verification in <span>{formatTime(minutes, seconds)}</span>
-//           </p>
-//           <hr />
-//           <button variant="primary" type="submit" className="login-btn">
-//             Submit
-//           </button>
-//           <p
-//             className="Rendering-Login-newAccount"
-//             style={{ cursor: "pointer",textAlign: "center" }}
-//             onClick={handleLoginNavigation} // Call navigation function on click
-//           >
-//             Already have an account? Login
-//           </p>
-//         </Form>
-//       </div>
-//     </div>
-//   );
-// };
-// export default VerifyEmailOTP;
-
-
-
 
 import React, { useState, useEffect, useRef } from "react";
 import { Form } from "react-bootstrap"; 
 import { FaAngleLeft } from "react-icons/fa";
-import { useNavigate } from "react-router-dom"; 
+import { Link, useNavigate } from "react-router-dom"; 
 import { toast } from "react-toastify"; 
 import axios from "axios";
 import "./VerifyNumber.css";
 import Loader from "../../../Loader/Loader/Loader";
 
-const VerifyEmailOTP = ({ isOpen, onResendOtp, handleNext, handleBack,userId }) => {
+const VerifyEmailOTP = ({ isOpen, handleNext, handleBack }) => {
   
+  const userId = sessionStorage.getItem("newSignUpRestoUserId");
+
+
   const [otp, setOtp] = useState(["", "", "", ""]);
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
-  const [isResendEnabled, setIsResendEnabled] = useState(false);
+
+  const [timeRemaining, setTimeRemaining] = useState(20);
+  const [showResend, setShowResend] = useState(false);
+
+
   const [loading, setLoading] = useState(false);
-  const [userOtpId, setUserOtpId]=useState()
-  console.log("OTP",userId)
+  const [userOtpId, setUserOtpId]=useState();
+
+
 
   const inputRefs = useRef([]);
   const navigate = useNavigate(); 
 
-  useEffect(() => {
-    let timer;
 
-    if (isOpen) {
-      // Start or reset timer when the component is open
-      setTimeLeft(300); // Reset to 5 minutes
-      setIsResendEnabled(false);
-
-      timer = setInterval(() => {
-        setTimeLeft((prev) => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            setIsResendEnabled(true);
-            return 0; // Stop the timer
-          }
-          return prev - 1; // Decrement time left
-        });
-      }, 1000);
-    }
-
-    return () => clearInterval(timer); // Clean up on component unmount or when `isOpen` changes
-  }, [isOpen]);
 
   const handleChange = (e, index) => {
     const value = e.target.value.slice(0, 1);
 
-    // Only accept numbers (0-9)
-    if (!/^[0-9]*$/.test(value) && value !== '') {
-      return; // Do nothing if the value is not a number
+    // Only accept numbers
+    if (!/^[0-9]$/.test(value) && value !== "") {
+      return;
     }
 
     const newOtp = [...otp];
@@ -200,35 +50,42 @@ const VerifyEmailOTP = ({ isOpen, onResendOtp, handleNext, handleBack,userId }) 
     }
   };
 
+
   const handleSubmit = async (event) => {
+
+      // handleNext();
+
+
+
     event.preventDefault();
     setLoading(true); 
 
     try {
-      const data = { otp: otp.join(""),
+      const data = { 
+        otp: otp.join(""),
         userId:userId
-       }; // Consolidating the OTP values
+       };
 
       // Send a POST request to verify OTP
       const response = await axios.post(
-        "https://dineright.techfluxsolutions.com/api/auth/verify-otp",
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/verify-otp`,
         data
       );
 
       setLoading(false); 
 
-      // Check if the OTP verification was successful
       if (response.data.response === true) {
         toast.success(response.data.success_msg || "OTP verified successfully!"); 
-        setOtp(["", "", "", ""]); // Reset OTP fields
+        setOtp(["", "", "", ""]);
 
-        console.log("get user Id",response?.data?.id)
+ 
           const newUserId = response.data.id;
           setUserOtpId(newUserId);
           
-          // Pass userId to handleNext
           handleNext({ userId: newUserId });
+
       } else {
+
         toast.error(response.data.error_msg || "OTP verification failed. Please try again."); 
       }
     } catch (error) {
@@ -238,29 +95,73 @@ const VerifyEmailOTP = ({ isOpen, onResendOtp, handleNext, handleBack,userId }) 
     }
   };
 
-  const handleResendOtp = () => {
-    onResendOtp();
-    setTimeLeft(300); // Reset timer to 5 minutes
-    setIsResendEnabled(false);
+
+
+
+
+  const handleResend = async () => {
+    try {
+      const body = {
+        userId: userId,
+      };
+
+      setLoading(true);
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/resendrestaurantOtp`,
+        body
+      );
+
+      setLoading(false);
+
+      if (response.data.response === true) {
+        setTimeRemaining(20);
+        setShowResend(false);
+        toast.info("Verification code resent to your email.");
+      } else {
+        toast.error(response.data.error_msg || "Failed. Please try again.");
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Error", error);
+      toast.error("An error occurred. Please try again later.");
+    }
   };
 
-  const formatTime = (time) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = time % 60;
-    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  useEffect(() => {
+    if (timeRemaining > 0) {
+      const timer = setInterval(() => {
+        setTimeRemaining((prevTime) => {
+          if (prevTime <= 1) {
+            clearInterval(timer);
+            setShowResend(true); // Show "Resend OTP" when the timer ends
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [timeRemaining]);
+
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${String(minutes).padStart(2, "0")}:${String(
+      remainingSeconds
+    ).padStart(2, "0")}`;
   };
 
-  const handleLoginNavigation = () => {
-    navigate("/"); // Navigate to the home page
-  };
 
   return (
     <>
-      {loading && <Loader />} {/* Show loader when loading */}
+      {loading && <Loader />} 
+
       <div className="new-verify-form">
         <div className="verify-form-container">
           <h2 className="login-head">
-            <FaAngleLeft onClick={handleBack} style={{ cursor: "pointer" }} />{" "}
+            {/* <FaAngleLeft onClick={handleBack} style={{ cursor: "pointer" }} /> */}
             Verify account
           </h2>
           <Form onSubmit={handleSubmit}>
@@ -282,27 +183,72 @@ const VerifyEmailOTP = ({ isOpen, onResendOtp, handleNext, handleBack,userId }) 
                 ))}
               </div>
             </Form.Group>
-            <p className="resend-txt">
-              Resend verification in <span>{formatTime(timeLeft)}</span>
-            </p>
+            {showResend ? (
+              <p
+                className="timer resend-txt"
+                onClick={handleResend}
+                style={{
+                  cursor: "pointer",
+                  textDecoration: "none",
+                }}
+                onMouseEnter={(e) =>
+                  (e.target.style.textDecoration = "underline")
+                }
+                onMouseLeave={(e) => (e.target.style.textDecoration = "none")}
+              >
+                Resend OTP
+              </p>
+            ) : (
+              <p style={{ cursor: "default" }} className="timer resend-txt">
+                {formatTime(timeRemaining)}
+              </p>
+            )}
+
             <hr />
 
             <button
               variant="primary"
               type="submit"
               className="login-btn"
-              disabled={loading || isResendEnabled}
+              disabled={loading}
             >
-              Submit
+             Verify
             </button>
 
-            <p
-              className="Rendering-Login-newAccount"
-              style={{ cursor: "pointer", textAlign: "center" }}
-              onClick={handleLoginNavigation} 
+            {/* <div
+              style={{
+                marginTop: "10px",
+                alignContent: "center",
+                textAlign: "center",
+                alignItems: "center",
+              }}
             >
-              Already have an account? Login
-            </p>
+              <Link
+                to="/"
+                style={{
+                  textDecoration: "none",
+                  marginTop: "10px",
+                }}
+              >
+                <p
+                  className="SignUp-LoginPage"
+                  style={{
+                    margin: "0",
+                    cursor: "pointer",
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.textDecoration = "underline")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.textDecoration = "none")
+                  }
+                >
+                  Already have an account? Login
+                </p>
+              </Link>
+            </div> */}
+
+
           </Form>
         </div>
       </div>
