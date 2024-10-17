@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import './FeaturedImg.css'; 
+import './FeaturedImg.css';
 import { MdDelete } from "react-icons/md";
 
 const FeaturedImg = () => {
@@ -26,22 +26,34 @@ const FeaturedImg = () => {
     }
   };
 
+  // Handler for saving images (functionality can be added)
+  const handleSave = () => {
+    console.log("Images saved:", selectedImages);
+    // Additional save functionality can go here
+  };
+
   return (
-    <div className='container'>
+    <div className='container mb-5'>
       <p className='Heading-RestroBackgroundImg' style={{ textAlign: 'center' }}>Upload Gallery Images</p> {/* Centered Heading */}
       <div className='row row-bookingPeriod'>
-        <div className='col-12 col-md-12'>
-          <div className='SubHeading-Profile mb-2'>Featured Images:</div>
+        <div className='col-12 col-md-12 border-Featured-img'>
           
           {/* Image Upload Input */}
           <div className='flex-bookingPeriod-btn'>
+            {/* Hidden file input */}
             <input
               type='file'
               accept='image/*'
               multiple
               ref={fileInputRef} // Attach ref to input field
+              id='file-upload' // Add id for label reference
               onChange={handleImageChange}
+              style={{ display: 'none' }} // Hide the default file input
             />
+            {/* Label styled as button */}
+            <label htmlFor='file-upload' className='custom-file-upload'>
+              Upload File {/* Change label text to 'Upload File' */}
+            </label>
           </div>
           
           {/* Display Selected Images in rows of 5 */}
@@ -61,16 +73,27 @@ const FeaturedImg = () => {
 
           {/* Message when no files are chosen */}
           {selectedImages.length === 0 && (
-            <div className='no-file-chosen'>No file chosen</div>
+            <div className='no-file-chosen'>Uploaded file will display here</div>
+          )}
+
+          {/* Save Button */}
+          {selectedImages.length > 0 && (
+            <div className='save-btn-container text-center mt-3'>
+              <button className='save-btn-Featuredimg' onClick={handleSave}>
+                Save
+              </button>
+            </div>
           )}
         </div>
       </div>
-      <hr className='hr-menu-accordian' />
+      {/* <hr className='hr-menu-accordian' /> */}
     </div>
   );
 };
 
 export default FeaturedImg;
+
+
 
 
 

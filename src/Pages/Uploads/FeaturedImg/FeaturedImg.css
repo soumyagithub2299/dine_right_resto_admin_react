@@ -31,8 +31,9 @@
     justify-content: center;
   } */
   .flex-bookingPeriod-btn{
-    background-color: #c39873;
+    /* background-color: #c39873; */
     /* width: 520px; */
+    text-align: center;
   }
   .row-bookingPeriod{
     display: flex;
@@ -51,7 +52,7 @@
   .selected-images {
     display: flex;
     flex-wrap: wrap;
-    gap: 40px;
+    gap: 38px;
   }
   
   .image-item {
@@ -87,4 +88,35 @@
     width: 100%;
     margin-top: 20px;
     border: 1px solid #c39873 !important;
+  }
+  .custom-file-upload {
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: #2f4cdd;
+    color: white;
+    border-radius: 4px;
+    text-align: center;
+  }
+  
+  .custom-file-upload:hover {
+    background-color: #0056b3;
+  }
+  .border-Featured-img{
+    border: 1px dotted #c49871;
+    padding: 20px;
+  }
+  .no-file-chosen{
+    text-align: center;
+  }
+  .save-btn-Featuredimg{
+    /* display: block; */
+    width: 10%;
+    padding: 8px;
+    border: none;
+    background-color:  #2f4cdd !important;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
   }

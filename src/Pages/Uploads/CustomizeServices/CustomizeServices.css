@@ -1,6 +1,8 @@
-.service-button {
+.service-button-customize{
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-right: 22px;
 }
 
 .service-btn {
@@ -21,9 +23,10 @@
   background-color: #0056b3 !important;
 }
 
-.service-container {
+.service-container-customize{
   display: flex;
-  width: 1200px;
+  /* width: 1200px; */
+  max-width: 85%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -52,7 +55,7 @@
   font-size: 16px;
   font-weight: 400;
 }
-.time-label {
+.time-label-customize{
   display: flex;
   justify-content: flex-start;
 }
@@ -198,6 +201,28 @@ input:checked + .slider:before {
   display: flex;
   flex-direction: column;
 }
+.update-CustomizeService{
+  display: block;
+  width: 25%;
+  padding: 10px;
+  border: none;
+  background-color:  #2f4cdd !important;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.cancel-CustomizeService{
+  display: block;
+  width: 25%;
+  padding: 10px;
+  border: none;
+  background-color: rgb(223, 22, 22) !important;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
 
 @media (max-width: 765px) {
   .day-box {
@@ -207,14 +232,15 @@ input:checked + .slider:before {
   .service-form {
     width: 100%;
   }
-  .service-container {
-    width: 100%;
+  .service-container-customize{
+    /* width: 100%; */
+    max-width: 100%;
   }
   .CustomizeServices-box {
-    padding-left: 0px !important;
-    padding-right: 0px !important;
+    /* padding-left: 0px !important; */
+    /* padding-right: 0px !important; */
   }
-  .time-label {
+  .time-label-customize{
     display: block;
   }
 }

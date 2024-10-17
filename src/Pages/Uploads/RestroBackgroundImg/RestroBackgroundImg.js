@@ -18,9 +18,11 @@ const RestroBackgroundImg = () => {
 
   return (
     <div className="container container-RestroBackgroundImg mb-4">
-      <div className="row">
+      
+      <p className="Heading-RestroBackgroundImg">Upload Restaurant Banner Image</p>
+       <div className="row row-RestroBackgroundImg">
         <div className="col-12 col-md-8">
-          <p className="Heading-RestroBackgroundImg">Upload Restaurant Banner Image</p>
+          
           <div className="image-upload-container-RestroBackgroundImg">
             {selectedImage ? (
               <img
@@ -56,7 +58,7 @@ const RestroBackgroundImg = () => {
         </div>
       </div>
 
-      <hr className="hr-menu-accordian" />
+      {/* <hr className="hr-menu-accordian" /> */}
     </div>
   );
 };

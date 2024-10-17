@@ -201,16 +201,23 @@ const EditMenuModal = ({ show, handleClose, handleGetAllData,selectedItem }) => 
     try {
       const formData = new FormData();
       formData.append("master_item_id", selectedItem?.master_item_id);
-      formData.append("menu_id", menuTypeId);
-      formData.append("beverage_id", menuTypeId === 6 ? beverageTypeId : null);
+
+      // formData.append("menu_id", menuTypeId);
+      // formData.append("beverage_id", menuTypeId === 6 ? beverageTypeId : null);
+
+      // formData.append("menu_id", menuTypeId);
+      formData.append("menu_id", menuTypeId === 6 ? beverageTypeId : null);
+
+
+      formData.append("menu_type", menuTypeId === 6 ? "beverage" : "menu");
       formData.append("master_item_name", name);
       formData.append("master_item_price", cost);
       formData.append("master_item_description", description);
       formData.append("master_item_image", image);
 
       setLoading(true);
-      const response = await axios.post(
-        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/insertMasterMenuItem`,
+      const response = await axios.patch(
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/updateMenuAndBeverageItems`,
         formData,
         {
           headers: {

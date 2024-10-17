@@ -6,7 +6,9 @@
   font-size: 20px;
   font-weight: 700;
   line-height: 28px;
-  color: #c49871;
+  /* color: #c49871; */
+  color: black;
+  text-align: center;
 }
 .image-upload-container-RestroBackgroundImg{
   width: 500px;
@@ -60,6 +62,12 @@
 .button-BackgroundImg{
   display: flex;
   align-items: center;
+}
+.row-RestroBackgroundImg{
+  display: flex;
+  flex-direction: row;
+  border: 1px dotted #c49871;
+  padding: 20px;
 }
 @media (max-width:1000px){
   .image-upload-container-RestroBackgroundImg{

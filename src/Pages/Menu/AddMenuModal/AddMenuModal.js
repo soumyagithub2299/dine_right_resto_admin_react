@@ -157,8 +157,14 @@ const AddMenuModal = ({ isOpen, onClose, handleGetAllData }) => {
     const token = sessionStorage.getItem("TokenForDineRightRestoAdmin");
     try {
       const formData = new FormData();
-      formData.append("menu_id", menuTypeId);
-      formData.append("beverage_id", menuTypeId === 6 ? beverageTypeId : null);
+
+     // formData.append("menu_id", menuTypeId);
+    // formData.append("beverage_id", menuTypeId === 6 ? beverageTypeId : null);
+
+      // formData.append("menu_id", menuTypeId);
+      formData.append("menu_id", menuTypeId === 6 ? beverageTypeId : null);
+
+      formData.append("menu_type", menuTypeId === 6 ? "beverage" : "menu");
       formData.append("master_item_name", name);
       formData.append("master_item_price", cost);
       formData.append("master_item_description", description);
@@ -166,7 +172,7 @@ const AddMenuModal = ({ isOpen, onClose, handleGetAllData }) => {
 
       setLoading(true);
       const response = await axios.post(
-        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/insertMasterMenuItem`,
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/insertMenuAndBeverageItems`,
         formData,
         {
           headers: {
