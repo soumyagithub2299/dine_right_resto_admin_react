@@ -25,7 +25,7 @@ const AddButtonMenu = ({ handleGetAllData }) => {
     className="AddMenu-Restro-Admin"
     onClick={toggleModal}
     style={{
-      width: '125px',
+      width: '155px',
       height: '43px',
       backgroundColor: '#4F46E5', /* Original background color */
       borderRadius: '10px',
@@ -48,7 +48,11 @@ const AddButtonMenu = ({ handleGetAllData }) => {
       e.currentTarget.style.color = '#FFFFFF'; /* Reset to original text color */
     }}
   >
-    +Add Menu Item
+  <div>
+  <span style={{ fontSize: "1.2rem", marginRight: "5px" }}>+</span>
+  Add Menu Item
+</div>
+
   </button>
 </div>
 

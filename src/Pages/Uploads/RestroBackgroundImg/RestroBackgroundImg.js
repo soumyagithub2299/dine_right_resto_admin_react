@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./RestroBackgroundImg.css";
+import { IoCloudUploadOutline } from "react-icons/io5";
 import { RiImageEditLine } from "react-icons/ri";
 
 const RestroBackgroundImg = () => {
@@ -17,9 +18,8 @@ const RestroBackgroundImg = () => {
   };
 
   return (
-    <div className="container container-RestroBackgroundImg mb-4">
-      
-      <p className="Heading-RestroBackgroundImg">Upload Restaurant Banner Image</p>
+    <div className="container container-RestroBackgroundImg mb-4">     
+      <p className="Heading-RestroBackgroundImg">Upload Restaurant Banner Image : </p>
        <div className="row row-RestroBackgroundImg">
         <div className="col-12 col-md-8">
           
@@ -32,7 +32,8 @@ const RestroBackgroundImg = () => {
               />
             ) : (
               <span className="icon-placeholder-RestroBackgroundImg">
-                <RiImageEditLine />
+                {/* <RiImageEditLine /> */}
+                Browse and choose the file you want to upload from your device <IoCloudUploadOutline />
               </span>
             )}
             <input

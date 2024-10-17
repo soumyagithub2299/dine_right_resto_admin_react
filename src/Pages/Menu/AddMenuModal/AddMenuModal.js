@@ -17,7 +17,7 @@ import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import Loader from "../../../Loader/Loader/Loader";
 
-const AddMenuModal = ({ isOpen, onClose, handleGetAllData }) => {
+const AddMenuModal = ({ isOpen, onClose, handleGetAllData ,handleGetBavergaesAllData}) => {
   const [menuTypeId, setMenuTypeId] = useState("");
   const [beverageTypeId, setBeverageTypeId] = useState("");
   const [name, setName] = useState("");
@@ -185,6 +185,7 @@ const AddMenuModal = ({ isOpen, onClose, handleGetAllData }) => {
       setLoading(false);
       if (response?.data?.response === true) {
         handleGetAllData();
+        handleGetBavergaesAllData();
         toast.success(
           response.data.success_msg || "Menu Item Added Successful!"
         );
@@ -214,6 +215,7 @@ const AddMenuModal = ({ isOpen, onClose, handleGetAllData }) => {
   return (
     <>
       {loading && <Loader />}
+      {/* <ToastContainer /> */}
       <Modal
         open={isOpen}
         onClose={() => {

@@ -8,7 +8,7 @@ const ServiceHourModal = ({ show, handleClose }) => {
     <Modal show={show} onHide={handleClose}>
       <Modal.Header>
         <Modal.Title>Service Hours</Modal.Title>
-        {/* Manually adding close button */}
+     
         <button
           type="button"
           className="custom-close-btn"
@@ -17,9 +17,12 @@ const ServiceHourModal = ({ show, handleClose }) => {
         >
           &times;
         </button>
+
       </Modal.Header>
       <Modal.Body>
-        <CustomizeServices />
+
+        <CustomizeServices handleClose={handleClose}/>
+
       </Modal.Body>
     </Modal>
   );

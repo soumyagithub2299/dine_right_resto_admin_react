@@ -4,11 +4,11 @@
 .Heading-RestroBackgroundImg {
   font-family: "Plus Jakarta Sans";
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 28px;
   /* color: #c49871; */
-  color: black;
-  text-align: center;
+  color: rgba(10, 10, 10, 0.902);
+  text-align: left;
 }
 .image-upload-container-RestroBackgroundImg{
   width: 500px;
@@ -25,21 +25,29 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  /* gap: 20px; */
+  gap: 12px;
 }
 .deleteBtn-Backgroundimg{
   background-color: rgb(223, 22, 22) !important;
   color: white;
   width: 100px;
-  margin: 6px 0;
+  height: 33px;
   border-radius: 5px;
+  font-family: "Plus Jakarta Sans";
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 24px;
 }
 .uploadBtn-Backgroundimg {
   background-color: #2f4cdd !important;
   color: white;
   width: 100px;
-  margin: 6px 0;
+  height: 33px;
   border-radius: 5px;
+  font-family: "Plus Jakarta Sans";
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 24px;
 }
 .uploaded-image-RestroBackgroundImg {
   width: 100%;
@@ -48,7 +56,8 @@
 }
 
 .icon-placeholder-RestroBackgroundImg {
-  font-size: 20px;
+  font-size: 18px;
+  color: #5E5E5E;
 }
 
 .file-input-RestroBackgroundImg {

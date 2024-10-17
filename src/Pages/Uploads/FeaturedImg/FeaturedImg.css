@@ -108,6 +108,8 @@
   }
   .no-file-chosen{
     text-align: center;
+    color: #5E5E5E;
+    font-size: 18px;
   }
   .save-btn-Featuredimg{
     /* display: block; */

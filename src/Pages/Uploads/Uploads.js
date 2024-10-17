@@ -3,8 +3,6 @@ import "../../Template/LayoutMain/LayoutMain/Layout.css";
 import FeaturedImg from "../Uploads/FeaturedImg/FeaturedImg";
 import RestroBackgroundImg from "./RestroBackgroundImg/RestroBackgroundImg";
 import ServiceHours from "./ServiceHours/ServiceHours";
-import SaveBtnUplod from "./SaveBtnUplod/SaveBtnUplod";
-import BannerVideo from "./BannerVideo/BannerVideo";
 
 const Uploads = () => {
   const [value, setValue] = useState(() => {
@@ -46,7 +44,6 @@ const Uploads = () => {
         }`}
       >
         <RestroBackgroundImg />
-        {/* <BannerVideo/> */}
         <FeaturedImg />
         <ServiceHours />
       </div>

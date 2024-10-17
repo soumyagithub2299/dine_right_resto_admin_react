@@ -13,11 +13,18 @@ import {
   FormControl,
   Typography,
 } from "@mui/material";
-import { toast, ToastContainer } from "react-toastify"; 
+import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import Loader from "../../../Loader/Loader/Loader";
 
-const EditMenuModal = ({ show, handleClose, handleGetAllData,selectedItem }) => {
+const EditMenuModal = ({
+  show,
+  handleClose,
+  handleGetAllData,
+  selectedItem,
+  type,
+  handleGetBavergaesAllData,
+}) => {
   const [menuTypeId, setMenuTypeId] = useState("");
   const [beverageTypeId, setBeverageTypeId] = useState("");
   const [name, setName] = useState("");
@@ -28,6 +35,12 @@ const EditMenuModal = ({ show, handleClose, handleGetAllData,selectedItem }) => 
   const [loading, setLoading] = useState(false);
   const [AllMenuOptions, setAllMenuOptions] = useState([]);
   const [AllBeveragesOptions, setAllBeveragesOptions] = useState([]);
+
+  useEffect(() => {
+    if (type === "beverage") {
+      setMenuTypeId(6);
+    }
+  }, [type]);
 
   const handleGetAllMenuOptionsData = async () => {
     const token = sessionStorage.getItem("TokenForDineRightRestoAdmin");
@@ -83,30 +96,40 @@ const EditMenuModal = ({ show, handleClose, handleGetAllData,selectedItem }) => 
     }
   };
 
-
-
-
-
-
   const handleGetAllPrefilledData = async () => {
     const token = sessionStorage.getItem("TokenForDineRightRestoAdmin");
     try {
       setLoading(true);
-      const response = await axios.get(
-        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getMenuItemsbyId/${selectedItem?.master_item_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+
+      const url =
+        type !== "beverage"
+          ? `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getMasterMenuItemsDetails/${selectedItem?.master_item_id}`
+          : `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getMasterBeverageItemsDetails/${selectedItem?.master_item_id}`;
+
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setLoading(false);
-      if (response?.data) {
+      if (response?.data?.success === true) {
+        const menuItem = response.data.data[0];
 
-        setAllBeveragesOptions(response.data);
+        if (type === "beverage") {
+          setMenuTypeId(6);
+          setBeverageTypeId(menuItem.beverage_id);
+        } else {
+          setMenuTypeId(menuItem.menu_id);
+          setBeverageTypeId(null);
+        }
 
+        setImagePreview(menuItem.master_item_image);
+        // setImage(menuItem.master_item_image);
 
+        setDescription(menuItem.master_item_description);
+        setName(menuItem.master_item_name);
+        setCost(menuItem.master_item_price);
       } else {
         const errorMsg = response.data?.error_msg || "Data fetching failed.";
         toast.error(errorMsg);
@@ -117,13 +140,6 @@ const EditMenuModal = ({ show, handleClose, handleGetAllData,selectedItem }) => 
       toast.error("An error occurred, please try again.");
     }
   };
-
-
-
-
-
-
-
 
   useEffect(() => {
     handleGetAllMenuOptionsData();
@@ -161,41 +177,41 @@ const EditMenuModal = ({ show, handleClose, handleGetAllData,selectedItem }) => 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-  // Check if the menu type ID is empty
-  if (!menuTypeId) {
-    toast.error("Please select a Menu Type.");
-    return;
-  }
+    // Check if the menu type ID is empty
+    if (!menuTypeId) {
+      toast.error("Please select a Menu Type.");
+      return;
+    }
 
-  // Check if the name field is empty
-  if (!name) {
-    toast.error("Please enter a Name.");
-    return;
-  }
+    // Check if the name field is empty
+    if (!name) {
+      toast.error("Please enter a Name.");
+      return;
+    }
 
-  // Check if the cost field is empty
-  if (!cost) {
-    toast.error("Please enter a Cost.");
-    return;
-  }
+    // Check if the cost field is empty
+    if (!cost) {
+      toast.error("Please enter a Cost.");
+      return;
+    }
 
-  // Check if the description field is empty
-  if (!description) {
-    toast.error("Please enter a Description.");
-    return;
-  }
+    // Check if the description field is empty
+    if (!description) {
+      toast.error("Please enter a Description.");
+      return;
+    }
 
-  // Check if the beverage type ID is required and empty
-  if (menuTypeId === 6 && !beverageTypeId) {
-    toast.error("Please select a Beverage Type.");
-    return;
-  }
+    // Check if the beverage type ID is required and empty
+    if (menuTypeId === 6 && !beverageTypeId) {
+      toast.error("Please select a Beverage Type.");
+      return;
+    }
 
-  // Check if the image file is not uploaded
-  if (!image) {
-    toast.error("Please upload an Image.");
-    return;
-  }
+    // Check if the image file is not uploaded
+    if (!imagePreview) {
+      toast.error("Please upload an Image.");
+      return;
+    }
 
     const token = sessionStorage.getItem("TokenForDineRightRestoAdmin");
     try {
@@ -207,7 +223,6 @@ const EditMenuModal = ({ show, handleClose, handleGetAllData,selectedItem }) => 
 
       // formData.append("menu_id", menuTypeId);
       formData.append("menu_id", menuTypeId === 6 ? beverageTypeId : null);
-
 
       formData.append("menu_type", menuTypeId === 6 ? "beverage" : "menu");
       formData.append("master_item_name", name);
@@ -230,6 +245,7 @@ const EditMenuModal = ({ show, handleClose, handleGetAllData,selectedItem }) => 
       setLoading(false);
       if (response?.data?.response === true) {
         handleGetAllData();
+        handleGetBavergaesAllData();
         toast.success(
           response.data.success_msg || "Menu Item Updated Successful!"
         );
@@ -259,6 +275,7 @@ const EditMenuModal = ({ show, handleClose, handleGetAllData,selectedItem }) => 
   return (
     <>
       {loading && <Loader />}
+      {/* <ToastContainer /> */}
       <Modal
         open={show}
         handleClose={() => {
@@ -303,7 +320,6 @@ const EditMenuModal = ({ show, handleClose, handleGetAllData,selectedItem }) => 
               Close
             </Button>
           </div>
-
 
           <div
             className="d-flex justify-content-center"
@@ -381,7 +397,7 @@ const EditMenuModal = ({ show, handleClose, handleGetAllData,selectedItem }) => 
           <form onSubmit={handleSubmit}>
             <FormControl fullWidth variant="outlined" sx={{ mb: 2 }}>
               <InputLabel id="menuType-label">Menu Type</InputLabel>
-              <Select
+              {/* <Select
                 labelId="menuType-label"
                 value={menuTypeId}
                 onChange={(e) => setMenuTypeId(e.target.value)}
@@ -396,7 +412,34 @@ const EditMenuModal = ({ show, handleClose, handleGetAllData,selectedItem }) => 
                     {menu.menu_name}
                   </MenuItem>
                 ))}
+              </Select> */}
+
+              <Select
+                labelId="menuType-label"
+                value={menuTypeId}
+                onChange={(e) => setMenuTypeId(e.target.value)}
+                label="Menu Type"
+                required
+                disabled={type === "beverage"}
+              >
+                <MenuItem value="">
+                  <em>Select...</em>
+                </MenuItem>
+                {AllMenuOptions.map((menu) => (
+                  <MenuItem
+                    key={menu.menu_id}
+                    value={menu.menu_id}
+                    disabled={type !== "beverage" && menu.menu_id === 6}
+                  >
+                    {menu.menu_name}
+                  </MenuItem>
+                ))}
               </Select>
+
+
+
+
+
             </FormControl>
 
             {menuTypeId === 6 && (
@@ -472,20 +515,17 @@ const EditMenuModal = ({ show, handleClose, handleGetAllData,selectedItem }) => 
         </Box>
       </Modal>
 
-
-      <ToastContainer 
-        position="top-right" 
-        autoClose={3000} 
-        hideProgressBar={false} 
-        newestOnTop={false} 
-        closeOnClick 
-        rtl={false} 
-        pauseOnFocusLoss 
-        draggable 
-        pauseOnHover 
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
       />
-
-      
     </>
   );
 };

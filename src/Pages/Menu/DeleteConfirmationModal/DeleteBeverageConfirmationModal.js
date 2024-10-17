@@ -5,7 +5,7 @@ import Loader from "../../../Loader/Loader/Loader";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 
-const DeleteConfirmationModal = ({
+const DeleteBeverageConfirmationModal = ({
   show,
   handleClose,
   selectedItem,
@@ -32,7 +32,7 @@ const DeleteConfirmationModal = ({
       // );
 
       const response = await axios.delete(
-        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/deleteMasterMenuItem/${selectedItem?.master_item_id}`,
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/deleteMasterBeverageItem/${selectedItem?.master_item_id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -46,8 +46,8 @@ const DeleteConfirmationModal = ({
         toast.success(response.data.success_msg || "Deleted successful!");
 
         handleGetAllData();
-        handleGetBavergaesAllData();
         handleClose();
+        handleGetBavergaesAllData();
       } else {
         toast.error(response.data.error_msg || "Please try again.");
       }
@@ -86,4 +86,4 @@ const DeleteConfirmationModal = ({
   );
 };
 
-export default DeleteConfirmationModal;
+export default DeleteBeverageConfirmationModal;

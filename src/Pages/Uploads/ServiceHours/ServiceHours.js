@@ -19,9 +19,11 @@ const ServiceHours = () => {
   };
 
   return (
-    <div className='container container-ServiceHours-Uplod mb-5'>
+   <div className='container'>
+       <p className="Heading-RestroBackgroundImg">Update Service Hours : </p>
+       <div className='container container-ServiceHours-Uplod mb-5'>
       <button className='btn-ServiceHours-Uplod' onClick={handleShow}>
-        Add Service Hours
+       Open
       </button>
 
       {/* Render the modal */}
@@ -31,6 +33,7 @@ const ServiceHours = () => {
         handleNext={handleNext} 
         handleBack={handleBack} 
       />
+    </div>
     </div>
   );
 };

@@ -11,7 +11,7 @@ import EditMenuModal from "./EditMenuModal/EditMenuModal";
 
 import "./MainCourse/MainCourse.css";
 
-const MenuListingDynamic = ({ AllData, handleGetAllData }) => {
+const MenuListingDynamic = ({ AllData, handleGetAllData ,handleGetBavergaesAllData}) => {
   const [activeKey, setActiveKey] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -31,10 +31,6 @@ const MenuListingDynamic = ({ AllData, handleGetAllData }) => {
     setSelectedItem(null);
   };
 
-  const handleDelete = () => {
-    // Add delete logic here
-    setShowDeleteModal(false);
-  };
 
   const handleEditIconClick = (item) => {
     setSelectedItem(item);
@@ -101,7 +97,7 @@ const MenuListingDynamic = ({ AllData, handleGetAllData }) => {
             </div>
           </Accordion.Header>
 
-          <hr className="hr-menu-accordian" />
+          {/* <hr className="hr-menu-accordian" /> */}
 
           <Accordion.Body>
             <div className="container">
@@ -238,7 +234,16 @@ const MenuListingDynamic = ({ AllData, handleGetAllData }) => {
                         </div>
                       ))
                     ) : (
-                      <p>No items available for {menu_name}</p>
+                      <span
+                      style={{
+                          color: "red", // Bootstrap danger red color
+                          fontWeight: "bold", 
+                          fontSize: "1rem", // Optional: sets the font size
+                          margin: "10px 0", // Optional: adds margin
+                      }}
+                  >
+                      No items available for {menu_name}.
+                  </span>
                     )}
                   </div>
                 </div>
@@ -248,22 +253,24 @@ const MenuListingDynamic = ({ AllData, handleGetAllData }) => {
         </Accordion.Item>
       </Accordion>
 
-      {selectedItem && (
+      {selectedItem && showDeleteModal && (
         <DeleteConfirmationModal
           show={showDeleteModal}
           selectedItem={selectedItem}
           handleClose={handleCloseDeleteModal}
           handleGetAllData={handleGetAllData}
+          handleGetBavergaesAllData={handleGetBavergaesAllData}
           menu_id={AllData?.menu_id}
         />
       )}
 
-      {selectedItem && (
+      {selectedItem && showEditModal && (
         <EditMenuModal
           show={showEditModal}
           handleClose={handleCloseEditModal}
           selectedItem={selectedItem}
           handleGetAllData={handleGetAllData}
+          handleGetBavergaesAllData={handleGetBavergaesAllData}
           menu_id={AllData?.menu_id}
         />
       )}

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import './FeaturedImg.css';
 import { MdDelete } from "react-icons/md";
+import { IoCloudUploadOutline } from "react-icons/io5";
 
 const FeaturedImg = () => {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -9,54 +10,52 @@ const FeaturedImg = () => {
   // Handler for image selection
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-    const imageFiles = files.filter((file) => file.type.startsWith('image/')); // Filter only image files
+    const imageFiles = files.filter((file) => file.type.startsWith('image/')); 
     const newImages = imageFiles.map((file) => URL.createObjectURL(file));
     setSelectedImages((prevImages) => [...prevImages, ...newImages]);
   };
 
-  // Handler for removing an image by index
+ 
   const removeImage = (indexToRemove) => {
     setSelectedImages((prevImages) =>
       prevImages.filter((_, index) => index !== indexToRemove)
     );
 
-    // Reset file input when all images are removed
+  
     if (selectedImages.length === 1) {
-      fileInputRef.current.value = ''; // Clear the file input
+      fileInputRef.current.value = ''; 
     }
   };
 
-  // Handler for saving images (functionality can be added)
+  
   const handleSave = () => {
     console.log("Images saved:", selectedImages);
-    // Additional save functionality can go here
   };
 
   return (
     <div className='container mb-5'>
-      <p className='Heading-RestroBackgroundImg' style={{ textAlign: 'center' }}>Upload Gallery Images</p> {/* Centered Heading */}
+      <p className='Heading-RestroBackgroundImg'>Upload Gallery Images : </p> {/* Centered Heading */}
       <div className='row row-bookingPeriod'>
         <div className='col-12 col-md-12 border-Featured-img'>
           
-          {/* Image Upload Input */}
+         
           <div className='flex-bookingPeriod-btn'>
-            {/* Hidden file input */}
             <input
               type='file'
               accept='image/*'
               multiple
-              ref={fileInputRef} // Attach ref to input field
-              id='file-upload' // Add id for label reference
+              ref={fileInputRef} 
+              id='file-upload'
               onChange={handleImageChange}
-              style={{ display: 'none' }} // Hide the default file input
+              style={{ display: 'none' }} 
             />
-            {/* Label styled as button */}
+           
             <label htmlFor='file-upload' className='custom-file-upload'>
-              Upload File {/* Change label text to 'Upload File' */}
+              Upload File 
             </label>
           </div>
           
-          {/* Display Selected Images in rows of 5 */}
+        
           <div className='selected-images mt-3'>
             {selectedImages.map((image, index) => (
               <React.Fragment key={index}>
@@ -71,9 +70,9 @@ const FeaturedImg = () => {
             ))}
           </div>
 
-          {/* Message when no files are chosen */}
+       
           {selectedImages.length === 0 && (
-            <div className='no-file-chosen'>Uploaded file will display here</div>
+            <div className='no-file-chosen'>Uploaded file will display here <IoCloudUploadOutline /></div>
           )}
 
           {/* Save Button */}

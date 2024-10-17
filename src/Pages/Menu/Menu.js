@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import MenuListingDynamic from "./MenuListingDynamic";
 import Loader from "../../Loader/Loader/Loader";
+import BeverageMenuListingDynamic from "./BeverageMenuListingDynamic";
 
 const Menu = () => {
 
@@ -55,6 +56,8 @@ const Menu = () => {
 
 
   const [AllDataOfAPI, setAllDataOfAPI] = useState([]);
+  const [AllBavaerageDataOfAPI, setAllBavaerageDataOfAPI] = useState([]);
+
   
 
 
@@ -94,8 +97,54 @@ const Menu = () => {
   };
   
 
+
+
+
+
+  
+  const handleGetBavergaesAllData = async () => {
+    const token = sessionStorage.getItem("TokenForDineRightRestoAdmin");
+  
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getBeverageAndItems`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      // setLoading(false);
+   
+  
+      if (response?.data) {
+
+        setLoading(false);
+
+        setAllBavaerageDataOfAPI(response?.data);
+
+      } else {
+      setLoading(false);
+
+        const errorMsg = response.data?.error_msg || "Data fetching failed.";
+        toast.error(errorMsg);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Verification failed:", error);
+      toast.error("An error occurred, please try again.");
+    }
+  };
+  
+
+
+
+
   useEffect(() => {
     handleGetAllData();
+    handleGetBavergaesAllData();
   }, []);
 
 
@@ -145,12 +194,19 @@ const Menu = () => {
        <Dessert/>
        <Beverages/> */}
 
-       <MenuListingDynamic AllData={soupData}  handleGetAllData={handleGetAllData} />
-       <MenuListingDynamic AllData={appetizerData} handleGetAllData={handleGetAllData} />
-       <MenuListingDynamic AllData={saladData} handleGetAllData={handleGetAllData} />
-       <MenuListingDynamic AllData={mainCourceData} handleGetAllData={handleGetAllData} />
-       <MenuListingDynamic AllData={dessertData} handleGetAllData={handleGetAllData} />
-       <MenuListingDynamic AllData={beveragesData} handleGetAllData={handleGetAllData} />
+       <MenuListingDynamic AllData={soupData}  handleGetAllData={handleGetAllData} handleGetBavergaesAllData={handleGetBavergaesAllData} />
+       <MenuListingDynamic AllData={appetizerData} handleGetAllData={handleGetAllData} handleGetBavergaesAllData={handleGetBavergaesAllData} />
+       <MenuListingDynamic AllData={saladData} handleGetAllData={handleGetAllData} handleGetBavergaesAllData={handleGetBavergaesAllData} />
+       <MenuListingDynamic AllData={mainCourceData} handleGetAllData={handleGetAllData} handleGetBavergaesAllData={handleGetBavergaesAllData} />
+       <MenuListingDynamic AllData={dessertData} handleGetAllData={handleGetAllData} handleGetBavergaesAllData={handleGetBavergaesAllData} />
+
+       {/* <MenuListingDynamic AllData={beveragesData} handleGetAllData={handleGetAllData} /> */}
+
+
+
+       <BeverageMenuListingDynamic AllData={AllBavaerageDataOfAPI} handleGetAllData={handleGetAllData}  handleGetBavergaesAllData={handleGetBavergaesAllData}/>
+
+
 
 
     </div>
