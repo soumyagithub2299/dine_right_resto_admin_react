@@ -318,8 +318,9 @@ const CreateAccount = ({ handleNext }) => {
             id="gstno"
             className="login-input"
             value={gstno}
+
             onChange={(e) => {
-              const value = e.target.value.toUpperCase(); // Convert input to uppercase
+              const value = e.target.value.toUpperCase();
               setGstno(value);
 
               // GSTIN validation regex

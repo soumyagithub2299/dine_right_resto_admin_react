@@ -37,14 +37,22 @@ const Uploads = () => {
 
   return (
     <>
-      {console.log("After", value)}
+   
       <div
         className={`content-container ${
           value ? "sidebar-open" : "sidebar-closed"
         }`}
       >
         <RestroBackgroundImg />
+    <hr style={{ height: "3px", border: "none", backgroundColor: "gray" }} />
+
+
+
         <FeaturedImg />
+    <hr style={{ height: "3px", border: "none", backgroundColor: "gray" }} />
+
+
+
         <ServiceHours />
       </div>
     </>

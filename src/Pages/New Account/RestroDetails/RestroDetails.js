@@ -7,6 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "./RestroDetails.css";
 import Loader from "../../../../src/Loader/Loader/Loader";
+import RestroBackgroundImg_Register from "../../Uploads/RestroBackgroundImg/RestroBackgroundImg_Register";
 
 const RestroDetails = ({ handleNext, handleBack }) => {
 
@@ -25,6 +26,10 @@ const RestroDetails = ({ handleNext, handleBack }) => {
   const [userRestroId, setUserRestroId] = useState();
   console.log("RestroDetails", userId);
   const navigate = useNavigate();
+
+
+
+
 
   useEffect(() => {
     const fetchRestaurantTypes = async () => {
@@ -73,6 +78,9 @@ const RestroDetails = ({ handleNext, handleBack }) => {
     fetchLocations();
   }, []);
 
+
+
+
   const handleFormSubmit = async (e) => {
 
 
@@ -81,6 +89,17 @@ const RestroDetails = ({ handleNext, handleBack }) => {
 
 
     e.preventDefault();
+
+
+    const bannerImageId = sessionStorage.getItem("banner_image_id");
+
+    if (!bannerImageId) {
+      toast.error("Please upload banner image.");
+      return;
+    }
+    
+
+
 
     const postData = {
       restaurantName: restroname,
@@ -166,6 +185,19 @@ const RestroDetails = ({ handleNext, handleBack }) => {
               {/* <FaAngleLeft onClick={handleBack} style={{ cursor: "pointer" }} /> */}
               Add restaurant details
             </h2>
+
+
+
+
+
+
+
+
+            <RestroBackgroundImg_Register userId={userId}/>
+            <hr style={{ height: "3px", border: "none", backgroundColor: "gray" }} />
+
+
+
 
             {/* Circular Image Input for Logo */}
             {/* <div className="image-upload-container">

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./AddButtonMenu.css";
 import AddMenuModal from "../AddMenuModal/AddMenuModal";
 
-const AddButtonMenu = ({ handleGetAllData }) => {
+const AddButtonMenu = ({ handleGetAllData,handleGetBavergaesAllData }) => {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const toggleModal = () => {
@@ -64,6 +64,7 @@ const AddButtonMenu = ({ handleGetAllData }) => {
           isOpen={isModalOpen}
           onClose={toggleModal}
           handleGetAllData={handleGetAllData}
+          handleGetBavergaesAllData={handleGetBavergaesAllData}
         />
       )}
     </div>

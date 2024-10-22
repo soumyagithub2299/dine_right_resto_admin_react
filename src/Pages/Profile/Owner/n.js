@@ -34,7 +34,7 @@ const Owner = () => {
     try {
       setLoading(true);
 
-      const url = `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getRestraurantProfileDetails`;
+      const url = `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getRestrauntProfileDetails`;
 
       const response = await axios.get(url, {
         headers: {
@@ -128,22 +128,18 @@ const Owner = () => {
       toast.error("Please enter a valid PAN Card number (e.g., ABCDE1234F).");
       return false;
     }
-
     if (!gstin) {
       toast.error("GSTIN number is required.");
       return false;
     }
-
-    // if (
-    //   !/^[0-9]{2}[A-Z]{4}[0-9]{4}[A-Z]{1}[A-Z0-9]{1}[Z]{1}[0-9A-Z]{1}$/.test(
-    //     gstin
-    //   )
-    // ) {
-    //   toast.error("Please enter a valid GSTIN number (e.g., 22ABCDE1234Z1Z).");
-    //   return false;
-    // }
-
-
+    if (
+      !/^[0-9]{2}[A-Z]{4}[0-9]{4}[A-Z]{1}[A-Z0-9]{1}[Z]{1}[0-9A-Z]{1}$/.test(
+        gstin
+      )
+    ) {
+      toast.error("Please enter a valid GSTIN number (e.g., 22ABCDE1234Z1Z).");
+      return false;
+    }
     if (!restaurantName) {
       toast.error("Restaurant Name is required.");
       return false;

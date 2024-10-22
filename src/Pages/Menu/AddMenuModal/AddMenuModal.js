@@ -148,23 +148,24 @@ const AddMenuModal = ({ isOpen, onClose, handleGetAllData ,handleGetBavergaesAll
     return;
   }
 
-  // Check if the image file is not uploaded
-  if (!image) {
-    toast.error("Please upload an Image.");
-    return;
-  }
+  // if (!image) {
+  //   toast.error("Please upload an Image.");
+  //   return;
+  // }
 
     const token = sessionStorage.getItem("TokenForDineRightRestoAdmin");
     try {
       const formData = new FormData();
 
      // formData.append("menu_id", menuTypeId);
-    // formData.append("beverage_id", menuTypeId === 6 ? beverageTypeId : null);
+     // formData.append("beverage_id", menuTypeId === 6 ? beverageTypeId : null);
 
-      // formData.append("menu_id", menuTypeId);
-      formData.append("menu_id", menuTypeId === 6 ? beverageTypeId : null);
+    // formData.append("menu_id", menuTypeId);
+
+      formData.append("menu_id", menuTypeId === 6 ? beverageTypeId : menuTypeId);
 
       formData.append("menu_type", menuTypeId === 6 ? "beverage" : "menu");
+
       formData.append("master_item_name", name);
       formData.append("master_item_price", cost);
       formData.append("master_item_description", description);
@@ -182,15 +183,22 @@ const AddMenuModal = ({ isOpen, onClose, handleGetAllData ,handleGetBavergaesAll
         }
       );
 
-      setLoading(false);
+      // setLoading(false);
+
       if (response?.data?.response === true) {
+      setLoading(false);
+
+
         handleGetAllData();
         handleGetBavergaesAllData();
+    
+        handleReset();
+        onClose();
+
         toast.success(
           response.data.success_msg || "Menu Item Added Successful!"
         );
-        handleReset();
-        onClose();
+
       } else {
         const errorMsg = response.data?.error_msg || "Error in saving.";
         toast.error(errorMsg);

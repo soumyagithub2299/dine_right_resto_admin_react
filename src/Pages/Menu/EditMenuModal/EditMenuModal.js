@@ -207,11 +207,10 @@ const EditMenuModal = ({
       return;
     }
 
-    // Check if the image file is not uploaded
-    if (!imagePreview) {
-      toast.error("Please upload an Image.");
-      return;
-    }
+    // if (!imagePreview) {
+    //   toast.error("Please upload an Image.");
+    //   return;
+    // }
 
     const token = sessionStorage.getItem("TokenForDineRightRestoAdmin");
     try {
@@ -222,7 +221,7 @@ const EditMenuModal = ({
       // formData.append("beverage_id", menuTypeId === 6 ? beverageTypeId : null);
 
       // formData.append("menu_id", menuTypeId);
-      formData.append("menu_id", menuTypeId === 6 ? beverageTypeId : null);
+      formData.append("menu_id", menuTypeId === 6 ? beverageTypeId : menuTypeId);
 
       formData.append("menu_type", menuTypeId === 6 ? "beverage" : "menu");
       formData.append("master_item_name", name);

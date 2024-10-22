@@ -1,124 +1,89 @@
-/* .selected-images {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  
-  .image-thumbnail {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .image-thumbnail img {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 2px;
-  }
-  
-  .remove-btn {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: red;
-    color: black;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  } */
-  .flex-bookingPeriod-btn{
-    /* background-color: #c39873; */
-    /* width: 520px; */
-    text-align: center;
-  }
-  .row-bookingPeriod{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .deleteBtn-Featuredimg{
-    position: absolute;
-    background-color: rgb(223, 22, 22) !important;
-    color: white;
-    width: 100px;
-    margin: 6px 0;
-    border-radius: 5px;
-  }
+.flex-bookingPeriod-btn {
+  text-align: center;
+}
 
-  .selected-images {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 38px;
-  }
-  
-  .image-item {
-    display: flex;
-    align-items: center; /* Align the delete button vertically centered with the image */
-    gap: 10px; /* Add some space between the image and the delete button */
-    flex-direction: column;
-  }
-  
-  /* .hr-after-first-row {
-    width: 100%;
-    margin-top: 20px;
-    border: 1px solid #ccc;
-  } */
-  .image-thumbnail {
-    width: 180px;
-    height: 100px;
-    object-fit: cover;
-  }
-  
-  .remove-btn {
-    /* background-color: red ; */
-    color: red;
-    border: none;
-    font-size: 25px;
-    cursor: pointer;
-    padding: 5px 10px;
-    border-radius: 5px;
-  }
-  
- 
-  .hr-menu-accordian-preview{
-    width: 100%;
-    margin-top: 20px;
-    border: 1px solid #c39873 !important;
-  }
-  .custom-file-upload {
-    display: inline-block;
-    padding: 6px 12px;
-    cursor: pointer;
-    background-color: #2f4cdd;
-    color: white;
-    border-radius: 4px;
-    text-align: center;
-  }
-  
-  .custom-file-upload:hover {
-    background-color: #0056b3;
-  }
-  .border-Featured-img{
-    border: 1px dotted #c49871;
-    padding: 20px;
-  }
-  .no-file-chosen{
-    text-align: center;
-    color: #5E5E5E;
-    font-size: 18px;
-  }
-  .save-btn-Featuredimg{
-    /* display: block; */
-    width: 10%;
-    padding: 8px;
-    border: none;
-    background-color:  #2f4cdd !important;
-    color: #fff;
-    font-size: 16px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+.row-bookingPeriod {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selected-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Adjust the gap between images as needed */
+}
+
+.image-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.image-preview {
+  border: 2px solid #c39873; /* Border around image preview */
+  width: 200px; /* Fixed width */
+  height: 110px; /* Fixed height */
+  display: flex; /* Enable flexbox for centering */
+  justify-content: center; /* Center the image horizontally */
+  align-items: center; /* Center the image vertically */
+  overflow: hidden; /* Hide any overflow */
+  border-radius: 8px; /* Rounded corners for the border */
+}
+
+.image-thumbnail {
+  max-width: 100%; /* Make sure the image fits within the container */
+  max-height: 100%; /* Make sure the image fits within the container */
+  object-fit: contain; /* Maintain aspect ratio, ensure the entire image is visible */
+}
+
+.remove-btn {
+  color: red;
+  border: none;
+  font-size: 25px;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+.hr-menu-accordian-preview {
+  width: 100%;
+  margin-top: 20px;
+  border: 1px solid #c39873 !important;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  background-color: #2f4cdd;
+  color: white;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.custom-file-upload:hover {
+  background-color: #0056b3;
+}
+
+.border-Featured-img {
+  border: 1px dotted #c49871;
+  padding: 20px;
+}
+
+.no-file-chosen {
+  text-align: center;
+  color: #5E5E5E;
+  font-size: 18px;
+}
+
+.save-btn-Featuredimg {
+  width: 10%;
+  padding: 8px;
+  border: none;
+  background-color: #2f4cdd !important;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}

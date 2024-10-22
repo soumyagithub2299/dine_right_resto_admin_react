@@ -3,7 +3,6 @@ import './TableGuest.css';
 import { IoMdCheckmark } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { TbCornerUpLeft } from "react-icons/tb";
-import EditGuestModal from '../EditGuestModal/EditGuestModal';
 import ReactPaginate from 'react-paginate';
 import OrdersModal from '../OrdersModal/OrdersModal';
 
@@ -307,15 +306,6 @@ const TableGuest = () => {
         </table>
       </div>
 
-      {selectedGuest && (
-        <EditGuestModal
-          show={showModal}
-          handleClose={handleCloseModal}
-          guest={selectedGuest}
-          setGuest={setSelectedGuest}
-          handleSubmit={handleSubmit}
-        />
-      )}
 
       {selectedOrderDetails && (
         <OrdersModal

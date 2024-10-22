@@ -183,7 +183,7 @@ const Menu = () => {
 
        <div className={`content-container ${value ? 'sidebar-open' : 'sidebar-closed'}`} >
 
-       <AddButtonMenu handleGetAllData={handleGetAllData} />
+       <AddButtonMenu handleGetAllData={handleGetAllData}  handleGetBavergaesAllData={handleGetBavergaesAllData} />
 
 
   

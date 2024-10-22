@@ -31,15 +31,10 @@ const Guests = () => {
     };
   }, [value]);
 
-  useEffect(() => {
-    console.log('Component updated, current value:', value);
-  }, [value]);
-
 
 
   return (
     <>
-      {console.log('After',value)}
        <div className={`content-container ${value ? 'sidebar-open' : 'sidebar-closed'}`} >
       {/* <div className="Headings-RestroAdmins">Guest List</div> */}
      <TableGuest/>

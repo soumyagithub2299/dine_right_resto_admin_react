@@ -2,67 +2,133 @@ import React, { useState, useRef } from 'react';
 import './FeaturedImg.css';
 import { MdDelete } from "react-icons/md";
 import { IoCloudUploadOutline } from "react-icons/io5";
+import { toast } from "react-toastify"; // Import react-toastify
+import "react-toastify/dist/ReactToastify.css"; // Import toastify CSS
+import axios from 'axios';
+import Loader from '../../../Loader/Loader/Loader';
 
 const FeaturedImg = () => {
-  const [selectedImages, setSelectedImages] = useState([]);
+  const token = sessionStorage.getItem("TokenForDineRightRestoAdmin");
+  const [loading, setLoading] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState([]); // Store objects with id and file
+  const [showModal, setShowModal] = useState(false);
+  const [fileToDelete, setFileToDelete] = useState(null); // Track the file to delete
   const fileInputRef = useRef(null); // Reference for the file input
 
-  // Handler for image selection
-  const handleImageChange = (e) => {
+  // Handler for file selection
+  const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    const imageFiles = files.filter((file) => file.type.startsWith('image/')); 
-    const newImages = imageFiles.map((file) => URL.createObjectURL(file));
-    setSelectedImages((prevImages) => [...prevImages, ...newImages]);
+    const acceptedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'video/mp4'];
+
+    const validFiles = files.filter((file) => acceptedTypes.includes(file.type));
+    const invalidFiles = files.filter((file) => !acceptedTypes.includes(file.type));
+
+    // Show error message for invalid files
+    if (invalidFiles.length > 0) {
+      toast.error(`Invalid file type(s): ${invalidFiles.map(file => file.name).join(', ')}`);
+    }
+
+    // Create an array of objects with id and file
+    const newFiles = validFiles.map((file) => ({
+      id: URL.createObjectURL(file), // Unique ID
+      file: file, // Actual File object
+    }));
+
+    // Store valid files directly
+    setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
   };
 
- 
-  const removeImage = (indexToRemove) => {
-    setSelectedImages((prevImages) =>
-      prevImages.filter((_, index) => index !== indexToRemove)
-    );
+  const removeFile = (idToRemove) => {
+    setFileToDelete(idToRemove); // Set the ID of the file to delete
+    setShowModal(true); // Show the confirmation modal
+  };
 
-  
-    if (selectedImages.length === 1) {
-      fileInputRef.current.value = ''; 
+  const confirmDelete = () => {
+    setSelectedFiles((prevFiles) =>
+      prevFiles.filter((file) => file.id !== fileToDelete) // Delete based on ID
+    );
+    setShowModal(false); // Close the modal
+    toast.success("File deleted successfully!"); // Show success message
+    setFileToDelete(null); // Clear the file to delete
+  };
+
+  const handleSave = async () => {
+    if (selectedFiles.length === 0) return; // Ensure there are files to upload
+
+    try {
+      setLoading(true);
+      const formData = new FormData();
+
+      // Append each selected file to the FormData
+      selectedFiles.forEach(({ file }) => {
+        formData.append("gallery_image[]", file); // Append the actual File object
+      });
+
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      // Make the API call using axios
+      const response = await axios.post(
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/gallery`,
+        formData,
+        config
+      );
+
+      setLoading(false);
+
+      if (response.data.response === true) {
+        toast.success(
+          response.data.success_msg || "Gallery images uploaded successfully!"
+        );
+      } else {
+        toast.error(response.data.error_msg || "Please try again.");
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Error during file upload:", error);
+      toast.error("An error occurred. Please try again later.");
     }
   };
 
-  
-  const handleSave = () => {
-    console.log("Images saved:", selectedImages);
-  };
-
   return (
+    <>
+      {loading && <Loader />}
     <div className='container mb-5'>
-      <p className='Heading-RestroBackgroundImg'>Upload Gallery Images : </p> {/* Centered Heading */}
+      <p className='Heading-RestroBackgroundImg'>Upload Gallery Images:</p>
       <div className='row row-bookingPeriod'>
         <div className='col-12 col-md-12 border-Featured-img'>
-          
-         
           <div className='flex-bookingPeriod-btn'>
             <input
               type='file'
-              accept='image/*'
+              accept='image/jpeg,image/jpg,image/png,video/mp4'
               multiple
-              ref={fileInputRef} 
+              ref={fileInputRef}
               id='file-upload'
-              onChange={handleImageChange}
-              style={{ display: 'none' }} 
+              onChange={handleFileChange}
+              style={{ display: 'none' }}
             />
-           
             <label htmlFor='file-upload' className='custom-file-upload'>
-              Upload File 
+              Choose Files
             </label>
           </div>
-          
-        
+
           <div className='selected-images mt-3'>
-            {selectedImages.map((image, index) => (
-              <React.Fragment key={index}>
-                {index % 5 === 0 && index !== 0 && <hr className='hr-menu-accordian-preview' />} {/* Add hr tag after every 5 images */}
+            {selectedFiles.map((file, index) => (
+              <React.Fragment key={file.id}>
+                {index % 5 === 0 && index !== 0 && <hr className='hr-menu-accordian-preview' style={{ height: "1px", border: "none", backgroundColor: "blue" }} />}
                 <div className='image-item'>
-                  <img src={image} alt={`Selected ${index}`} className='image-thumbnail' />
-                  <button className='remove-btn' onClick={() => removeImage(index)}>
+                  <div className='image-preview'>
+                    {file.file.type.startsWith('video/') ? (
+                      <video src={file.id} alt={`Selected ${index}`} className='image-thumbnail' controls />
+                    ) : (
+                      <img src={file.id} alt={`Selected ${index}`} className='image-thumbnail' />
+                    )}
+                  </div>
+                  <button className='remove-btn' onClick={() => removeFile(file.id)}>
                     <MdDelete />
                   </button>
                 </div>
@@ -70,154 +136,75 @@ const FeaturedImg = () => {
             ))}
           </div>
 
-       
-          {selectedImages.length === 0 && (
+          {selectedFiles.length === 0 && (
             <div className='no-file-chosen'>Uploaded file will display here <IoCloudUploadOutline /></div>
           )}
 
-          {/* Save Button */}
-          {selectedImages.length > 0 && (
+          {selectedFiles.length > 0 && (
             <div className='save-btn-container text-center mt-3'>
               <button className='save-btn-Featuredimg' onClick={handleSave}>
-                Save
+                Upload
               </button>
             </div>
           )}
         </div>
       </div>
-      {/* <hr className='hr-menu-accordian' /> */}
+
+      {/* Confirmation Modal */}
+      {showModal && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 1000,
+        }}>
+          <div style={{
+            backgroundColor: "#fff",
+            padding: "20px",
+            borderRadius: "8px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+            textAlign: "center",
+            width: "400px",
+          }}>
+            <p>Are you sure you want to delete this file?</p>
+            <div style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "20px",
+            }}>
+              <button style={{
+                backgroundColor: "#d9534f",
+                color: "white",
+                border: "none",
+                padding: "10px 20px",
+                borderRadius: "5px",
+                cursor: "pointer",
+              }} onClick={confirmDelete}>
+                Yes, Delete
+              </button>
+              <button style={{
+                backgroundColor: "#5bc0de",
+                color: "white",
+                border: "none",
+                padding: "10px 20px",
+                borderRadius: "5px",
+                cursor: "pointer",
+              }} onClick={() => setShowModal(false)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
+    </>
   );
 };
 
 export default FeaturedImg;
-
-
-
-
-
-
-
-    
-// import React, { useState, useRef } from 'react';
-// import './FeaturedImg.css';
-// import { uploadFeatcherImagesAPI } from '../../../utils/APIs/UplodApis/UplodApi';
-// import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css'; // Import toastify styles
-
-// const FeaturedImg = () => {
-//   const [selectedImages, setSelectedImages] = useState([]);
-//   const fileInputRef = useRef(null); 
-//   const [uploadError, setUploadError] = useState(null);
-
-//   // Handler for image selection
-//   const handleImageChange = async (e) => {
-//     const files = Array.from(e.target.files);
-//     const imageFiles = files.filter((file) => file.type.startsWith('image/')); 
-
-    
-//     const newImages = imageFiles.map((file) => URL.createObjectURL(file));
-//     setSelectedImages((prevImages) => [...prevImages, ...newImages]);
-
-    
-//     const formData = new FormData();
-//     imageFiles.forEach((file) => formData.append('images', file));
-
-//     try {
-//       const response = await uploadFeatcherImagesAPI(formData);
-//       toast.success('Images uploaded successfully!'); 
-//       console.log('Upload successful:', response);
-//       setUploadError(null); // Clear any previous errors
-//     } catch (error) {
-//       console.error('Error uploading images:', error);
-//       // setUploadError('Failed to upload images. Please try again.');
-//       toast.error('Failed to upload images. Please try again.'); 
-//     }
-//   };
-
-//   // Handler for removing an image by index
-//   const removeImage = (indexToRemove) => {
-//     setSelectedImages((prevImages) =>
-//       prevImages.filter((_, index) => index !== indexToRemove)
-//     );
-
-//     // Reset file input when all images are removed
-//     if (selectedImages.length === 1) {
-//       fileInputRef.current.value = ''; // Clear the file input
-//     }
-//   };
-
-  
-//   const removeLastImage = () => {
-//     if (selectedImages.length > 0) {
-//       setSelectedImages((prevImages) => prevImages.slice(0, -1));
-//     }
-
-    
-//     if (selectedImages.length === 1) {
-//       fileInputRef.current.value = '';
-//     }
-//   };
-
-//   return (
-//     <div className='container'>
-//       {/* Toast container */}
-//       <ToastContainer />
-
-//       <p className='Heading-RestroBackgroundImg' style={{ textAlign: 'center' }}>
-//         Upload Gallery Images
-//       </p> {/* Centered Heading */}
-//       <div className='row row-bookingPeriod'>
-//         <div className='col-12 col-md-7'>
-//           <div className='SubHeading-Profile mb-2'>Featured Images:</div>
-
-//           {/* Image Upload Input */}
-//           <div className='flex-bookingPeriod-btn'>
-//             <input
-//               type='file'
-//               accept='image/*'
-//               multiple
-//               ref={fileInputRef} // Attach ref to input field
-//               onChange={handleImageChange}
-//             />
-//           </div>
-
-//           {/* Display Selected Images */}
-//           <div className='selected-images mt-3'>
-//             {selectedImages.map((image, index) => (
-//               <div key={index} className='image-thumbnail'>
-//                 <img src={image} alt={`Selected ${index}`} width={50} height={50} />
-//                 <button className='remove-btn' onClick={() => removeImage(index)}>
-//                   &times;
-//                 </button>
-//               </div>
-//             ))}
-//           </div>
-
-//           {/* Message when no files are chosen */}
-//           {selectedImages.length === 0 && (
-//             <div className='no-file-chosen'>No file chosen</div>
-//           )}
-
-//           {/* Display error if upload fails */}
-//           {uploadError && (
-//             <div className='upload-error'>
-//               {uploadError}
-//             </div>
-//           )}
-//         </div>
-
-//         <div className='col-12 col-md-3'>
-//           {/* Delete Button to remove the last image */}
-//           <button className="deleteBtn-Featuredimg" onClick={removeLastImage}>
-//             Delete
-//           </button>
-//         </div>
-//       </div>
-//       <hr className='hr-menu-accordian' />
-//     </div>
-//   );
-// };
-
-// export default FeaturedImg;
-
