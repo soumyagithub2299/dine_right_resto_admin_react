@@ -53,7 +53,7 @@ const Uploads = () => {
 
 
 
-        <ServiceHours />
+        {/* <ServiceHours /> */}
       </div>
     </>
   );
