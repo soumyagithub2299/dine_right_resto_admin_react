@@ -64,18 +64,18 @@ const Sidebar = ({ isOpen }) => {
             </li>
           </Link>
 
-          <Link to="/booking">
+          {/* <Link to="/booking">
             <li
               className={`menu-item ${
                 activeItem === "/booking" ? "active" : ""
               }`}
               onClick={() => handleItemClick("/booking")}
             >
-              {/* <img src="./assets/images/Sidebar/booking.png" alt="Booking" /> */}
+             
               <TbNotebook />
               <span>Booking</span>
             </li>
-          </Link>
+          </Link> */}
 
           <Link to="/guests">
             <li
