@@ -6,6 +6,16 @@ import { TbCornerUpLeft } from "react-icons/tb";
 import ReactPaginate from 'react-paginate';
 import OrdersModal from '../OrdersModal/OrdersModal';
 
+
+
+
+
+
+
+
+
+
+
 const initialGuestData = [
   {
     id: 1,
@@ -152,6 +162,8 @@ const initialGuestData = [
     table: 'To3',
   },
 ];
+
+
 
 const TableGuest = () => {
   const [guestData, setGuestData] = useState(initialGuestData);

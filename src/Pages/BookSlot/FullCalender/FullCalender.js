@@ -1,21 +1,57 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import BookingModal from "../BookingModal/BookingModal";
 import SlotBookingModal from "../SlotBookingModal/SlotBookingModal"; // Keep this import
 import "./FullCalender.css";
 import EventCalendar from "../EventCalendar/EventCalendar";
 import EventTable from "./EventTable";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const FullCalender = () => {
+
+  const token = sessionStorage.getItem("TokenForDineRightRestoAdmin");
+
   const [currentDate, setCurrentDate] = useState(new Date());
+
+  // Function to go to the previous day
+  const handlePrevDay = () => {
+    setCurrentDate((prevDate) => {
+      const newDate = new Date(prevDate);
+      newDate.setDate(newDate.getDate() - 1); // Decrement day by 1
+      return newDate;
+    });
+  };
+
+  // Function to go to the next day
+  const handleNextDay = () => {
+    setCurrentDate((prevDate) => {
+      const newDate = new Date(prevDate);
+      newDate.setDate(newDate.getDate() + 1); // Increment day by 1
+      return newDate;
+    });
+  };
+
+  const formatDate = (date) => {
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+
+
+
   const [showModal, setShowModal] = useState(false); // for table booking
   const [showSlotBookingModal, setShowSlotBookingModal] = useState(false); // for slot booking
   const [bookings, setBookings] = useState([]);
 
-  const handlePrevDay = () =>
-    setCurrentDate(new Date(currentDate.setDate(currentDate.getDate() - 1)));
-  const handleNextDay = () =>
-    setCurrentDate(new Date(currentDate.setDate(currentDate.getDate() + 1)));
+
+  const [loading, setLoading] = useState(false);
+
+
+
 
   const handleSaveBooking = (bookingDetails) => {
     console.log("Saving booking details:", bookingDetails);
@@ -26,78 +62,57 @@ const FullCalender = () => {
   const handleSlotModalOpen = () => setShowSlotBookingModal(true);
   const handleSlotModalClose = () => setShowSlotBookingModal(false);
 
-  const formatDate = (date) => {
-    return date.toLocaleDateString("en-US", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
 
-  // Static bookings data
-  const staticBookings = [
-    {
-      name: "Ribeca Stanly",
-      guests: 2,
-      time: 2,
-      table: "T1",
-      email: "ribecha@gmail.com",
-      phone: "9875326789",
-      comment: "Birthday",
-      className: "booking-details-box1", // To keep different class names for each
-    },
-    {
-      name: "Ribeca Stanly",
-      guests: 2,
-      time: 2,
-      table: "T1",
-      email: "ribecha@gmail.com",
-      phone: "9875326789",
-      comment: "Birthday",
-      className: "booking-details-box1", // To keep different class names for each
-    },
-    {
-      name: "Sam vicsa",
-      guests: 5,
-      time: 6,
-      table: "T3",
-      email: "samvicsa.com",
-      phone: "9875326789",
-      comment: "Birthday",
-      className: "booking-details-box2",
-    },
-    {
-      name: "Sam vicsa",
-      guests: 5,
-      time: 6,
-      table: "T3",
-      email: "samvicsa.com",
-      phone: "9875326789",
-      comment: "Birthday",
-      className: "booking-details-box2",
-    },
-    {
-      name: "Robert Stanly",
-      guests: 3,
-      time: 7,
-      table: "T4",
-      email: "robert@gmail.com",
-      phone: "9875326789",
-      comment: "Birthday",
-      className: "booking-details-box3",
-    },
-    {
-      name: "Robert Stanly",
-      guests: 3,
-      time: 7,
-      table: "T4",
-      email: "robert@gmail.com",
-      phone: "9875326789",
-      comment: "Birthday",
-      className: "booking-details-box3",
-    },
-  ];
+
+
+  const bookingDate = currentDate.toISOString().slice(0, 10); // Convert currentDate to "YYYY-MM-DD" format
+
+  const [AllDataOfAPI, setAllDataOfAPI] = useState([]);
+  
+  const handleGetAllData = async () => {
+  
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getAllocatedTables?booking_date=${bookingDate}`,
+
+        // {
+        //   // booking_date: "2024-10-12",
+        //   booking_date: bookingDate,
+        // },
+
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        }
+      );
+      
+  
+      setLoading(false);
+  
+  
+      if (response?.data?.response === true) {
+
+        setAllDataOfAPI(response?.data?.data);
+
+
+      } else {
+        const errorMsg = response.data?.error_msg || "Data fetching failed.";
+        toast.error(errorMsg);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Verification failed:", error);
+      toast.error("An error occurred, please try again.");
+    }
+  };
+  
+
+  useEffect(() => {
+    handleGetAllData();
+  }, []);
+
 
 
 
@@ -397,17 +412,20 @@ const bookingsssssssssssss = [
     <div className="Full-calendar">
       {/* calendar controls */}
       <div className="calendar-controls">
-        <div className="Firstchild-calendar-controls">
-          <button className="prev-arrow" onClick={handlePrevDay}>
-            &#8592; {/* Previous arrow */}
-          </button>
-          <span className="current-date">
-            {formatDate(currentDate)} {/* Display the current date */}
-          </span>
-          <button className="next-arrow" onClick={handleNextDay}>
-            &#8594; {/* Next arrow */}
-          </button>
-        </div>
+
+
+      <div className="Firstchild-calendar-controls">
+      <button className="prev-arrow" onClick={handlePrevDay}>
+        &#8592; {/* Previous arrow */}
+      </button>
+      <span className="current-date">{formatDate(currentDate)}</span>
+      <button className="next-arrow" onClick={handleNextDay}>
+        &#8594; {/* Next arrow */}
+      </button>
+    </div>
+
+
+
 
         <div className="Secondchild-calendar-controls">
 

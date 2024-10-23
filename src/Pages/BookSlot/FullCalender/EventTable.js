@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -17,11 +17,18 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import BookingModal from "../BookingModal/BookingModal";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const EventTable = ({ initialBookings }) => {
   const [bookings, setBookings] = useState(initialBookings);
   const [selectedTimeZone, setSelectedTimeZone] = useState("Morning");
   // const [selectedTimeZone, setSelectedTimeZone] = useState("All");
+  const token = sessionStorage.getItem("TokenForDineRightRestoAdmin");
+
+
+  const [loading, setLoading] = useState(false);
+
 
   const [openDialog, setOpenDialog] = useState(false);
   const [openClearDialog, setOpenClearDialog] = useState(false);
@@ -108,55 +115,128 @@ const EventTable = ({ initialBookings }) => {
     }
   };
 
-  const tableGroups = [
-    {
-      heading: "BAR",
-      totalCapacity: "24",
-      tables: [
-        { id: 1, name: "T-1", capacity: 4 },
-        { id: 2, name: "T-2", capacity: 2 },
-        { id: 3, name: "T-3", capacity: 6 },
-        { id: 4, name: "T-4", capacity: 4 },
-        { id: 5, name: "T-5", capacity: 8 },
-      ],
-    },
-    {
-      heading: "Roof",
-      totalCapacity: "22",
-      tables: [
-        { id: 6, name: "T-6", capacity: 2 },
-        { id: 7, name: "T-7", capacity: 4 },
-        { id: 8, name: "T-8", capacity: 2 },
-        { id: 9, name: "T-9", capacity: 6 },
-        { id: 10, name: "T-10", capacity: 8 },
-      ],
-    },
-    {
-      heading: "Terrace",
-      totalCapacity: "24",
 
-      tables: [
-        { id: 11, name: "T-11", capacity: 4 },
-        { id: 12, name: "T-12", capacity: 6 },
-        { id: 13, name: "T-13", capacity: 8 },
-        { id: 14, name: "T-14", capacity: 4 },
-        { id: 15, name: "T-15", capacity: 2 },
-      ],
-    },
-    {
-      heading: "Garden",
-      totalCapacity: "26",
 
-      tables: [
-        { id: 16, name: "T-16", capacity: 4 },
-        { id: 17, name: "T-17", capacity: 2 },
-        { id: 18, name: "T-18", capacity: 8 },
-        { id: 19, name: "T-19", capacity: 6 },
-        { id: 20, name: "T-20", capacity: 4 },
-        { id: 21, name: "T-21", capacity: 2 },
-      ],
-    },
-  ];
+
+
+
+
+
+
+
+  
+  const [tableGroups, setTableGroups] = useState([]);
+  
+  const handleGetAllData = async () => {
+  
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getAllDiningAreas`,
+
+        // {
+        //   // booking_date: "2024-10-12",
+        //   booking_date: bookingDate,
+        // },
+
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        }
+      );
+      
+  
+      setLoading(false);
+  
+  
+      if (response?.data?.length > 0) {
+        // Check if any dining area has tables
+        const validDiningAreas = response.data.filter(
+          (area) => area.tables && area.tables.length > 0
+        );
+      
+        if (validDiningAreas.length > 0) {
+
+          setTableGroups(validDiningAreas); 
+
+        } else {
+          toast.error("No tables available in the dining areas.");
+        }
+
+      } else {
+        const errorMsg = response.data?.error_msg || "Data fetching failed.";
+        toast.error(errorMsg);
+      }
+      
+
+
+    } catch (error) {
+      setLoading(false);
+      console.error("Verification failed:", error);
+      toast.error("An error occurred, please try again.");
+    }
+  };
+  
+
+  useEffect(() => {
+    handleGetAllData();
+  }, []);
+
+
+
+
+  // const tableGroups = [
+  //   {
+  //     heading: "BAR",
+  //     totalCapacity: "24",
+  //     tables: [
+  //       { id: 1, name: "T-1", capacity: 4 },
+  //       { id: 2, name: "T-2", capacity: 2 },
+  //       { id: 3, name: "T-3", capacity: 6 },
+  //       { id: 4, name: "T-4", capacity: 4 },
+  //       { id: 5, name: "T-5", capacity: 8 },
+  //     ],
+  //   },
+  //   {
+  //     heading: "Roof",
+  //     totalCapacity: "22",
+  //     tables: [
+  //       { id: 6, name: "T-6", capacity: 2 },
+  //       { id: 7, name: "T-7", capacity: 4 },
+  //       { id: 8, name: "T-8", capacity: 2 },
+  //       { id: 9, name: "T-9", capacity: 6 },
+  //       { id: 10, name: "T-10", capacity: 8 },
+  //     ],
+  //   },
+  //   {
+  //     heading: "Terrace",
+  //     totalCapacity: "24",
+
+  //     tables: [
+  //       { id: 11, name: "T-11", capacity: 4 },
+  //       { id: 12, name: "T-12", capacity: 6 },
+  //       { id: 13, name: "T-13", capacity: 8 },
+  //       { id: 14, name: "T-14", capacity: 4 },
+  //       { id: 15, name: "T-15", capacity: 2 },
+  //     ],
+  //   },
+  //   {
+  //     heading: "Garden",
+  //     totalCapacity: "26",
+
+  //     tables: [
+  //       { id: 16, name: "T-16", capacity: 4 },
+  //       { id: 17, name: "T-17", capacity: 2 },
+  //       { id: 18, name: "T-18", capacity: 8 },
+  //       { id: 19, name: "T-19", capacity: 6 },
+  //       { id: 20, name: "T-20", capacity: 4 },
+  //       { id: 21, name: "T-21", capacity: 2 },
+  //     ],
+  //   },
+  // ];
+
+
 
   function calculateTimeDifference(slot1, slot2) {
     const [hours1, minutes1] = slot1.split(":").map(Number);
@@ -428,7 +508,7 @@ const EventTable = ({ initialBookings }) => {
                       padding: "5px",
                     }}
                   >
-                    {group.heading}
+                    {group?.dining_area_type}
                   </TableCell>
                   <TableCell
                     style={{
@@ -440,7 +520,7 @@ const EventTable = ({ initialBookings }) => {
                       padding: "5px",
                     }}
                   >
-                    ( {group.totalCapacity} )
+                    ( {group?.total_capacity} )
                   </TableCell>
                   {/* Empty cells for the time slots */}
                   {Array.from({
@@ -463,7 +543,7 @@ const EventTable = ({ initialBookings }) => {
                         padding: "5px",
                       }}
                     >
-                      {table.name} {/* Display table name */}
+                      {table?.table_name} {/* Display table name */}
                     </TableCell>
                     <TableCell
                       style={{
@@ -474,7 +554,7 @@ const EventTable = ({ initialBookings }) => {
                         padding: "5px",
                       }}
                     >
-                      {table.capacity} {/* Display table capacity */}
+                      {table?.table_no_of_seats} {/* Display table capacity */}
                     </TableCell>
 
 
