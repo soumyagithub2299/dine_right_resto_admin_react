@@ -3,10 +3,7 @@ import "./FeaturedImg.css";
 import { MdDelete } from "react-icons/md";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { toast } from "react-toastify"; // Import react-toastify
-import "react-toastify/dist/ReactToastify.css"; // Import toastify CSS4
-
-
-
+import "react-toastify/dist/ReactToastify.css"; // Import toastify CSS
 import axios from "axios";
 import Loader from "../../../Loader/Loader/Loader";
 

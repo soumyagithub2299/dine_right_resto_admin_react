@@ -4,6 +4,9 @@ import FeaturedImg from "../Uploads/FeaturedImg/FeaturedImg";
 import RestroBackgroundImg from "./RestroBackgroundImg/RestroBackgroundImg";
 import ServiceHours from "./ServiceHours/ServiceHours";
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const Uploads = () => {
   const [value, setValue] = useState(() => {
     const storedValue = sessionStorage.getItem("isSidebarOpen");
@@ -43,6 +46,8 @@ const Uploads = () => {
           value ? "sidebar-open" : "sidebar-closed"
         }`}
       >
+
+        
         <RestroBackgroundImg />
     <hr style={{ height: "3px", border: "none", backgroundColor: "gray" }} />
 
@@ -54,6 +59,9 @@ const Uploads = () => {
 
 
         {/* <ServiceHours /> */}
+
+        <ToastContainer />
+
       </div>
     </>
   );

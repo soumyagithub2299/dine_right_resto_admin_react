@@ -14,20 +14,31 @@ const FullCalender = () => {
 
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  // Function to go to the previous day
   const handlePrevDay = () => {
     setCurrentDate((prevDate) => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Reset the time to 00:00:00 for accurate comparison
+
       const newDate = new Date(prevDate);
       newDate.setDate(newDate.getDate() - 1); // Decrement day by 1
-      return newDate;
+
+      // Check if newDate is before today, prevent update if so
+      if (newDate < today) {
+        return prevDate; // Return the previous date without changing it
+      }
+      handleGetAllData(newDate);
+
+      return newDate; // Otherwise, update to the new date
     });
   };
+
 
   // Function to go to the next day
   const handleNextDay = () => {
     setCurrentDate((prevDate) => {
       const newDate = new Date(prevDate);
       newDate.setDate(newDate.getDate() + 1); // Increment day by 1
+      handleGetAllData(newDate);
       return newDate;
     });
   };
@@ -69,37 +80,25 @@ const FullCalender = () => {
 
   const [AllDataOfAPI, setAllDataOfAPI] = useState([]);
   
-  const handleGetAllData = async () => {
-  
+  const handleGetAllData = async (date) => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getAllocatedTables?booking_date=${bookingDate}`,
-
-        // {
-        //   // booking_date: "2024-10-12",
-        //   booking_date: bookingDate,
-        // },
-
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getAllocatedTables?booking_date=${date}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
         }
       );
-      
-  
+
       setLoading(false);
-  
-  
-      if (response?.data?.response === true) {
 
-        setAllDataOfAPI(response?.data?.data);
-
-
+      if (Array.isArray(response?.data) && response.data.length > 0) {
+        setAllDataOfAPI(response.data);
       } else {
-        const errorMsg = response.data?.error_msg || "Data fetching failed.";
-        toast.error(errorMsg);
+        const errorMsg = response?.data?.error_msg || "No Bookings Made";
+        toast.info(errorMsg);
       }
     } catch (error) {
       setLoading(false);
@@ -107,11 +106,10 @@ const FullCalender = () => {
       toast.error("An error occurred, please try again.");
     }
   };
-  
 
   useEffect(() => {
-    handleGetAllData();
-  }, []);
+    handleGetAllData(currentDate);
+  }, []); // This should ensure it runs only once
 
 
 
@@ -447,7 +445,9 @@ const bookingsssssssssssss = [
 
 
 <div>
-      <EventTable initialBookings={bookingsssssssssssss} />
+      {/* <EventTable initialBookings={bookingsssssssssssss} /> */}
+      <EventTable initialBookings={AllDataOfAPI} />
+
     </div>
 
 

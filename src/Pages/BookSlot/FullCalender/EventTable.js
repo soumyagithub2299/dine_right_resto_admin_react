@@ -55,25 +55,18 @@ const EventTable = ({ initialBookings }) => {
     Night: timeSlots.slice(22 * 4).concat(timeSlots.slice(0, 6 * 4)), // 22:00 - 06:00
   };
 
-  const isTableBooked = (tableName, timeSlot) => {
+  const isTableBooked = (tableId, tableName, timeSlot) => {
     return bookings.find(
-      (booking) => booking.table === tableName && booking.time === timeSlot
+      (booking) =>
+        booking.table_id === tableId && // Check by table_id
+        booking.table_name === tableName && // Check by table_name
+        booking.start_time === timeSlot // Check by start_time
     );
   };
 
-  // const handleCellClick = (table, timeSlot) => {
-  //   const booking = isTableBooked(table.name, timeSlot);
-  //   if (booking) {
-  //     setSelectedBooking(booking);
-  //     setOpenDialog(true);
-  //   } else {
-  //     setNewSelectedBookingTable({ table, timeSlot });
-  //     setNewBookingModal(true);
-  //   }
-  // };
 
   const handleCellClick = (table, bookingStartTime, bookingEndTime) => {
-    const booking = isTableBooked(table.name, bookingStartTime); // Check booking at the start time
+    const booking = isTableBooked(table.table_id, table.table_name, bookingStartTime); // Check booking at the start time
     if (booking) {
       setSelectedBooking({
         ...booking,
@@ -132,7 +125,7 @@ const EventTable = ({ initialBookings }) => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getAllDiningAreas`,
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getAllDiningAreasWithTables`,
 
         // {
         //   // booking_date: "2024-10-12",
@@ -534,7 +527,7 @@ const EventTable = ({ initialBookings }) => {
                 </TableRow>
 
                 {/* Rows for each table with details below the heading */}
-                {group.tables.map((table, tableIndex) => (
+                {group?.tables.map((table, tableIndex) => (
                   <TableRow key={tableIndex}>
                     <TableCell
                       style={{
@@ -579,7 +572,7 @@ const EventTable = ({ initialBookings }) => {
 
 
                     {timeZones[selectedTimeZone].map((timeSlot, cellIndex) => {
-                      const booking = isTableBooked(table.name, timeSlot);
+                      const booking = isTableBooked(table?.table_id,table?.table_name, timeSlot);
                       let backgroundColor = "transparent"; // Default color
                       let fillNextCells = 0; // Variable to keep track of how many extra cells to fill
                       let bookingStartTime = timeSlot; // Initialize booking start time
@@ -587,21 +580,24 @@ const EventTable = ({ initialBookings }) => {
                       let cellWidth = "80px"; // Default width, adjust as needed
 
                       if (booking) {
-                        const { status, guests, booked_for_limit } = booking; // Destructure guests and booked_for_limit
+                        const { booking_status, no_of_guest, slot_time } = booking; // Destructure
 
-                        // Set background color based on status
-                        if (status === "ongoing") {
+                        // Set background color based on booking_status
+                        if (booking_status === "ongoing") {
                           backgroundColor = "#90ee90"; // Green for ongoing
-                        } else if (status === "upcoming") {
+                        } else if (booking_status === "upcoming") {
                           backgroundColor = "#ffeb3b"; // Light yellow/orange for upcoming
-                        } else if (status === "completed") {
+                        } else if (booking_status === "completed") {
                           backgroundColor = "#2196f3"; // Blue for completed
-                        } else if (status === "canceled") {
+                        } else if (booking_status === "canceled") {
                           backgroundColor = "#ff6347"; // Red for canceled
+                        }
+                        else{
+                          backgroundColor = "black";
                         }
 
                         // Calculate how many extra cells to fill based on booking duration
-                        let remainingTime = booked_for_limit; // Time to fill in minutes
+                        let remainingTime = slot_time; // Time to fill in minutes
                         for (
                           let i = cellIndex + 1;
                           i < timeZones[selectedTimeZone].length &&
@@ -669,7 +665,7 @@ const EventTable = ({ initialBookings }) => {
                               }}
                             />
                             <span style={{ position: "relative", zIndex: 2 }}>
-                              {booking ? `${booking.guests}` : ""}
+                              {booking ? `${booking.no_of_guest}` : ""}
                             </span>
                           </TableCell>
 
@@ -771,7 +767,7 @@ const EventTable = ({ initialBookings }) => {
                         padding: "8px",
                       }}
                     >
-                      {selectedBooking.table}
+                      {selectedBooking.table_name}
                     </td>
                   </tr>
                   <tr>
@@ -791,7 +787,7 @@ const EventTable = ({ initialBookings }) => {
                         padding: "8px",
                       }}
                     >
-                      {selectedBooking.time}
+                      {selectedBooking.start_time}
                     </td>
                   </tr>
                   <tr>
@@ -811,7 +807,7 @@ const EventTable = ({ initialBookings }) => {
                         padding: "8px",
                       }}
                     >
-                      {selectedBooking.booked_for_limit} minutes
+                      {selectedBooking.slot_time} minutes
                     </td>
                   </tr>
                   <tr>
@@ -825,14 +821,28 @@ const EventTable = ({ initialBookings }) => {
                       Menu:
                     </td>
                     <td
-                      style={{
-                        width: "70%",
-                        border: "1px solid black",
-                        padding: "8px",
-                      }}
-                    >
-                      {selectedBooking.details.menu}
-                    </td>
+  style={{
+    width: "70%",
+    border: "1px solid black",
+    padding: "8px",
+  }}
+>
+  {selectedBooking.details.menu.map((item) => (
+    <div key={item.master_item_id} style={{ marginBottom: "16px" }}>
+      <img
+        src={item.master_item_image}
+        alt={item.master_item_name}
+        style={{ width: "100px", height: "100px", marginRight: "8px" }} // Adjust size as needed
+      />
+      <div>
+        <h4>{item.master_item_name}</h4>
+        <p>Price: ${item.master_item_price}</p>
+        <p>Description: {item.master_item_description}</p>
+      </div>
+    </div>
+  ))}
+</td>
+
                   </tr>
                   <tr>
                     <td
@@ -851,7 +861,7 @@ const EventTable = ({ initialBookings }) => {
                         padding: "8px",
                       }}
                     >
-                      {selectedBooking.details.name}
+                      {selectedBooking.details.booking_name}
                     </td>
                   </tr>
                   <tr>
@@ -871,7 +881,7 @@ const EventTable = ({ initialBookings }) => {
                         padding: "8px",
                       }}
                     >
-                      {selectedBooking.guests}
+                      {selectedBooking.no_of_guest}
                     </td>
                   </tr>
                   <tr>
@@ -882,7 +892,7 @@ const EventTable = ({ initialBookings }) => {
                         padding: "8px",
                       }}
                     >
-                      Status:
+                      Booking Status:
                     </td>
                     <td
                       style={{
@@ -891,9 +901,57 @@ const EventTable = ({ initialBookings }) => {
                         padding: "8px",
                       }}
                     >
-                      {selectedBooking.status}
+                      {selectedBooking.booking_status}
                     </td>
                   </tr>
+
+
+
+
+
+                  <tr>
+                    <td
+                      style={{
+                        width: "30%",
+                        border: "1px solid black",
+                        padding: "8px",
+                      }}
+                    >
+                      Payment Status:
+                    </td>
+                    <td
+                      style={{
+                        width: "70%",
+                        border: "1px solid black",
+                        padding: "8px",
+                      }}
+                    >
+                      {selectedBooking.payment_status}
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td
+                      style={{
+                        width: "30%",
+                        border: "1px solid black",
+                        padding: "8px",
+                      }}
+                    >
+                      Booking Amount:
+                    </td>
+                    <td
+                      style={{
+                        width: "70%",
+                        border: "1px solid black",
+                        padding: "8px",
+                      }}
+                    >
+                      {selectedBooking.billing_amount}
+                    </td>
+                  </tr>
+
+
                 </tbody>
               </table>
             </div>
@@ -942,9 +1000,9 @@ const EventTable = ({ initialBookings }) => {
           <DialogTitle>Clear Booking Confirmation</DialogTitle>
           <DialogContent>
             Are you sure you want to clear the booking for{" "}
-            {selectedBooking.details.name} of{" "}
-            {selectedBooking ? selectedBooking.table : ""} at{" "}
-            {selectedBooking ? selectedBooking.time : ""}?
+            {selectedBooking.details.booking_name} of{" "}
+            {selectedBooking ? selectedBooking.table_name : ""} at{" "}
+            {selectedBooking ? selectedBooking.start_time : ""}?
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setOpenClearDialog(false)} color="primary">

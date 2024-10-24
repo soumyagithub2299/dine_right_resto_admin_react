@@ -224,9 +224,9 @@ const RestroBackgroundImg = () => {
         <p className="Heading-RestroBackgroundImg">
           Upload Restaurant Banner Image:
         </p>
-        <p className="recommendation-text-RestroBackgroundImg">
-          Recommended height : <strong>450px</strong>
-        </p>
+        <p style={{ textAlign: 'center' }}>
+  Recommended height for website preview: <strong>450px</strong>
+</p>
         <div className="row row-RestroBackgroundImg">
           <div className="col-12 col-md-8">
             <div className="image-upload-container-RestroBackgroundImg">
@@ -235,10 +235,10 @@ const RestroBackgroundImg = () => {
     src={selectedImage ? URL.createObjectURL(selectedImage) : imagePreview}
     alt="Uploaded"
     className="uploaded-image-RestroBackgroundImg"
-    style={{
-      width: "auto",
-      objectFit: "cover",
-    }}
+    // style={{
+    //   width: "auto",
+    //   objectFit: "cover",
+    // }}
   />
 ) : (
   <span className="icon-placeholder-RestroBackgroundImg">
