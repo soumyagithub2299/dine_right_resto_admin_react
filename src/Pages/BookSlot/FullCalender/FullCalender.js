@@ -76,15 +76,17 @@ const FullCalender = () => {
 
 
 
-  const bookingDate = currentDate.toISOString().slice(0, 10); // Convert currentDate to "YYYY-MM-DD" format
 
   const [AllDataOfAPI, setAllDataOfAPI] = useState([]);
   
   const handleGetAllData = async (date) => {
+
+  const bookingDate = date.toISOString().slice(0, 10); 
+
     try {
       setLoading(true);
       const response = await axios.get(
-        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getAllocatedTables?booking_date=${date}`,
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getAllocatedTables?booking_date=${bookingDate}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
