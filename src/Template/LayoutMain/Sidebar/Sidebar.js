@@ -64,7 +64,7 @@ const Sidebar = ({ isOpen }) => {
             </li>
           </Link>
 
-          {/* <Link to="/booking">
+          <Link to="/booking">
             <li
               className={`menu-item ${
                 activeItem === "/booking" ? "active" : ""
@@ -73,9 +73,9 @@ const Sidebar = ({ isOpen }) => {
             >
              
               <TbNotebook />
-              <span>Booking</span>
+              <span>Bookings</span>
             </li>
-          </Link> */}
+          </Link>
 
           <Link to="/guests">
             <li

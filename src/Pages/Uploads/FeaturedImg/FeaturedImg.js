@@ -257,7 +257,7 @@ const FeaturedImg = () => {
               {selectedFiles.map((file, index) => (
                 <React.Fragment key={file.id}>
                   {index % 5 === 0 && index !== 0 && (
-                    <hr className="hr-menu-accordian-preview" />
+                    // <hr className="hr-menu-accordian-preview" />
                   )}
                   <div className="image-item">
                     <div className="image-preview">
