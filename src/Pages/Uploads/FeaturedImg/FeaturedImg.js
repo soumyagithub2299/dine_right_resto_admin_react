@@ -3,10 +3,7 @@ import "./FeaturedImg.css";
 import { MdDelete } from "react-icons/md";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { toast } from "react-toastify"; // Import react-toastify
-import "react-toastify/dist/ReactToastify.css"; // Import toastify CSS4
-
-
-
+import "react-toastify/dist/ReactToastify.css"; // Import toastify CSS
 import axios from "axios";
 import Loader from "../../../Loader/Loader/Loader";
 
@@ -257,7 +254,7 @@ const FeaturedImg = () => {
               {selectedFiles.map((file, index) => (
                 <React.Fragment key={file.id}>
                   {index % 5 === 0 && index !== 0 && (
-                    // <hr className="hr-menu-accordian-preview" />
+                    <hr className="hr-menu-accordian-preview" />
                   )}
                   <div className="image-item">
                     <div className="image-preview">

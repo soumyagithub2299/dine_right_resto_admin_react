@@ -21,7 +21,19 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 const EventTable = ({ initialBookings }) => {
-  const [bookings, setBookings] = useState(initialBookings);
+
+
+
+
+
+  const [API_Bookings, setAPI_Bookings] = useState([]);
+
+  useEffect(() => {
+    setAPI_Bookings(initialBookings);
+  }, []);
+
+
+
   const [selectedTimeZone, setSelectedTimeZone] = useState("Morning");
   // const [selectedTimeZone, setSelectedTimeZone] = useState("All");
   const token = sessionStorage.getItem("TokenForDineRightRestoAdmin");
@@ -55,18 +67,18 @@ const EventTable = ({ initialBookings }) => {
     Night: timeSlots.slice(22 * 4).concat(timeSlots.slice(0, 6 * 4)), // 22:00 - 06:00
   };
 
-  const isTableBooked = (tableId, tableName, timeSlot) => {
-    return bookings.find(
+  const isTableBooked = (tableId, tableName) => {
+
+    return API_Bookings.find(
       (booking) =>
-        booking.table_id === tableId && // Check by table_id
-        booking.table_name === tableName && // Check by table_name
-        booking.start_time === timeSlot // Check by start_time
+        booking.table_id === tableId && 
+        booking.table_name === tableName 
     );
+
   };
 
-
   const handleCellClick = (table, bookingStartTime, bookingEndTime) => {
-    const booking = isTableBooked(table.table_id, table.table_name, bookingStartTime); // Check booking at the start time
+    const booking = isTableBooked(table?.table_id, table?.table_name); // Check booking at the start time
     if (booking) {
       setSelectedBooking({
         ...booking,
@@ -99,9 +111,9 @@ const EventTable = ({ initialBookings }) => {
 
   const handleClearTable = () => {
     if (selectedBooking) {
-      setBookings(
+      setAPI_Bookings(
         (prevBookings) =>
-          prevBookings.filter((booking) => booking.id !== selectedBooking.id) // Ensure there's a unique identifier
+          prevBookings.filter((booking) => booking.table_id !== selectedBooking.table_id) // Ensure there's a unique identifier
       );
       handleCloseDialog();
       setOpenClearDialog(false);
@@ -572,7 +584,9 @@ const EventTable = ({ initialBookings }) => {
 
 
                     {timeZones[selectedTimeZone].map((timeSlot, cellIndex) => {
-                      const booking = isTableBooked(table?.table_id,table?.table_name, timeSlot);
+
+                      const booking = isTableBooked(table?.table_id,table?.table_name);
+
                       let backgroundColor = "transparent"; // Default color
                       let fillNextCells = 0; // Variable to keep track of how many extra cells to fill
                       let bookingStartTime = timeSlot; // Initialize booking start time
@@ -580,12 +594,12 @@ const EventTable = ({ initialBookings }) => {
                       let cellWidth = "80px"; // Default width, adjust as needed
 
                       if (booking) {
-                        const { booking_status, no_of_guest, slot_time } = booking; // Destructure
+                        const { booking_status, no_of_guest, slot_time } = booking; 
 
                         // Set background color based on booking_status
                         if (booking_status === "ongoing") {
                           backgroundColor = "#90ee90"; // Green for ongoing
-                        } else if (booking_status === "upcoming") {
+                        } else if (booking_status === "upcomming") {
                           backgroundColor = "#ffeb3b"; // Light yellow/orange for upcoming
                         } else if (booking_status === "completed") {
                           backgroundColor = "#2196f3"; // Blue for completed
@@ -593,7 +607,7 @@ const EventTable = ({ initialBookings }) => {
                           backgroundColor = "#ff6347"; // Red for canceled
                         }
                         else{
-                          backgroundColor = "black";
+                          backgroundColor = "blue";
                         }
 
                         // Calculate how many extra cells to fill based on booking duration
@@ -619,97 +633,123 @@ const EventTable = ({ initialBookings }) => {
                         }
                       }
 
+
+
+
+
+
+
+
+                      
                       return (
                         <React.Fragment key={cellIndex}>
                           <TableCell
                             style={{
                               width: cellWidth,
-                              backgroundColor: booking
-                                ? backgroundColor
-                                : "transparent",
+                              backgroundColor: booking ? backgroundColor : "transparent",
                               textAlign: "center",
-                              cursor: booking ? "pointer" : "pointer",
+                              cursor: "pointer",
                               borderBottom: "1.5px solid rgba(0, 0, 0, 0.2)",
-                              position: "relative", // Use relative positioning for the cell
-                              padding: "0px", // Remove padding for line alignment
+                              position: "relative",
+                              padding: "0px",
                             }}
-                            onClick={() =>
-                              handleCellClick(
-                                table,
-                                bookingStartTime,
-                                bookingEndTime
-                              )
-                            }
+                            onClick={() => handleCellClick(table, bookingStartTime, bookingEndTime)}
                             onMouseEnter={(e) => {
                               if (!booking) {
-                                e.currentTarget.style.backgroundColor =
-                                  "lightyellow";
+                                e.currentTarget.style.backgroundColor = "lightyellow";
                               }
                             }}
                             onMouseLeave={(e) => {
                               if (!booking) {
-                                e.currentTarget.style.backgroundColor =
-                                  "transparent";
+                                e.currentTarget.style.backgroundColor = "transparent";
                               }
                             }}
                           >
                             <div
                               style={{
                                 position: "absolute",
-                                left: 0, // Align it to the left of the cell
+                                left: 0,
                                 top: 0,
                                 bottom: 0,
                                 width: "1.5px",
-                                backgroundColor: "rgba(0, 0, 0, 0.2)", // Color for the vertical line
-                                zIndex: 1, // Ensure the line is above the cell background
+                                backgroundColor: "rgba(0, 0, 0, 0.2)",
+                                zIndex: 10,
                               }}
                             />
-                            <span style={{ position: "relative", zIndex: 2 }}>
-                              {booking ? `${booking.no_of_guest}` : ""}
-                            </span>
                           </TableCell>
-
-                          {Array.from({ length: fillNextCells }).map(
-                            (_, index) => {
-                              const nextCellIndex = cellIndex + index + 1;
-                              return (
-                                <TableCell
-                                  key={nextCellIndex}
+                      
+                          {Array.from({ length: fillNextCells }).map((_, index) => {
+                            const nextCellIndex = cellIndex + index + 1;
+                            
+                            // Calculate the center cell by including the first cell
+                            const isCenterCell = index === Math.floor((fillNextCells + 1) / 2) - 1;
+                      
+                            // Render the booking text in the calculated center cell
+                            const renderBookingText = isCenterCell ? (
+                              <span
+                                style={{
+                                  position: "absolute",
+                                  left: 0,
+                                  right: 0,
+                                  top: "50%",
+                                  transform: "translateY(-50%)",
+                                  textAlign: "center",
+                                  width: "100%",
+                                  zIndex: 5,
+                                }}
+                              >
+                                {booking ? `${booking?.details?.booking_name} - (${booking?.no_of_guest})` : ""}
+                              </span>
+                            ) : null;
+                      
+                            return (
+                              <TableCell
+                                key={nextCellIndex}
+                                style={{
+                                  width: cellWidth,
+                                  backgroundColor: backgroundColor,
+                                  textAlign: "center",
+                                  cursor: "pointer",
+                                  borderBottom: "1.5px solid rgba(0, 0, 0, 0.2)",
+                                  position: "relative",
+                                  padding: "0px",
+                                }}
+                                onClick={() => handleCellClick(table, bookingStartTime, bookingEndTime)}
+                              >
+                                <div
                                   style={{
-                                    width: cellWidth,
-                                    backgroundColor: backgroundColor,
-                                    textAlign: "center",
-                                    cursor: "pointer",
-                                    borderBottom:
-                                      "1.5px solid rgba(0, 0, 0, 0.2)", // Bottom border for the next cells
-                                    position: "relative", // Use relative positioning for the cell
-                                    padding: "0px", // Remove padding for line alignment
+                                    position: "absolute",
+                                    left: 0,
+                                    top: 0,
+                                    bottom: 0,
+                                    backgroundColor: "rgba(0, 0, 0, 0.2)",
+                                    zIndex: 1,
                                   }}
-                                  onClick={() =>
-                                    handleCellClick(
-                                      table,
-                                      bookingStartTime,
-                                      bookingEndTime
-                                    )
-                                  }
-                                >
-                                  <div
-                                    style={{
-                                      position: "absolute",
-                                      left: 0, // Align it to the left of the cell
-                                      top: 0,
-                                      bottom: 0,
-                                      // width: "1.5px",
-                                      backgroundColor: "rgba(0, 0, 0, 0.2)", // Color for the vertical line
-                                      zIndex: 1, // Ensure the line is above the cell background
-                                    }}
-                                  />
-                                </TableCell>
-                              );
-                            }
-                          )}
+                                />
+                                
+                                {renderBookingText}
+                              </TableCell>
+                            );
+                          })}
                         </React.Fragment>
                       );
+                      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      
                     })}
 
 
@@ -1021,8 +1061,8 @@ const EventTable = ({ initialBookings }) => {
           handleClose={handleCloseNewBookingModal}
           onSave={handleSaveBooking}
           newSelectedBookingTable={newSelectedBookingTable}
-          bookings={bookings}
-          setBookings={setBookings}
+          bookings={API_Bookings}
+          setBookings={setAPI_Bookings}
         />
       )}
     </>

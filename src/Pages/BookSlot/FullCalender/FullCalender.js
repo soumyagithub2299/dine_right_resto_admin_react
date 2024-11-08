@@ -14,23 +14,33 @@ const FullCalender = () => {
 
   const [currentDate, setCurrentDate] = useState(new Date());
 
+  // const handlePrevDay = () => {
+  //   setCurrentDate((prevDate) => {
+  //     const today = new Date();
+  //     today.setHours(0, 0, 0, 0); // Reset the time to 00:00:00 for accurate comparison
+
+  //     const newDate = new Date(prevDate);
+  //     newDate.setDate(newDate.getDate() - 1); // Decrement day by 1
+
+  //     // Check if newDate is before today, prevent update if so
+  //     if (newDate < today) {
+  //       return prevDate; // Return the previous date without changing it
+  //     }
+  //     handleGetAllData(newDate);
+
+  //     return newDate; // Otherwise, update to the new date
+  //   });
+  // };
+
   const handlePrevDay = () => {
     setCurrentDate((prevDate) => {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0); // Reset the time to 00:00:00 for accurate comparison
-
       const newDate = new Date(prevDate);
       newDate.setDate(newDate.getDate() - 1); // Decrement day by 1
-
-      // Check if newDate is before today, prevent update if so
-      if (newDate < today) {
-        return prevDate; // Return the previous date without changing it
-      }
-      handleGetAllData(newDate);
-
-      return newDate; // Otherwise, update to the new date
+      handleGetAllData(newDate); // Fetch data for the previous day
+      return newDate;
     });
   };
+
 
 
   // Function to go to the next day
@@ -97,7 +107,7 @@ const FullCalender = () => {
       setLoading(false);
 
       if (Array.isArray(response?.data) && response.data.length > 0) {
-        setAllDataOfAPI(response.data);
+        setAllDataOfAPI(response?.data);
       } else {
         const errorMsg = response?.data?.error_msg || "No Bookings Made";
         toast.info(errorMsg);
