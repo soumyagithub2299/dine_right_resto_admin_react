@@ -263,7 +263,7 @@ const OrdersModal = ({
 
 
 
-          {selectedGuest?.booking_status !== "inprogress" && (
+          {selectedGuest?.booking_status !== "inprogress" &&  selectedGuest?.booking_status !== "completed" && (
           <Button
             variant="contained"
             disabled={selectedGuest?.booking_status === "inprogress"}
@@ -292,7 +292,7 @@ const OrdersModal = ({
           )}
 
 
-{selectedGuest?.booking_status !== "upcoming" && (
+{selectedGuest?.booking_status !== "upcoming" && selectedGuest?.booking_status !== "completed" && (
           <Button
             variant="contained"
             disabled={selectedGuest?.booking_status === "upcoming"}
