@@ -642,7 +642,7 @@ const EventTable = ({ initialBookings ,handleGetAllBookingMainData}) => {
                         const { booking_status, no_of_guest, slot_time } = booking; 
 
                         // Set background color based on booking_status
-                        if (booking_status === "ongoing") {
+                        if (booking_status === "inprogress") {
                           backgroundColor = "#90ee90"; // Green for ongoing
                         } else if (booking_status === "upcoming") {
                           backgroundColor = "#ffeb3b"; // Light yellow/orange for upcoming
