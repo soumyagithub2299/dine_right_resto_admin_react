@@ -8,6 +8,9 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
+import { toast } from "react-toastify";
+import axios from "axios";
+import Loader from "../../../../Loader/Loader/Loader";
 
 const OrdersModal = ({
   show,
@@ -16,6 +19,8 @@ const OrdersModal = ({
   handleGetAllData,
 }) => {
   const [openClearDialog, setOpenClearDialog] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const token = sessionStorage.getItem("TokenForDineRightRestoAdmin");
 
   if (!show) return null;
 
@@ -53,19 +58,50 @@ const OrdersModal = ({
     return quantity * price;
   };
 
-  const handleClearTable = () => {
-    handleGetAllData();
-    console.log("Clearing table...");
-    setOpenClearDialog(false); // Close the dialog after confirming
+  const handleClearTable = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getAllocawbyfbwqdtedTables?bo`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setLoading(false);
+
+      if (response?.data?.response === true) {
+
+        handleGetAllData();
+        setOpenClearDialog(false);
+
+        toast.success("Table released successfully");
+      } else {
+        toast.error("Error in releasing the table");
+      }
+
+
+    } catch (error) {
+      setLoading(false);
+      console.error("Failed:", error);
+      toast.error("An error occurred, please try again.");
+    }
   };
 
   return (
+    <>
+      {loading && <Loader />}
+
     <div className="orders-modal-overlay">
       <div className="orders-modal">
-        <button className="close-button" onClick={handleClose}>
-          X
-        </button>
-        <h2>Order Details</h2>
+        <div className="modal-header">
+          <button className="close-button" onClick={handleClose}>
+            X
+          </button>
+          <h2>Order Details</h2>
+        </div>
 
         <div className="guest-details">
           <p>
@@ -102,8 +138,8 @@ const OrdersModal = ({
             <thead>
               <tr>
                 <th>Sr No.</th>
-                <th>Item</th>
-                <th>Description</th>
+                <th>Menu Item</th>
+                <th>Item Description</th>
                 <th>Quantity</th>
                 <th>Price</th>
                 <th>Total</th>
@@ -113,29 +149,41 @@ const OrdersModal = ({
               {selectedGuest?.details?.menu?.map((item, index) => (
                 <tr key={index}>
                   <td>{index + 1}</td>
+
                   <td>
                     <div
                       style={{
-                        width: "100px",
-                        height: "100px",
-                        overflow: "hidden",
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "center",
+                        justifyContent: "flex-start",
                       }}
                     >
-                      <img
-                        src={item.master_item_image}
-                        alt={item.master_item_name}
+                      <div
                         style={{
-                          maxWidth: "100%",
-                          maxHeight: "100%",
-                          objectFit: "cover",
+                          width: "100px",
+                          height: "100px",
+                          overflow: "hidden",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          marginRight: "10px", // Adds space between image and name
                         }}
-                      />
+                      >
+                        <img
+                          src={item.master_item_image}
+                          alt={item.master_item_name}
+                          style={{
+                            maxWidth: "100%",
+                            maxHeight: "100%",
+                            objectFit: "cover",
+                          }}
+                        />
+                      </div>
+                      <span>{item?.master_item_name}</span>{" "}
+                      {/* Keeps name next to the image */}
                     </div>
-                    {item.master_item_name}
                   </td>
+
                   <td>{item.master_item_description || "N/A"}</td>
                   <td>{item.product_quantity || 0}</td>
                   <td>₹{item.master_item_price}</td>
@@ -167,12 +215,13 @@ const OrdersModal = ({
           variant="contained"
           onClick={() => setOpenClearDialog(true)}
           style={{
-            marginTop: "10px",
-            marginBottom: "10px",
-            marginLeft: "10px",
-            marginRight: "10px",
+            marginBottom: "25px",
+            marginLeft: "auto",
+            marginRight: "auto",
             backgroundColor: "#FFCCCB",
             color: "black",
+            display: "block",
+            width: "300px",
           }}
           onMouseOver={(e) => {
             e.currentTarget.style.backgroundColor = "red";
@@ -202,7 +251,11 @@ const OrdersModal = ({
               <strong>{selectedGuest?.details?.booking_name}</strong> of{" "}
               <strong>{selectedGuest?.table_name}</strong> from{" "}
               <strong>{startTimeFormatted}</strong> to{" "}
-              <strong>{endTimeFormatted}</strong>?
+              <strong>{endTimeFormatted}</strong> {" for "}{" "}
+              <strong>
+                {selectedGuest ? selectedGuest?.no_of_guest : ""} guests{" "}
+              </strong>
+              ?
             </p>
           </DialogContent>
           <DialogActions>
@@ -216,6 +269,7 @@ const OrdersModal = ({
         </Dialog>
       </div>
     </div>
+    </>
   );
 };
 

@@ -19,8 +19,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import BookingModal from "../BookingModal/BookingModal";
 import { toast } from "react-toastify";
 import axios from "axios";
+import Loader from "../../../Loader/Loader/Loader";
+import OrdersModal from "../../Bookings/BookingTable/OrdersModal/OrdersModal";
 
-const EventTable = ({ initialBookings }) => {
+const EventTable = ({ initialBookings ,handleGetAllBookingMainData}) => {
 
 
 
@@ -259,6 +261,8 @@ const EventTable = ({ initialBookings }) => {
 
   return (
     <>
+    {loading && <Loader />}
+
       {/* Button group for selecting time zones */}
       <div
         style={{
@@ -777,296 +781,22 @@ const EventTable = ({ initialBookings }) => {
 
 
 
-
-
-
-      {/* Dialog for booking details */}
-      <Dialog
-        maxWidth="sm"
-        fullWidth
-        open={openDialog}
-        onClose={handleCloseDialog}
-      >
-        <DialogTitle>
-          Booking Details
-          <IconButton
-            onClick={handleCloseDialog}
-            aria-label="close"
-            style={{ position: "absolute", right: 10, top: 10 }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent>
-
-          {selectedBooking ? (
-            <div>
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                <tbody>
-                  <tr>
-                    <td
-                      style={{
-                        width: "30%",
-                        border: "1px solid black",
-                        padding: "8px",
-                      }}
-                    >
-                      Table:
-                    </td>
-                    <td
-                      style={{
-                        width: "70%",
-                        border: "1px solid black",
-                        padding: "8px",
-                      }}
-                    >
-                      {selectedBooking.table_name}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      style={{
-                        width: "30%",
-                        border: "1px solid black",
-                        padding: "8px",
-                      }}
-                    >
-                      Time:
-                    </td>
-                    <td
-                      style={{
-                        width: "70%",
-                        border: "1px solid black",
-                        padding: "8px",
-                      }}
-                    >
-                      {selectedBooking.start_time}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      style={{
-                        width: "30%",
-                        border: "1px solid black",
-                        padding: "8px",
-                      }}
-                    >
-                      Booking For:
-                    </td>
-                    <td
-                      style={{
-                        width: "70%",
-                        border: "1px solid black",
-                        padding: "8px",
-                      }}
-                    >
-                      {selectedBooking.slot_time} minutes
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      style={{
-                        width: "30%",
-                        border: "1px solid black",
-                        padding: "8px",
-                      }}
-                    >
-                      Menu:
-                    </td>
-                    <td
-  style={{
-    width: "70%",
-    border: "1px solid black",
-    padding: "8px",
-  }}
->
-  {selectedBooking.details.menu.map((item) => (
-    <div key={item.master_item_id} style={{ marginBottom: "16px" }}>
-      <img
-        src={item.master_item_image}
-        alt={item.master_item_name}
-        style={{ width: "100px", height: "100px", marginRight: "8px" }} // Adjust size as needed
-      />
-      <div>
-        <h4>{item.master_item_name}</h4>
-        <p>Price: ${item.master_item_price}</p>
-        <p>Description: {item.master_item_description}</p>
-      </div>
-    </div>
-  ))}
-</td>
-
-                  </tr>
-                  <tr>
-                    <td
-                      style={{
-                        width: "30%",
-                        border: "1px solid black",
-                        padding: "8px",
-                      }}
-                    >
-                      Name:
-                    </td>
-                    <td
-                      style={{
-                        width: "70%",
-                        border: "1px solid black",
-                        padding: "8px",
-                      }}
-                    >
-                      {selectedBooking.details.booking_name}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      style={{
-                        width: "30%",
-                        border: "1px solid black",
-                        padding: "8px",
-                      }}
-                    >
-                      Guests:
-                    </td>
-                    <td
-                      style={{
-                        width: "70%",
-                        border: "1px solid black",
-                        padding: "8px",
-                      }}
-                    >
-                      {selectedBooking.no_of_guest}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      style={{
-                        width: "30%",
-                        border: "1px solid black",
-                        padding: "8px",
-                      }}
-                    >
-                      Booking Status:
-                    </td>
-                    <td
-                      style={{
-                        width: "70%",
-                        border: "1px solid black",
-                        padding: "8px",
-                      }}
-                    >
-                      {selectedBooking.booking_status}
-                    </td>
-                  </tr>
+      {selectedBooking && openDialog &&  (
+          <OrdersModal
+            show={selectedBooking}
+            handleClose={handleCloseDialog}
+            selectedGuest={selectedBooking}
+            handleGetAllData={() => handleGetAllBookingMainData()}
+          />
+        )}
 
 
 
 
 
-                  <tr>
-                    <td
-                      style={{
-                        width: "30%",
-                        border: "1px solid black",
-                        padding: "8px",
-                      }}
-                    >
-                      Payment Status:
-                    </td>
-                    <td
-                      style={{
-                        width: "70%",
-                        border: "1px solid black",
-                        padding: "8px",
-                      }}
-                    >
-                      {selectedBooking.payment_status}
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td
-                      style={{
-                        width: "30%",
-                        border: "1px solid black",
-                        padding: "8px",
-                      }}
-                    >
-                      Booking Amount:
-                    </td>
-                    <td
-                      style={{
-                        width: "70%",
-                        border: "1px solid black",
-                        padding: "8px",
-                      }}
-                    >
-                      {selectedBooking.billing_amount}
-                    </td>
-                  </tr>
 
 
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <p>No booking selected.</p>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button
-            variant="contained"
-            onClick={() => setOpenClearDialog(true)} 
-            style={{
-              marginTop: "0px",
-              marginBottom: "10px",
-              marginLeft: "10px",
-              marginRight: "10px",
-              backgroundColor: "#FFCCCB",
-              color: "black",
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.backgroundColor = "red"; // Darker red on hover
-              e.currentTarget.style.color = "white"; // White text color on hover
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.backgroundColor = "#FFCCCB";
-              e.currentTarget.style.color = "black"; // Reset text color
-            }}
-          >
-            Clear Table
-          </Button>
-        </DialogActions>
-      </Dialog>
 
-      {/* Dialog for clear confirmation */}
-
-      {selectedBooking && (
-        <Dialog
-          BackdropProps={{
-            style: {
-              backgroundColor: "rgba(0, 0, 0, 0.75)",
-            },
-          }}
-          open={openClearDialog}
-          onClose={() => setOpenClearDialog(false)}
-        >
-          <DialogTitle>Clear Booking Confirmation</DialogTitle>
-          <DialogContent>
-            Are you sure you want to clear the booking for{" "}
-            {selectedBooking.details.booking_name} of{" "}
-            {selectedBooking ? selectedBooking.table_name : ""} at{" "}
-            {selectedBooking ? selectedBooking.start_time : ""}?
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setOpenClearDialog(false)} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={handleClearTable} color="error">
-              Confirm
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
 
       {newBookingModal && (
         <BookingModal
@@ -1078,6 +808,11 @@ const EventTable = ({ initialBookings }) => {
           setBookings={setAPI_Bookings}
         />
       )}
+
+
+
+
+
     </>
   );
 };

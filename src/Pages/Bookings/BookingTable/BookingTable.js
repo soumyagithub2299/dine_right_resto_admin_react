@@ -15,6 +15,10 @@ const BookingTable = () => {
   const [selectedGuest, setSelectedGuest] = useState(null); // To hold the selected guest object
   const [noDataMessage, setNoDataMessage] = useState(false); // Flag for no data message
 
+  const [ChoosenDate, setChoosenDate] = useState();
+
+
+
   const token = sessionStorage.getItem("TokenForDineRightRestoAdmin");
 
   const formatDate = (date) => {
@@ -68,8 +72,10 @@ const BookingTable = () => {
   const handlePrevDay = () => {
     setCurrentDate((prevDate) => {
       const newDate = new Date(prevDate);
-      newDate.setDate(newDate.getDate() - 1); // Decrement day by 1
-      handleGetAllData(newDate); // Fetch data for the previous day
+      newDate.setDate(newDate.getDate() - 1); 
+      handleGetAllData(newDate); 
+     setChoosenDate(newDate);
+
       return newDate;
     });
   };
@@ -79,12 +85,22 @@ const BookingTable = () => {
       const newDate = new Date(prevDate);
       newDate.setDate(newDate.getDate() + 1); // Increment day by 1
       handleGetAllData(newDate);
+     setChoosenDate(newDate);
+
       return newDate;
     });
   };
 
+
+
+
   const handleGetAllData = async (date) => {
+    setChoosenDate(date);
+
     const bookingDate = date.toISOString().slice(0, 10);
+
+
+
     try {
       setLoading(true);
       const response = await axios.get(
@@ -116,6 +132,7 @@ const BookingTable = () => {
 
   useEffect(() => {
     handleGetAllData(currentDate);
+    setChoosenDate(currentDate);
   }, [currentDate]);
 
   // Send the complete guest object to the modal
@@ -249,10 +266,11 @@ const BookingTable = () => {
             show={showOrdersModal}
             handleClose={handleCloseOrdersModal}
             selectedGuest={selectedGuest}
-            // handleGetAllData={handleGetAllData(new Date())}
-            handleGetAllData={handleGetAllData}
+            handleGetAllData={() => handleGetAllData(ChoosenDate)}
           />
         )}
+
+        
       </div>
       <ToastContainer />
     </>

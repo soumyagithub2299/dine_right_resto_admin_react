@@ -7,10 +7,12 @@ import EventCalendar from "../EventCalendar/EventCalendar";
 import EventTable from "./EventTable";
 import { toast } from "react-toastify";
 import axios from "axios";
+import Loader from "../../../Loader/Loader/Loader";
 
 const FullCalender = () => {
 
   const token = sessionStorage.getItem("TokenForDineRightRestoAdmin");
+  const [ChoosenDate, setChoosenDate] = useState();
 
   const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -37,6 +39,8 @@ const FullCalender = () => {
       const newDate = new Date(prevDate);
       newDate.setDate(newDate.getDate() - 1); // Decrement day by 1
       handleGetAllData(newDate); // Fetch data for the previous day
+     setChoosenDate(newDate);
+
       return newDate;
     });
   };
@@ -49,6 +53,8 @@ const FullCalender = () => {
       const newDate = new Date(prevDate);
       newDate.setDate(newDate.getDate() + 1); // Increment day by 1
       handleGetAllData(newDate);
+     setChoosenDate(newDate);
+
       return newDate;
     });
   };
@@ -90,6 +96,7 @@ const FullCalender = () => {
   const [AllDataOfAPI, setAllDataOfAPI] = useState([]);
   
   const handleGetAllData = async (date) => {
+    setChoosenDate(date);
 
   const bookingDate = date.toISOString().slice(0, 10); 
 
@@ -121,6 +128,8 @@ const FullCalender = () => {
 
   useEffect(() => {
     handleGetAllData(currentDate);
+    setChoosenDate(currentDate);
+
   }, []); // This should ensure it runs only once
 
 
@@ -419,6 +428,11 @@ const bookingsssssssssssss = [
 
 
   return (
+    <>
+    
+    {loading && <Loader />}
+    
+    
     <div className="Full-calendar">
       {/* calendar controls */}
       <div className="calendar-controls">
@@ -458,7 +472,10 @@ const bookingsssssssssssss = [
 
 <div>
       {/* <EventTable initialBookings={bookingsssssssssssss} /> */}
-      <EventTable initialBookings={AllDataOfAPI} />
+      <EventTable initialBookings={AllDataOfAPI} 
+            handleGetAllBookingMainData={() => handleGetAllData(ChoosenDate)}
+      
+      />
 
     </div>
 
@@ -518,7 +535,7 @@ const bookingsssssssssssss = [
       <BookingModal
         show={showModal}
         handleClose={() => setShowModal(false)}
-        onSave={handleSaveBooking} // Ensure this function is passed correctly
+        onSave={handleSaveBooking}
       />
 
       {/* Slot Booking Modal */}
@@ -615,6 +632,8 @@ const bookingsssssssssssss = [
 
       
     </div>
+    </>
+
   );
 };
 

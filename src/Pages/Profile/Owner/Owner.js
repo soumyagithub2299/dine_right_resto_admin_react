@@ -242,7 +242,7 @@ const Owner = () => {
         <div className="MainInfo-Owner">
           <div className="heading-Profile">PERSONAL INFORMATION</div>
           <div className="CommisionField-Owner">
-            Commission to DineRight - {formData.commission}%
+            Commission to DineRight : {formData.commission}%
           </div>
 
           {isApproved ? (
