@@ -57,38 +57,49 @@ const OrdersModal = ({
   const calculateItemTotal = (quantity, price) => {
     return quantity * price;
   };
-
   const handleClearTable = async () => {
     try {
+      // Ensure `selectedGuest?.details?.booking_id` and token are defined before making the request
+      if (!selectedGuest?.details?.booking_id) {
+        toast.error("Booking ID is missing.");
+        return;
+      }
+      if (!token) {
+        toast.error("Authorization token is missing.");
+        return;
+      }
+  
       setLoading(true);
+  
+      // Use axios.post with the correct structure, passing the token in headers
       const response = await axios.post(
-        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getAllocawbyfbwqdtedTables?bo`,
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/releaseTable/${selectedGuest?.details?.booking_id}`,
+        {}, // Empty body for the POST request, unless your API requires data
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, // Pass token in headers
           },
         }
       );
-
+  
       setLoading(false);
-
+  
       if (response?.data?.response === true) {
-
-        handleGetAllData();
-        setOpenClearDialog(false);
-
-        toast.success("Table released successfully");
+        handleGetAllData(); // Refresh the data if the table is released successfully
+        setOpenClearDialog(false); // Close the dialog
+        handleClose();
+        toast.success(response?.data?.message || "Table released successfully.");
       } else {
-        toast.error("Error in releasing the table");
+        toast.error(response?.data?.message || "Error in releasing the table.");
       }
-
-
+      
     } catch (error) {
       setLoading(false);
       console.error("Failed:", error);
       toast.error("An error occurred, please try again.");
     }
   };
+  
 
   return (
     <>

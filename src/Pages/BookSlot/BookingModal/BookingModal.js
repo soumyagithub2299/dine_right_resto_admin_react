@@ -3,8 +3,8 @@ import { Modal, Button, Form } from "react-bootstrap";
 import CloseIcon from "@mui/icons-material/Close";
 import PropTypes from "prop-types";
 import { IconButton } from "@mui/material";
-import { toast, ToastContainer } from 'react-toastify'; // Import ToastContainer and toast
-import 'react-toastify/dist/ReactToastify.css'; // Import CSS for toast notifications
+import { toast, ToastContainer } from "react-toastify"; // Import ToastContainer and toast
+import "react-toastify/dist/ReactToastify.css"; // Import CSS for toast notifications
 import "./BookingModal.css";
 
 const BookingModal = ({ show, handleClose, onSave, newSelectedBookingTable, bookings, setBookings }) => {
@@ -27,12 +27,8 @@ const BookingModal = ({ show, handleClose, onSave, newSelectedBookingTable, book
 
   useEffect(() => {
     if (show && newSelectedBookingTable) {
-      setTable(newSelectedBookingTable.table.name);
-
-
-      setTime(newSelectedBookingTable.bookingStartTime);
-
-      
+      setTable(newSelectedBookingTable.table?.name || "");
+      setTime(newSelectedBookingTable.bookingStartTime || "");
     } else {
       setTable("");
       setTime("");
@@ -49,7 +45,6 @@ const BookingModal = ({ show, handleClose, onSave, newSelectedBookingTable, book
   }, [course]);
 
   const handleSave = () => {
-    // Validation: Check if required fields are filled
     if (!name || !guests || !time || !table || !email || !phone || !course || !menu) {
       toast.error("Please fill all fields!");
       return;
@@ -69,13 +64,11 @@ const BookingModal = ({ show, handleClose, onSave, newSelectedBookingTable, book
       booked_for_limit: guests * 30, // Assuming 30 minutes per guest
     };
 
-    // Save the new booking
     setBookings([...bookings, newBooking]);
     if (typeof onSave === "function") {
       onSave(newBooking); // Call onSave with the new booking
     }
 
-    // Clear form after saving
     setName("");
     setGuests("");
     setTime("");
@@ -85,22 +78,18 @@ const BookingModal = ({ show, handleClose, onSave, newSelectedBookingTable, book
     setComment("");
     setCourse("");
     setMenu("");
-    setMenuOptions([]); // Reset menu options after save
+    setMenuOptions([]);
 
     handleClose();
   };
 
   return (
     <>
-      <ToastContainer /> {/* Add ToastContainer to your component */}
+      <ToastContainer />
       <Modal show={show} onHide={handleClose}>
         <Modal.Header className="d-flex align-items-center">
           <Modal.Title className="me-auto">Create New Booking</Modal.Title>
-          <IconButton
-            onClick={handleClose}
-            aria-label="close"
-            style={{ color: 'black' }}
-          >
+          <IconButton onClick={handleClose} aria-label="close" style={{ color: "black" }}>
             <CloseIcon />
           </IconButton>
         </Modal.Header>
@@ -129,22 +118,12 @@ const BookingModal = ({ show, handleClose, onSave, newSelectedBookingTable, book
             <div className="d-flex mb-3">
               <Form.Group controlId="formTime" className="mr-2" style={{ flex: 1 }}>
                 <Form.Label>Time</Form.Label>
-                <Form.Control
-                  type="time"
-                  value={time}
-                  onChange={(e) => setTime(e.target.value)}
-                  disabled
-                />
+                <Form.Control type="time" value={time} onChange={(e) => setTime(e.target.value)} disabled />
               </Form.Group>
 
               <Form.Group controlId="formTable" className="ml-2" style={{ flex: 1 }}>
                 <Form.Label>Table</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={table}
-                  onChange={(e) => setTable(e.target.value)}
-                  disabled
-                >
+                <Form.Control as="select" value={table} disabled>
                   <option value="">{table}</option>
                 </Form.Control>
               </Form.Group>
@@ -183,11 +162,7 @@ const BookingModal = ({ show, handleClose, onSave, newSelectedBookingTable, book
 
             <Form.Group controlId="formCourse">
               <Form.Label>Select Course</Form.Label>
-              <Form.Control
-                as="select"
-                value={course}
-                onChange={(e) => setCourse(e.target.value)}
-              >
+              <Form.Control as="select" value={course} onChange={(e) => setCourse(e.target.value)}>
                 <option value="">Choose a course...</option>
                 <option value="Course 1">Course 1</option>
                 <option value="Course 2">Course 2</option>
@@ -197,12 +172,7 @@ const BookingModal = ({ show, handleClose, onSave, newSelectedBookingTable, book
 
             <Form.Group controlId="formMenu">
               <Form.Label>Select Menu</Form.Label>
-              <Form.Control
-                as="select"
-                value={menu}
-                onChange={(e) => setMenu(e.target.value)}
-                disabled={!menuOptions.length}
-              >
+              <Form.Control as="select" value={menu} onChange={(e) => setMenu(e.target.value)} disabled={!menuOptions.length}>
                 <option value="">Choose a menu...</option>
                 {menuOptions.map((menuItem, index) => (
                   <option key={index} value={menuItem}>{menuItem}</option>
@@ -233,12 +203,13 @@ BookingModal.propTypes = {
     table: PropTypes.shape({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
-      capacity: PropTypes.number.isRequired,
-    }).isRequired,
-    timeSlot: PropTypes.string.isRequired,
+      capacity: PropTypes.number,
+    }),
+    bookingStartTime: PropTypes.string,
+    bookingEndTime: PropTypes.string,
   }),
-  bookings: PropTypes.array.isRequired, // Add bookings prop type
-  setBookings: PropTypes.func.isRequired, // Add setBookings prop type
+  bookings: PropTypes.array.isRequired,
+  setBookings: PropTypes.func.isRequired,
 };
 
 export default BookingModal;
