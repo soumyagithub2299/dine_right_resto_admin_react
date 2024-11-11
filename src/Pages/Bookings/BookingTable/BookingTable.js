@@ -34,10 +34,9 @@ const BookingTable = () => {
   //   });
   // };
 
-
   // Function to format the start time from 24-hour to 12-hour format
   const formatTime = (time) => {
-    const [hours, minutes] = time.split(':');
+    const [hours, minutes] = time.split(":");
     const date = new Date(); // Using the current date
     date.setHours(hours);
     date.setMinutes(minutes);
@@ -168,7 +167,7 @@ const BookingTable = () => {
                   <th scope="col">Booking Status</th>
                   <th scope="col">Guests Count</th>
                   <th scope="col">Table</th>
-                  <th scope="col">View</th>
+                  <th scope="col">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -183,13 +182,15 @@ const BookingTable = () => {
                           <div className="col-6 col-md-2">
                             <img
                               className="img-guest"
-                              src={guest.details?.customer_profile_image || "default-image-url.jpg"}
+                              src={
+                                guest.details?.customer_profile_image ||
+                                "default-image-url.jpg"
+                              }
                               alt={guest.details?.booking_name}
                             />
                           </div>
                           <div className="col-6 col-md-4">
                             <div className="row name-email-guest">
-                              
                               <div className="name-guest">
                                 {guest.details?.booking_name}
                               </div>
@@ -231,12 +232,11 @@ const BookingTable = () => {
                     <td className="text-guest">{guest.no_of_guest}</td>
                     <td className="text-guest">{guest.table_name}</td>
                     <td
-  className="edit_guests"
-  onClick={() => handleOrdersClick(guest)}
->
-  <span className="material-icons">visibility</span> {/* Eye icon */}
-</td>
-
+                      className="edit_guests"
+                      onClick={() => handleOrdersClick(guest)}
+                    >
+                      <span className="material-icons">edit</span>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -249,6 +249,8 @@ const BookingTable = () => {
             show={showOrdersModal}
             handleClose={handleCloseOrdersModal}
             selectedGuest={selectedGuest}
+            // handleGetAllData={handleGetAllData(new Date())}
+            handleGetAllData={handleGetAllData}
           />
         )}
       </div>

@@ -30,7 +30,7 @@ const EventTable = ({ initialBookings }) => {
 
   useEffect(() => {
     setAPI_Bookings(initialBookings);
-  }, []);
+  }, [initialBookings]);
 
 
 
@@ -768,6 +768,18 @@ const EventTable = ({ initialBookings }) => {
         </Table>
       </TableContainer>
 
+
+
+
+
+
+
+
+
+
+
+
+
       {/* Dialog for booking details */}
       <Dialog
         maxWidth="sm"
@@ -786,6 +798,7 @@ const EventTable = ({ initialBookings }) => {
           </IconButton>
         </DialogTitle>
         <DialogContent>
+
           {selectedBooking ? (
             <div>
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -1002,7 +1015,7 @@ const EventTable = ({ initialBookings }) => {
         <DialogActions>
           <Button
             variant="contained"
-            onClick={() => setOpenClearDialog(true)} // Open confirmation dialog
+            onClick={() => setOpenClearDialog(true)} 
             style={{
               marginTop: "0px",
               marginBottom: "10px",
