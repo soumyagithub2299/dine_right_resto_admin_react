@@ -542,7 +542,166 @@ const EventTable = ({ ChoosenDate,initialBookings, handleGetAllBookingMainData }
                       {table?.table_no_of_seats} {/* Display table capacity */}
                     </TableCell>
 
-                 
+                    {/* 
+                    
+                    {timeZones[selectedTimeZone].map((timeSlot, cellIndex) => {
+
+                      const booking = isTableBooked(table?.table_id,table?.table_name,timeSlot);
+
+                      let backgroundColor = "transparent"; // Default color
+                      let fillNextCells = 0; // Variable to keep track of how many extra cells to fill
+                      let bookingStartTime = timeSlot; // Initialize booking start time
+                      let bookingEndTime = timeSlot; // Initialize booking end time
+                      let cellWidth = "80px"; // Default width, adjust as needed
+
+                      if (booking) {
+
+
+
+                        const { booking_status, no_of_guest, slot_time } = booking; 
+
+                        // Set background color based on booking_status
+                        if (booking_status === "inprogress") {
+                          backgroundColor = "#90ee90"; // Green for ongoing
+                        } else if (booking_status === "upcoming") {
+                          backgroundColor = "#ffeb3b"; // Light yellow/orange for upcoming
+                        } else if (booking_status === "completed") {
+                          backgroundColor = "#2196f3"; // Blue for completed
+                        } 
+                        else if (booking_status === "canceled") {
+                          backgroundColor = "#ff6347"; // Red for canceled
+                        }
+                        else{
+                          backgroundColor = "pink";
+                        }
+
+                        // Calculate how many extra cells to fill based on booking duration
+                        let remainingTime = slot_time; // Time to fill in minutes
+
+
+                        for (
+                          let i = cellIndex + 1;
+                          i < timeZones[selectedTimeZone].length &&
+                          remainingTime > 0;
+                          i++
+                        ) {
+                          const currentSlot =
+                            timeZones[selectedTimeZone][i - 1]; // Previous slot
+                          const nextSlot = timeZones[selectedTimeZone][i]; // Current slot
+                          const slotDuration = calculateTimeDifference(
+                            currentSlot,
+                            nextSlot
+                          ); // Calculate duration between slots
+                          remainingTime -= slotDuration;
+                          if (remainingTime >= 0) {
+                            fillNextCells += 1; // Increase the count of additional cells to fill
+                            bookingEndTime = nextSlot; // Update booking end time
+                          }
+                        }
+                        
+                      }
+
+
+                      return (
+                        <React.Fragment key={cellIndex}>
+                          <TableCell
+                            style={{
+                              width: cellWidth,
+                              backgroundColor: booking ? backgroundColor : "transparent",
+                              textAlign: "center",
+                              cursor: "pointer",
+                              borderBottom: "1.5px solid rgba(0, 0, 0, 0.2)",
+                              position: "relative",
+                              padding: "0px",
+                            }}
+                            onClick={() => handleCellClick(table, bookingStartTime, bookingEndTime)}
+                            onMouseEnter={(e) => {
+                              if (!booking) {
+                                e.currentTarget.style.backgroundColor = "lightyellow";
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              if (!booking) {
+                                e.currentTarget.style.backgroundColor = "transparent";
+                              }
+                            }}
+                          >
+                            <div
+                              style={{
+                                position: "absolute",
+                                left: 0,
+                                top: 0,
+                                bottom: 0,
+                                width: "1.5px",
+                                backgroundColor: "rgba(0, 0, 0, 0.2)",
+                                zIndex: 10,
+                              }}
+                            />
+                          </TableCell>
+                      
+                          {Array.from({ length: fillNextCells }).map((_, index) => {
+                            const nextCellIndex = cellIndex + index + 1;
+                            
+                            // Calculate the center cell by including the first cell
+                            const isCenterCell = index === Math.floor((fillNextCells + 1) / 2) - 1;
+                      
+                            // Render the booking text in the calculated center cell
+                            const renderBookingText = isCenterCell ? (
+                              <span
+                                style={{
+                                  position: "absolute",
+                                  left: 0,
+                                  right: 0,
+                                  top: "50%",
+                                  transform: "translateY(-50%)",
+                                  textAlign: "center",
+                                  width: "100%",
+                                  zIndex: 5,
+                                  fontWeight:"bold",
+                                }}
+                              >
+
+                                {booking ? `${booking?.details?.booking_name}` : ""}
+
+                              </span>
+                            ) : null;
+                      
+                            return (
+                              <TableCell
+                                key={nextCellIndex}
+                                style={{
+                                  width: cellWidth,
+                                  backgroundColor: backgroundColor,
+                                  textAlign: "center",
+                                  cursor: "pointer",
+                                  borderBottom: "1.5px solid rgba(0, 0, 0, 0.2)",
+                                  position: "relative",
+                                  padding: "0px",
+                                }}
+                                onClick={() => handleCellClick(table, bookingStartTime, bookingEndTime)}
+                              >
+                                <div
+                                  style={{
+                                    position: "absolute",
+                                    left: 0,
+                                    top: 0,
+                                    bottom: 0,
+                                    backgroundColor: "rgba(0, 0, 0, 0.2)",
+                                    zIndex: 1,
+                                  }}
+                                />
+                                
+                                {renderBookingText}
+                                
+                              </TableCell>
+                            );
+                          })}
+                        </React.Fragment>
+                      );
+                          
+                    })} 
+                     
+                     */}
 
                     {/*
                     
@@ -920,6 +1079,7 @@ const EventTable = ({ ChoosenDate,initialBookings, handleGetAllBookingMainData }
         </div>
       )}
 
+      {/* Left arrow for the starting cell of the booking */}
       {isStartingCell && (
         <div
           style={{
@@ -947,6 +1107,7 @@ const EventTable = ({ ChoosenDate,initialBookings, handleGetAllBookingMainData }
         </div>
       )}
 
+      {/* Right arrow for the ending cell of the booking */}
       {isEndingCell && (
         <div
           style={{
