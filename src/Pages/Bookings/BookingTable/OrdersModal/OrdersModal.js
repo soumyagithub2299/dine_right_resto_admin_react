@@ -269,7 +269,7 @@ const OrdersModal = ({
             disabled={selectedGuest?.booking_status === "inprogress"}
             onClick={() => setOpenStatusDialog(true)}
             style={{
-              marginBottom: "25px",
+              marginBottom: "45px",
               marginLeft: "auto",
               marginRight: "auto",
               backgroundColor: "#87CEFA",
@@ -287,7 +287,7 @@ const OrdersModal = ({
               e.currentTarget.style.color = "black";
             }}
           >
-            Change Table Status
+            Change Table/Booking Status
           </Button>
           )}
 
@@ -298,7 +298,7 @@ const OrdersModal = ({
             disabled={selectedGuest?.booking_status === "upcoming"}
             onClick={() => setOpenClearDialog(true)}
             style={{
-              marginBottom: "15px",
+              marginBottom: "45px",
               marginLeft: "auto",
               marginRight: "auto",
               backgroundColor: "#FFCCCB",
@@ -316,7 +316,7 @@ const OrdersModal = ({
               e.currentTarget.style.color = "black";
             }}
           >
-            Clear Table
+            Release Table/Booking
           </Button>
 )}
   

@@ -96,9 +96,16 @@ const FullCalender = () => {
   const [AllDataOfAPI, setAllDataOfAPI] = useState([]);
   
   const handleGetAllData = async (date) => {
+
     setChoosenDate(date);
 
-  const bookingDate = date.toISOString().slice(0, 10); 
+
+
+  // Manually format the date to avoid timezone issues
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const day = String(date.getDate()).padStart(2, '0');
+  const bookingDate = `${year}-${month}-${day}`;
 
     try {
       setLoading(true);
@@ -113,12 +120,19 @@ const FullCalender = () => {
 
       setLoading(false);
 
-      if (Array.isArray(response?.data) && response.data.length > 0) {
+      if (Array.isArray(response?.data) && response?.data) {
         setAllDataOfAPI(response?.data);
+        if(response.data.length === 0){
+          const errorMsg = "No Bookings Made";
+          toast.info(errorMsg);
+          }
       } else {
+        
         const errorMsg = response?.data?.error_msg || "No Bookings Made";
         toast.info(errorMsg);
       }
+
+      
     } catch (error) {
       setLoading(false);
       console.error("Verification failed:", error);
@@ -127,6 +141,7 @@ const FullCalender = () => {
   };
 
   useEffect(() => {
+
     handleGetAllData(currentDate);
     setChoosenDate(currentDate);
 
@@ -435,18 +450,51 @@ const bookingsssssssssssss = [
     
     <div className="Full-calendar">
       {/* calendar controls */}
-      <div className="calendar-controls">
+      <div className="calendar-controlsssssss">
 
 
-      <div className="Firstchild-calendar-controls">
-      <button className="prev-arrow" onClick={handlePrevDay}>
-        &#8592; {/* Previous arrow */}
-      </button>
-      <span className="current-date">{formatDate(currentDate)}</span>
-      <button className="next-arrow" onClick={handleNextDay}>
-        &#8594; {/* Next arrow */}
-      </button>
-    </div>
+      <div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "15px",
+    color: "black", // Set all text to black
+    fontWeight: "bold",
+    fontSize: "20px", // Adjust font size for date text if needed
+  }}
+>
+  <button
+    style={{
+      background: "none",
+      border: "none",
+      fontSize: "36px", // Larger font size for bigger arrows
+      color: "black", // Set arrows color to black
+      cursor: "pointer",
+      fontWeight: "bold",
+    }}
+    onClick={handlePrevDay}
+  >
+    &#8592;
+  </button>
+  
+  <span>{formatDate(currentDate)}</span>
+  
+  <button
+    style={{
+      background: "none",
+      border: "none",
+      fontSize: "36px", // Larger font size for bigger arrows
+      color: "black", // Set arrows color to black
+      cursor: "pointer",
+      fontWeight: "bold",
+    }}
+    onClick={handleNextDay}
+  >
+    &#8594;
+  </button>
+</div>
+
 
 
 
@@ -472,6 +520,7 @@ const bookingsssssssssssss = [
 
 <div>
       {/* <EventTable initialBookings={bookingsssssssssssss} /> */}
+      {console.log(AllDataOfAPI,"wefiuhwug")}
       <EventTable initialBookings={AllDataOfAPI} 
             handleGetAllBookingMainData={() => handleGetAllData(ChoosenDate)}
       
