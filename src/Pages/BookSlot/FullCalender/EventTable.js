@@ -7,22 +7,14 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
-  ButtonGroup,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  IconButton,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import BookingModal from "../BookingModal/BookingModal";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Loader from "../../../Loader/Loader/Loader";
 import OrdersModal from "../../Bookings/BookingTable/OrdersModal/OrdersModal";
 
-const EventTable = ({ initialBookings, handleGetAllBookingMainData }) => {
+const EventTable = ({ ChoosenDate,initialBookings, handleGetAllBookingMainData }) => {
 
   const token = sessionStorage.getItem("TokenForDineRightRestoAdmin");
 
@@ -107,11 +99,12 @@ const EventTable = ({ initialBookings, handleGetAllBookingMainData }) => {
   }
 
   const handleCellClick = (table, bookingStartTime, bookingEndTime) => {
+
+
     console.log(table, "table");
     console.log(bookingStartTime, "bookingStartTime");
     console.log(bookingEndTime, "bookingEndTime");
 
-    // Ensure that table_id, table_name, and timeSlot are defined before checking bookings
     if (table?.table_id && table?.table_name && bookingStartTime) {
       const booking = isTableBooked(
         table?.table_id,
@@ -924,12 +917,27 @@ const EventTable = ({ initialBookings, handleGetAllBookingMainData }) => {
                                 width: "100%",
                               }}
                             >
-                              {booking?.details?.booking_name}
+
+                         {booking?.details?.booking_name} - ID: {booking?.details?.booking_id}
+
                             </div>
                           )}
                         </TableCell>
                       );
                     })}
+
+
+
+
+
+
+
+
+
+
+
+
+
                   </TableRow>
                 ))}
               </React.Fragment>
@@ -951,11 +959,12 @@ const EventTable = ({ initialBookings, handleGetAllBookingMainData }) => {
         <BookingModal
           show={newBookingModal}
           handleClose={handleCloseNewBookingModal}
-          onSave={handleSaveBooking}
           newSelectedBookingTable={newSelectedBookingTable}
-          bookings={API_Bookings}
-          setBookings={setAPI_Bookings}
+          ChoosenDate={ChoosenDate}
+          handleGetAllData={() => handleGetAllBookingMainData()}
+
         />
+
       )}
     </>
   );

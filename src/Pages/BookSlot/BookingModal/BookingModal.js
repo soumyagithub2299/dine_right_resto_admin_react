@@ -1,100 +1,238 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import CloseIcon from "@mui/icons-material/Close";
-import PropTypes from "prop-types";
 import { IconButton } from "@mui/material";
 import { toast, ToastContainer } from "react-toastify"; // Import ToastContainer and toast
 import "react-toastify/dist/ReactToastify.css"; // Import CSS for toast notifications
 import "./BookingModal.css";
+import axios from "axios";
 
-const BookingModal = ({ show, handleClose, onSave, newSelectedBookingTable, bookings, setBookings }) => {
+const BookingModal = ({
+  show,
+  handleClose,
+  ChoosenDate,
+  newSelectedBookingTable,
+  handleGetAllData
+}) => {
+  const token = sessionStorage.getItem("TokenForDineRightRestoAdmin");
+
+  const [loading, setLoading] = useState(false);
+
   const [name, setName] = useState("");
-  const [guests, setGuests] = useState("");
+  const [guests, setGuests] = useState(1);
   const [time, setTime] = useState("");
   const [table, setTable] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [comment, setComment] = useState("");
-  const [course, setCourse] = useState("");
-  const [menu, setMenu] = useState("");
-  const [menuOptions, setMenuOptions] = useState([]);
-
-  const courseMenuMap = {
-    "Course 1": ["Menu 1-1", "Menu 1-2", "Menu 1-3"],
-    "Course 2": ["Menu 2-1", "Menu 2-2", "Menu 2-3"],
-    "Course 3": ["Menu 3-1", "Menu 3-2", "Menu 3-3"],
-  };
 
   useEffect(() => {
     if (show && newSelectedBookingTable) {
-      setTable(newSelectedBookingTable.table?.name || "");
+      setTable(newSelectedBookingTable?.table?.table_name || "");
       setTime(newSelectedBookingTable.bookingStartTime || "");
     } else {
       setTable("");
       setTime("");
     }
   }, [show, newSelectedBookingTable]);
-
-  useEffect(() => {
-    if (course) {
-      setMenuOptions(courseMenuMap[course]);
-      setMenu(""); // Reset menu selection when course changes
-    } else {
-      setMenuOptions([]); // Clear menu options if no course is selected
-    }
-  }, [course]);
-
-  const handleSave = () => {
-    if (!name || !guests || !time || !table || !email || !phone || !course || !menu) {
+  const handleSave = async () => {
+    if (!name || !guests || !time || !table || !email || !phone) {
       toast.error("Please fill all fields!");
       return;
     }
+  
+    const formattedTime = time.includes(":") && time.split(":").length === 2 
+      ? `${time}:00` // Add seconds (00) if not already included
+      : time; // Keep the original format if it already includes seconds
 
-    const newBooking = {
-      id: bookings.length + 1, // Example ID generation
-      table,
-      time,
-      guests: Number(guests),
-      status: "upcoming",
-      details: {
-        name,
-        menu,
-        payment: "Pending", // Example default value for payment status
-      },
-      booked_for_limit: guests * 30, // Assuming 30 minutes per guest
+ 
+  // Manually format the date to avoid timezone issues
+  const year = ChoosenDate.getFullYear();
+  const month = String(ChoosenDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const day = String(ChoosenDate.getDate()).padStart(2, '0');
+  const bookingDate = `${year}-${month}-${day}`;
+
+
+
+  
+    const bookingData = {
+      booking_name: name,
+      booking_email: email,
+      booking_no_of_guest: guests,
+      booking_date: bookingDate,
+      booking_time: formattedTime, // Use the formatted time
+      dining_area_id: newSelectedBookingTable?.table?.dining_area_id, // Default to 1 if no dining area id
+      booking_comment: comment,
+      table_ids: [newSelectedBookingTable?.table?.table_id], // Default to 1 if no table id
     };
+  
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/insertNewBooking`,
+        bookingData, // Send the data as the request body
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      setLoading(false);
+  
+      if (response?.data?.response === true) {
 
-    setBookings([...bookings, newBooking]);
-    if (typeof onSave === "function") {
-      onSave(newBooking); // Call onSave with the new booking
+        toast.success("Booking done successfully!");
+        // Clear the form
+        setName("");
+        setGuests(1);
+        setTime("");
+        setTable("");
+        setEmail("");
+        setPhone("");
+        setComment("");
+  
+        handleClose(); // Close the modal
+
+        handleGetAllData();
+
+
+      } else {
+        const errorMsg = response.data?.message || "Failed.";
+        toast.error(errorMsg);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Error occurred:", error);
+      toast.error("An error occurred, please try again.");
     }
-
-    setName("");
-    setGuests("");
-    setTime("");
-    setTable("");
-    setEmail("");
-    setPhone("");
-    setComment("");
-    setCourse("");
-    setMenu("");
-    setMenuOptions([]);
-
-    handleClose();
   };
-
+  
   return (
     <>
       <ToastContainer />
       <Modal show={show} onHide={handleClose}>
         <Modal.Header className="d-flex align-items-center">
           <Modal.Title className="me-auto">Create New Booking</Modal.Title>
-          <IconButton onClick={handleClose} aria-label="close" style={{ color: "black" }}>
+          <IconButton
+            onClick={handleClose}
+            aria-label="close"
+            style={{ color: "black" }}
+          >
             <CloseIcon />
           </IconButton>
         </Modal.Header>
         <Modal.Body>
           <Form>
+            <div className="d-flex mb-3">
+              <Form.Group
+                controlId="formTime"
+                className="mr-2"
+                style={{ flex: 1 }}
+              >
+                <Form.Label>Time</Form.Label>
+                <Form.Control type="time" value={time} disabled />
+              </Form.Group>
+
+              <Form.Group
+                controlId="formTable"
+                className="ml-2"
+                style={{ flex: 1 }}
+              >
+                <Form.Label>Table</Form.Label>
+                <Form.Control as="select" value={table} disabled>
+                  <option value="">{table}</option>
+                </Form.Control>
+              </Form.Group>
+            </div>
+
+            <Form.Group
+              controlId="formGuests"
+              style={{
+                border: "1px solid #ddd",
+                padding: "20px",
+                borderRadius: "8px",
+                maxWidth: "100%",
+                margin: "10px auto", // Center the form group
+              }}
+            >
+              <Form.Label className="text-center w-100">
+                No. of Guests
+              </Form.Label>
+              <div className="d-flex align-items-center justify-content-center">
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => {
+                    if (guests > 1) {
+                      setGuests(guests - 1);
+                    } else {
+                      toast.warn("Number of guests cannot be less than 1.");
+                    }
+                  }}
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    fontSize: "20px",
+                    transition:
+                      "transform 0.2s ease, background-color 0.2s ease",
+                  }}
+                  className="guest-button-minus"
+                >
+                  -
+                </Button>
+
+                <div
+                  style={{
+                    width: "60px",
+                    textAlign: "center",
+                    fontSize: "18px",
+                    margin: "0 10px",
+                  }}
+                >
+                  {guests}
+                </div>
+
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => {
+                    const maxGuests =
+                      newSelectedBookingTable?.table?.table_no_of_seats || 1;
+                    if (guests < maxGuests) {
+                      setGuests(guests + 1);
+                    } else {
+                      toast.warn(
+                        `Number of guests cannot exceed ${maxGuests} for ${newSelectedBookingTable?.table?.table_name}.`
+                      );
+                    }
+                  }}
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    fontSize: "20px",
+                    transition:
+                      "transform 0.2s ease, background-color 0.2s ease",
+                  }}
+                  className="guest-button-plus"
+                >
+                  +
+                </Button>
+              </div>
+              <Form.Text className="text-muted text-center d-block mt-2">
+                Guests limit: Min 1 and Max{" "}
+                {newSelectedBookingTable?.table?.table_no_of_seats || 1}
+              </Form.Text>
+
+              <style jsx>{`
+                .guest-button-minus:hover,
+                .guest-button-plus:hover {
+                  transform: scale(1); /* Increase size */
+                  background-color: #007bff; /* Change background to blue */
+                  border-color: #007bff; /* Change border color to blue */
+                  color: white; /* Change text color to white */
+                }
+              `}</style>
+            </Form.Group>
+
             <Form.Group controlId="formName">
               <Form.Label>Name</Form.Label>
               <Form.Control
@@ -104,30 +242,6 @@ const BookingModal = ({ show, handleClose, onSave, newSelectedBookingTable, book
                 placeholder="Enter your name"
               />
             </Form.Group>
-
-            <Form.Group controlId="formGuests">
-              <Form.Label>No. of Guests</Form.Label>
-              <Form.Control
-                type="number"
-                value={guests}
-                onChange={(e) => setGuests(e.target.value)}
-                placeholder="Enter number of guests"
-              />
-            </Form.Group>
-
-            <div className="d-flex mb-3">
-              <Form.Group controlId="formTime" className="mr-2" style={{ flex: 1 }}>
-                <Form.Label>Time</Form.Label>
-                <Form.Control type="time" value={time} onChange={(e) => setTime(e.target.value)} disabled />
-              </Form.Group>
-
-              <Form.Group controlId="formTable" className="ml-2" style={{ flex: 1 }}>
-                <Form.Label>Table</Form.Label>
-                <Form.Control as="select" value={table} disabled>
-                  <option value="">{table}</option>
-                </Form.Control>
-              </Form.Group>
-            </div>
 
             <Form.Group controlId="formEmail">
               <Form.Label>Email</Form.Label>
@@ -159,27 +273,6 @@ const BookingModal = ({ show, handleClose, onSave, newSelectedBookingTable, book
                 placeholder="Any special requests or comments"
               />
             </Form.Group>
-
-            <Form.Group controlId="formCourse">
-              <Form.Label>Select Course</Form.Label>
-              <Form.Control as="select" value={course} onChange={(e) => setCourse(e.target.value)}>
-                <option value="">Choose a course...</option>
-                <option value="Course 1">Course 1</option>
-                <option value="Course 2">Course 2</option>
-                <option value="Course 3">Course 3</option>
-              </Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId="formMenu">
-              <Form.Label>Select Menu</Form.Label>
-              <Form.Control as="select" value={menu} onChange={(e) => setMenu(e.target.value)} disabled={!menuOptions.length}>
-                <option value="">Choose a menu...</option>
-                {menuOptions.map((menuItem, index) => (
-                  <option key={index} value={menuItem}>{menuItem}</option>
-                ))}
-              </Form.Control>
-            </Form.Group>
-
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -193,23 +286,6 @@ const BookingModal = ({ show, handleClose, onSave, newSelectedBookingTable, book
       </Modal>
     </>
   );
-};
-
-BookingModal.propTypes = {
-  show: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
-  newSelectedBookingTable: PropTypes.shape({
-    table: PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      capacity: PropTypes.number,
-    }),
-    bookingStartTime: PropTypes.string,
-    bookingEndTime: PropTypes.string,
-  }),
-  bookings: PropTypes.array.isRequired,
-  setBookings: PropTypes.func.isRequired,
 };
 
 export default BookingModal;

@@ -522,6 +522,7 @@ const bookingsssssssssssss = [
       {/* <EventTable initialBookings={bookingsssssssssssss} /> */}
       {console.log(AllDataOfAPI,"wefiuhwug")}
       <EventTable initialBookings={AllDataOfAPI} 
+      ChoosenDate={ChoosenDate}
             handleGetAllBookingMainData={() => handleGetAllData(ChoosenDate)}
       
       />

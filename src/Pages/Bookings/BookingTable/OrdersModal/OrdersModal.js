@@ -182,6 +182,8 @@ const OrdersModal = ({
             </p>
           </div>
 
+{selectedGuest?.details?.table_booked_by_resto_admin === 0 && (
+
           <div className="order-table-container">
             <table className="order-table">
               <thead>
@@ -246,11 +248,21 @@ const OrdersModal = ({
             </table>
           </div>
 
+)}
+
+
+
           <div className="order-summary">
+
+          {selectedGuest?.details?.table_booked_by_resto_admin === 0 && (
+
             <p>
               <strong>Total Net Amount: </strong>₹
               {selectedGuest?.details?.billing_amount}
             </p>
+
+            )}
+
             <p>
               <strong>Payment Status: </strong>
               {selectedGuest?.details?.payment_status}

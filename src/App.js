@@ -29,6 +29,7 @@ import BookSlot from "./Pages/BookSlot/BookSlot";
 import EmailModal from "./Pages/Credentials/Login/EmailModal";
 import OtpModal from "./Pages/Credentials/Login/OtpModal";
 import Uploads from "./Pages/Uploads/Uploads";
+import Commission from "./Pages/Commission/Commission";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -119,6 +120,10 @@ function AppContent({ isOffline, loggedIn }) {
           <Route path="/book-slot" element={<BookSlot />} />
           <Route path="/booking" element={<Bookings />} />
           <Route path="/guests" element={<Guests />} />
+
+          <Route path="/commission" element={<Commission />} />
+
+
           <Route path="/orders" element={<Orders />} />
           <Route path="/menu" element={<Menu />} />
           <Route path="/course" element={<Course />} />

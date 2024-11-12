@@ -7,13 +7,15 @@ import { TbNotebook } from "react-icons/tb";
 import { IoPeopleOutline } from "react-icons/io5";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { PiCookingPot } from "react-icons/pi";
-import { MdOutlineFolder } from "react-icons/md";
+import { MdAttachMoney, MdOutlineFolder } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa6";
 import { TbGraph } from "react-icons/tb";
 import { BiSupport } from "react-icons/bi";
 import { GoTrophy } from "react-icons/go";
 import { IoSettingsOutline } from "react-icons/io5";
 import { TbLogout } from "react-icons/tb";
+import { FaDollarSign } from "react-icons/fa";
+import { AiOutlineTransaction } from "react-icons/ai";
 
 const Sidebar = ({ isOpen }) => {
   const [activeItem, setActiveItem] = useState(""); // State to track the active item
@@ -77,18 +79,26 @@ const Sidebar = ({ isOpen }) => {
             </li>
           </Link>
 
-          <Link to="/guests">
+
+
+
+          <Link to="/commission">
             <li
               className={`menu-item ${
-                activeItem === "/guests" ? "active" : ""
+                activeItem === "/commission" ? "active" : ""
               }`}
-              onClick={() => handleItemClick("/guests")}
+              onClick={() => handleItemClick("/commission")}
             >
-              {/* <img src="./assets/images/Sidebar/Guests.png" alt="Guests" /> */}
-              <IoPeopleOutline />
-              <span>Guests</span>
+        
+        <AiOutlineTransaction />
+              <span>Commission</span>
             </li>
           </Link>
+
+
+
+
+      
 {/* 
           <Link to="/orders" className="link">
             <li
@@ -123,6 +133,21 @@ const Sidebar = ({ isOpen }) => {
               <span>Menu</span>
             </li>
           </Link>
+
+
+          <Link to="/guests">
+            <li
+              className={`menu-item ${
+                activeItem === "/guests" ? "active" : ""
+              }`}
+              onClick={() => handleItemClick("/guests")}
+            >
+              {/* <img src="./assets/images/Sidebar/Guests.png" alt="Guests" /> */}
+              <IoPeopleOutline />
+              <span>Guests</span>
+            </li>
+          </Link>
+
 
           <Link to="/profile">
             <li
