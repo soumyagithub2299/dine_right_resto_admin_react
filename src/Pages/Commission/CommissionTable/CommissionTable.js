@@ -15,6 +15,16 @@ const CommissionTable = () => {
 
   const [loading, setLoading] = useState(false);
   const [guestData, setGuestData] = useState([]);
+
+
+
+
+  const [PreviousWithdrawHistoryData, setPreviousWithdrawHistoryData] = useState([]);
+  const [PreviousPaidCommissionHistoryData, setPreviousPaidCommissionHistoryData] = useState([]);
+
+
+
+
   const [showOrdersModal, setShowOrdersModal] = useState(false);
   const [selectedOrderDetails, setSelectedOrderDetails] = useState(null);
 
@@ -34,7 +44,7 @@ const CommissionTable = () => {
 
   const [WalletTab, setWalletTab] = useState("");
   const [TotalCommission, setTotalCommission] = useState("");
-  const [TotalWithdrawRequestAmount, setTotalWithdrawRequestAmount] = useState("00000");
+  const [TotalWithdrawRequestAmount, setTotalWithdrawRequestAmount] = useState("");
   const [TotalNetSell, setTotalNetSell] = useState("");
 
   const [PayCommission, setPayCommission] = useState("Pay Commission");
@@ -67,7 +77,9 @@ const CommissionTable = () => {
         setTotalNetSell(response?.data?.total?.total_billing_amount);
         setTotalCommission(response?.data?.total?.total_commition_amount);
         setWalletTab(response?.data?.total?.total_payout_balance);
+        setTotalWithdrawRequestAmount(response?.data?.total?.total_withdrawal);
 
+        
 
 
       } else {
@@ -87,6 +99,104 @@ const CommissionTable = () => {
     handleGetAllData();
   }, []);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  const handleGetWithdrwalHistoryData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getAllWithdrawals`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setLoading(false);
+
+
+      if (response?.data) {
+
+
+        setPreviousWithdrawHistoryData(response?.data?.data);
+
+      } else {
+        const errorMsg = response?.data?.error_msg || "No Withdrwal Made";
+        toast.info(errorMsg);
+        setPreviousWithdrawHistoryData([]);
+
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Data fetch failed:", error);
+      toast.error("An error occurred, please try again.");
+    }
+  };
+
+
+
+
+
+
+
+
+
+  
+
+  
+  const handleGetPaidCommissionHistoryData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getPaymentHistory`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setLoading(false);
+
+
+      if (response?.data) {
+
+
+        setPreviousPaidCommissionHistoryData(response?.data?.data);
+
+      } else {
+        const errorMsg = response?.data?.error_msg || "No Withdrwal Made";
+        toast.info(errorMsg);
+        setPreviousPaidCommissionHistoryData([]);
+
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Data fetch failed:", error);
+      toast.error("An error occurred, please try again.");
+    }
+  };
+
+
+
   const handleOrdersClick = (guest) => {
     setSelectedOrderDetails(guest);
     setShowOrdersModal(true);
@@ -103,7 +213,63 @@ const CommissionTable = () => {
 
   const handleWithdrawHistoryClick = () => {
     setShowWithdrawHistoryModal(true);
+    handleGetWithdrwalHistoryData();
   };
+
+
+
+
+  const handleWithdrawRequest =async () => {
+
+
+
+    try {
+      // const body = {
+      //   userId: "5",
+      //   booking_date: "sdijfj",
+      //   booking_no_of_guest: "snjdf",
+      //   payment_mod: "bh",
+      // };
+
+      setLoading(true);
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/withdrawalPayment`,
+
+        // body,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setLoading(false);
+
+      if (response.status === 200) {
+
+        setShowWithdrawRequestModal(false);
+        toast.success("Withdraw request submitted successfully.");
+    
+ 
+      } else {
+        toast.error(response.data.error_msg || "Please try again.");
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Error:", error);
+      toast.error("An error occurred. Please try again later.");
+    }
+
+
+
+
+
+  };
+
+
 
 
 
@@ -119,49 +285,27 @@ const CommissionTable = () => {
 
   const handlePaidCommissionHistoryClick = () => {
     setShowPaidCommissionHistoryModal(true);
+    handleGetPaidCommissionHistoryData();
   };
 
 
 
-
-
-
-
-
-  // Dummy data for Withdraw History table
-  const withdrawHistoryData = [
-    { id: 1, date: "2024-10-01", amount: "$100", status: "Completed" },
-    { id: 2, date: "2024-11-10", amount: "$200", status: "Pending" },
-    { id: 3, date: "2024-12-15", amount: "$150", status: "Completed" },
-  ];
-
-
-
-
-
-
-
-
-
-
-  
   const handlePayment = async () => {
     try {
-      const body = {
-        userId: "5",
-        booking_date: "sdijfj",
-        booking_no_of_guest: "snjdf",
-        payment_mod: "bh",
-
-        
-      };
+      // const body = {
+      //   userId: "5",
+      //   booking_date: "sdijfj",
+      //   booking_no_of_guest: "snjdf",
+      //   payment_mod: "bh",
+      // };
 
       setLoading(true);
 
       const response = await axios.post(
-        `${process.env.REACT_APP_DINE_RIGHT_USER_WEBSITE_BASE_API_URL}/api/auth/book_product`,
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/PayMyUnpaidCommission`,
 
-        body,
+        // body,
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -284,24 +428,27 @@ const CommissionTable = () => {
 
 
       <div style={{ display: "flex", gap: "10px" }}>
-  <div
-    style={{
-      backgroundColor: "#ffecb3",
-      padding: "15px",
-      flex: "1",
-      textAlign: "center",
-      cursor: "pointer",
-      border: "1px solid #ddd",
-      borderRadius: "25px",
-      transition: "transform 0.2s ease-in-out",
-    }}
-    onClick={handleWithdrawRequestClick}
-    onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-    onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-    
-  >
-    {DoWithdrawRequest}
-  </div>
+      <div
+  style={{
+    backgroundColor: "#ffecb3",
+    padding: "15px",
+    flex: "1",
+    textAlign: "center",
+    cursor: WalletTab < 0 ? "not-allowed" : "pointer",
+    border: "1px solid #ddd",
+    borderRadius: "25px",
+    transition: "transform 0.2s ease-in-out",
+    opacity: WalletTab < 0 ? 0.5 : 1,
+    pointerEvents: WalletTab < 0 ? "none" : "auto",
+  }}
+  onClick={() => {
+    if (WalletTab >= 0) handleWithdrawRequestClick();
+  }}
+  onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+  onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+>
+  {DoWithdrawRequest}
+</div>
 
   <div
     style={{
@@ -322,28 +469,39 @@ const CommissionTable = () => {
   </div>
 
   <div
-    style={{
-      backgroundColor: "#ffcdd2",
-      padding: "15px",
-      flex: "1",
-      textAlign: "center",
-      cursor: "pointer",
-      border: "1px solid #ddd",
-      borderRadius: "25px",
-      transition: "transform 0.2s ease-in-out",
-    }}
-    onClick={handlePayCommissionRequestClick}
-    onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-    onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-  >
-    {PayCommission}
-  </div>
+  style={{
+    backgroundColor: "#ffcdd2",
+    padding: "15px",
+    flex: "1",
+    textAlign: "center",
+    cursor: WalletTab < 0 ? "pointer" : "not-allowed",
+    border: "1px solid #ddd",
+    borderRadius: "25px",
+    transition: "transform 0.2s ease-in-out",
+    opacity: WalletTab < 0 ? 1 : 0.5,
+    pointerEvents: WalletTab < 0 ? "auto" : "none",
+  }}
+  onClick={() => {
+    if (WalletTab < 0) handlePayCommissionRequestClick();
+  }}
+  onMouseEnter={(e) => {
+    if (WalletTab < 0) e.currentTarget.style.transform = "scale(1.05)";
+  }}
+  onMouseLeave={(e) => {
+    if (WalletTab < 0) e.currentTarget.style.transform = "scale(1)";
+  }}
+>
+  {PayCommission}
+</div>
+
 
 
   { callRazorPay && showPayCommmissionRequestModal && BookingData &&  (
                         <RazorpayPayment
                           BookingData={BookingData}
                           callRazorPay={callRazorPay}
+                          handleGetAllData={handleGetAllData}
+     
                         />
                       )}
 
@@ -404,7 +562,7 @@ const CommissionTable = () => {
               }}
             />
           </Modal.Header>
-          <Modal.Body>Are you sure you want to proceed with the withdraw request?</Modal.Body>
+          <Modal.Body>Are you sure you want to proceed with the withdraw request for ₹ {WalletTab} ?</Modal.Body>
           <Modal.Footer>
             <Button
               variant="secondary"
@@ -422,10 +580,7 @@ const CommissionTable = () => {
             </Button>
             <Button
               variant="primary"
-              onClick={() => {
-                setShowWithdrawRequestModal(false);
-                toast.success("Withdraw request submitted successfully.");
-              }}
+              onClick={handleWithdrawRequest}
               style={{
                 backgroundColor: "#007bff",
                 color: "#fff",
@@ -484,26 +639,35 @@ const CommissionTable = () => {
             />
           </Modal.Header>
           <Modal.Body>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <thead>
-                <tr>
-                  <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>ID</th>
-                  <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Date</th>
-                  <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Amount</th>
-                  <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {withdrawHistoryData.map((entry) => (
-                  <tr key={entry.id}>
-                    <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{entry.id}</td>
-                    <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{entry.date}</td>
-                    <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{entry.amount}</td>
-                    <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{entry.status}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+    <thead>
+      <tr>
+        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Sr. No</th>
+        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Transaction ID</th>
+        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Date</th>
+        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Deposit Amount</th>
+        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Withdraw Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {PreviousWithdrawHistoryData.map((entry, index) => {
+        const formattedDate = new Date(entry.created_at).toLocaleDateString("en-GB");
+
+        return (
+          <tr key={entry.id}>
+            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{index + 1}.</td>
+            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>
+  {entry.transaction_id ? entry.transaction_id : <span style={{ color: "red", fontWeight: "bold" }}>TBA</span>}
+</td>
+
+            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{formattedDate}</td>
+            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>₹ {entry.account_no}</td>
+            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{entry.status}</td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
           </Modal.Body>
           <Modal.Footer>
             <Button
@@ -536,7 +700,7 @@ const CommissionTable = () => {
           style={{ borderRadius: "10px" }}
         >
           <Modal.Header style={{ position: "relative", padding: "20px" }}>
-            <Modal.Title>Paid Commission History</Modal.Title>
+            <Modal.Title>Online Paid Commission History</Modal.Title>
             <FaTimes
               onClick={() => setShowPaidCommissionHistoryModal(false)}
               style={{
@@ -550,27 +714,34 @@ const CommissionTable = () => {
             />
           </Modal.Header>
           <Modal.Body>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <thead>
-                <tr>
-                  <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>ID</th>
-                  <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Date</th>
-                  <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Amount</th>
-                  <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {withdrawHistoryData.map((entry) => (
-                  <tr key={entry.id}>
-                    <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{entry.id}</td>
-                    <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{entry.date}</td>
-                    <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{entry.amount}</td>
-                    <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{entry.status}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </Modal.Body>
+  <table style={{ width: "100%", borderCollapse: "collapse" }}>
+    <thead>
+      <tr>
+        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Sr. No</th>
+        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Payment ID</th>
+        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Date</th>
+        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Deposit Amount</th>
+        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Payment Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {PreviousPaidCommissionHistoryData.map((entry, index) => {
+        const formattedDate = new Date(entry.created_at).toLocaleDateString("en-GB");
+
+        return (
+          <tr key={entry.id}>
+            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{index + 1}.</td>
+            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{entry.razorpay_payment_id}</td>
+            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{formattedDate}</td>
+            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>₹ {entry.deposit_amount}</td>
+            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{entry.razorpay_status}</td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+</Modal.Body>
+
           <Modal.Footer>
             <Button
               variant="secondary"
@@ -608,7 +779,7 @@ const CommissionTable = () => {
                 <th scope="col">Billing Amount ( in ₹ )</th>
                 <th scope="col">Commission ( in ₹  )</th>
                 <th scope="col">Payment Balance ( in ₹ )</th>
-                <th scope="col">Status</th>
+                <th scope="col">Booking Status</th>
 
               </tr>
             </thead>

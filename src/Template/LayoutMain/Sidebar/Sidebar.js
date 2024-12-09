@@ -37,7 +37,10 @@ const Sidebar = ({ isOpen }) => {
 
   return (
     <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
-      <div className="sidebar-menu-container">
+      <div style={{
+    // overflow: "hidden",
+    // position: "fixed", 
+  }} className="sidebar-menu-container">
         {/* Sidebar Menu */}
         <ul className="sidebar-menu">
           <Link to="/dashboard">

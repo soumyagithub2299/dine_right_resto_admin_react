@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const RazorpayPayment = ({ BookingData, callRazorPay }) => {
+const RazorpayPayment = ({ BookingData, callRazorPay,handleGetAllData,handleGetWithdrwalHistoryData ,handleGetPaidCommissionHistoryData}) => {
   const navigate = useNavigate();
   const [isScriptReady, setIsScriptReady] = useState(false);
 
@@ -78,11 +78,16 @@ const RazorpayPayment = ({ BookingData, callRazorPay }) => {
               
               console.log("Payment verified!", data);
               toast.success("Paid Successfully.");
+              handleGetAllData();
+    
+
               // navigate("/user-profile");
 
             })
             .catch((err) => {
-              
+              handleGetAllData();
+      
+
               console.error("Verification failed:", err);
               // alert("Payment verification failed. Please try again.");
               // toast.success("Paid Successfully.");
