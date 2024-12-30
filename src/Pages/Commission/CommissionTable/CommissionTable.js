@@ -181,11 +181,15 @@ const CommissionTable = () => {
 
 
         setPreviousPaidCommissionHistoryData(response?.data?.data);
+    handleGetAllData();
+
 
       } else {
         const errorMsg = response?.data?.error_msg || "No Withdrwal Made";
         toast.info(errorMsg);
         setPreviousPaidCommissionHistoryData([]);
+    handleGetAllData();
+
 
       }
     } catch (error) {
@@ -252,6 +256,8 @@ const CommissionTable = () => {
 
         setShowWithdrawRequestModal(false);
         toast.success("Withdraw request submitted successfully.");
+    handleGetAllData();
+
     
  
       } else {
@@ -323,9 +329,12 @@ const CommissionTable = () => {
         if (response?.data?.order) {
           setBookingData(response?.data?.order);
           setCallRazorPay(true);
+          
         } else {
           setBookingData();
           setCallRazorPay(false);
+    handleGetAllData();
+
         }
 
  

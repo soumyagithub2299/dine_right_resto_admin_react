@@ -107,7 +107,11 @@ const BookingTable = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getAllocatedTables?booking_date=${bookingDate}`,
+
+        // `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getAllocatedTables?booking_date=${bookingDate}`,
+
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getAllDiningAreaBookingAndAllocatedTables?booking_date=${bookingDate}`,
+
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -215,20 +219,19 @@ const BookingTable = () => {
           <div className="table-responsive mb-5">
             <table className="table table-bordered table-guest">
               <thead className="heading_guest">
-                <tr>
-                  <th scope="col">Sr No.</th>
-                  <th scope="col">Guest Name</th>
-                  <th scope="col">Time</th>
+              <tr>
+  <th scope="col" style={{ width: "7%" }}>Sr.</th> {/* 1/12 */}
+  <th scope="col" style={{ width: "15%" }}>Guest</th> {/* 2/12 */}
+  <th scope="col" style={{ width: "15%" }}>Time</th> {/* 2/12 */}
+  <th scope="col" style={{ width: "10%" }}>Total Payment</th> {/* 3/12 */}
+  <th scope="col" style={{ width: "7%" }}>Payment Mode</th> {/* 2/12 */}
+  <th scope="col" style={{ width: "7%" }}>Payment Status</th> {/* 3/12 */}
+  <th scope="col" style={{ width: "7%" }}>Booking Status</th> {/* 2/12 */}
+  <th scope="col" style={{ width: "7%" }}>Guests Count</th> {/* 2/12 */}
+  <th scope="col" style={{ width: "20%" }}>Table</th> {/* 2/12 */}
+  {/* <th scope="col" style={{ width: "5%" }}>Action</th> */} {/* Uncomment if needed */}
+</tr>
 
-                  <th scope="col">Total Payment</th>
-
-                  <th scope="col">Payment Status</th>
-
-                  <th scope="col">Booking Status</th>
-                  <th scope="col">Guests Count</th>
-                  <th scope="col">Table</th>
-                  <th scope="col">Action</th>
-                </tr>
               </thead>
               <tbody>
                 {guestData.map((guest, index) => (
@@ -243,26 +246,39 @@ const BookingTable = () => {
                      
                             <div className="row name-email-guest">
                               <div className="name-guest">
-                                {guest.details?.booking_name}
+                                {guest?.booking_name}
                               </div>
                               <div className="email-guest">
-                                {guest.details?.booking_email}
+                                {guest?.booking_email}
                               </div>
+
+
+
+                              <div style={{color:"blue"}} className="email-guest">
+                                {guest?.booking_id}
+                              </div>
+
+
                             </div>
                          
                         </div>
                       </div>
                     </td>
                     <td className="text-guest">
-                      {formatTime(guest.start_time)}
+                      {formatTime(guest.booking_time)}
                     </td>
 
                     <td className="text-guest">
-                      ₹{guest.details.billing_amount}
+                      ₹{guest.billing_amount}
+                    </td>
+
+                    
+                    <td className="text-guest">
+                      {guest.payment_mod}
                     </td>
 
                     <td className="text-guest">
-                      {guest.details.payment_status}
+                      {guest.payment_status}
                     </td>
 
                     <td
@@ -280,14 +296,14 @@ const BookingTable = () => {
                       </div>
                     </td>
 
-                    <td className="text-guest">{guest.no_of_guest}</td>
-                    <td className="text-guest">{guest.table_name}</td>
-                    <td
+                    <td className="text-guest">{guest.booking_no_of_guest}</td>
+                    <td className="text-guest">{guest.tables}</td>
+                    {/* <td
                       className="edit_guests"
                       onClick={() => handleOrdersClick(guest)}
                     >
                       <span className="material-icons">edit</span>
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
               </tbody>
