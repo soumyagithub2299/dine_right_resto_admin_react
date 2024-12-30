@@ -192,39 +192,126 @@ const OrdersModal = ({
   };
   
   const timeSlots = generateTimeSlots();
-  const [startTime, setStartTime] = useState(startTimeFormatted);
-  const [endTime, setEndTime] = useState(endTimeFormatted);
+
+
+
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
 
 
-useEffect(() => {
-  if (startTimeFormatted && endTimeFormatted) {
-    setStartTime(startTimeFormatted);
-    setEndTime(endTimeFormatted);
-    console.log("Initial startTime set to:", startTimeFormatted);
-    console.log("Initial endTime set to:", endTimeFormatted);
-  }
-}, [startTimeFormatted, endTimeFormatted]);
+  const [startTime, setStartTime] = useState(selectedGuest?.start_time || "");
+  const [endTime, setEndTime] = useState(selectedGuest?.end_time || "");
 
-
-
-  // Enable "Update" button only if times are changed from default values
   useEffect(() => {
-    if (startTime !== startTimeFormatted || endTime !== endTimeFormatted) {
+    if (selectedGuest) {
+      setStartTime(selectedGuest?.start_time);
+      setEndTime(selectedGuest?.end_time);
+    }
+  }, [selectedGuest]);
+
+
+  useEffect(() => {
+    // Enable button if the timings have changed
+    if (
+      selectedGuest &&
+      (startTime !== selectedGuest?.start_time || endTime !== selectedGuest?.end_time)
+    ) {
       setIsButtonEnabled(true);
     } else {
       setIsButtonEnabled(false);
     }
-  }, [startTime, endTime, startTimeFormatted, endTimeFormatted]);
+  }, [startTime, endTime, selectedGuest]);
   
-  const handleUpdate = () => {
-    console.log("Start Time:", startTime);
-    console.log("End Time:", endTime);
-    // Perform any update logic here
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const handleUpdate = async () => {
+    try {
+      if (!selectedGuest?.details?.booking_id) {
+        toast.error("Booking ID is missing.");
+        return;
+      }
+      if (!token) {
+        toast.error("Authorization token is missing.");
+        return;
+      }
+  
+      setLoading(true);
+  
+      // Calculate slot time in minutes
+      const startTimeMinutes = parseInt(startTime.split(":")[0]) * 60 + parseInt(startTime.split(":")[1]);
+      const endTimeMinutes = parseInt(endTime.split(":")[0]) * 60 + parseInt(endTime.split(":")[1]);
+      const slotTime = endTimeMinutes - startTimeMinutes;
+  
+      const response = await axios.patch(
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/updateBookingTimes`,
+        {
+          booking_id: selectedGuest?.details?.booking_id,
+          booking_time: startTime,
+          booking_end_time: endTime,
+          slot_time: slotTime,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      setLoading(false);
+  
+      if (response?.data?.response === true) {
+        handleGetAllData();
+        setOpenStatusDialog(false);
+        handleClose();
+        toast.success(response?.data?.message || "Booking Timing changed successfully.");
+      } else {
+        toast.error(response?.data?.message || "Error in changing Booking Timing.");
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Failed:", error);
+      toast.error("An error occurred, please try again.");
+    }
   };
   
 
 
+
+
+
+  // Generate time options in 15-minute intervals
+  const generateTimeOptions = () => {
+    const times = [];
+    for (let hour = 0; hour < 24; hour++) {
+      for (let minute = 0; minute < 60; minute += 15) {
+        const time24 = `${hour.toString().padStart(2, "0")}:${minute
+          .toString()
+          .padStart(2, "0")}:00`;
+        const time12 = convertTo12HourFormat(hour, minute);
+        times.push({ time24, time12 });
+      }
+    }
+    return times;
+  };
+
+  // Convert 24-hour format to 12-hour AM/PM format
+  const convertTo12HourFormat = (hour, minute) => {
+    const period = hour >= 12 ? "PM" : "AM";
+    const hour12 = hour % 12 || 12; // Convert hour to 12-hour format, with 0 as 12
+    return `${hour12}:${minute.toString().padStart(2, "0")} ${period}`;
+  };
+
+  const timeOptions = generateTimeOptions();
 
 
 
@@ -312,58 +399,72 @@ useEffect(() => {
 
 
             <div>
-            <div>
-        <label>
-          <strong>Start Time:</strong>
-          <select
-  value={startTime}
-  onChange={(e) => setStartTime(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "8px",
-              margin: "10px 0",
-              cursor: "pointer",
-              boxSizing: "border-box",
-            }}
-          >
-         <option value="">Select Start Time</option>
-         {timeSlots.map((time, index) => (
-     <option key={index} value={time}>
-      {time}
-    </option>
-  ))}
-          </select>
-        </label>
-      </div>
 
-      <div>
-        <label>
-          <strong>End Time:</strong>
-          <select
-            value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "8px",
-              margin: "10px 0",
-              cursor: "pointer",
-              boxSizing: "border-box",
-            }}
-          >
-            <option value="">Select End Time</option>
-            {timeSlots.map((time, index) => (
-              <option key={index} value={time}>
-                {time}
-              </option>
-            ))}
-          </select>
-        </label>
+
+
+
+            <div>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
+        <div style={{ flex: 1 }}>
+          <label>
+            <strong>Start Time:</strong>
+            <select
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "8px",
+                margin: "10px 0",
+                boxSizing: "border-box",
+              }}
+            >
+              <option value="">Select Start Time</option>
+              {timeOptions.map(({ time24, time12 }) => (
+                <option key={time24} value={time24}>
+                  {time12}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        <div style={{ flex: 1 }}>
+          <label>
+            <strong>End Time:</strong>
+            <select
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "8px",
+                margin: "10px 0",
+                boxSizing: "border-box",
+              }}
+            >
+              <option value="">Select End Time</option>
+              {timeOptions.map(({ time24, time12 }) => (
+                <option key={time24} value={time24}>
+                  {time12}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
       </div>
+    </div>
+
+
+
+
+
+
+
 
 
       <button
         onClick={handleUpdate} // Replace with your update function
         disabled={!isButtonEnabled}
+
         style={{
           width: "100%",
           padding: "10px",
@@ -383,7 +484,7 @@ useEffect(() => {
           (e.currentTarget.style.backgroundColor = "#4CAF50")
         }
       >
-        Update
+        Update Booking Timings
       </button>
 
       </div>

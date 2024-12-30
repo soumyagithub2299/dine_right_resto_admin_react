@@ -533,68 +533,92 @@ const CommissionTable = () => {
 
 
 
-
-
-
-
-
-
         </div>
 
-        {/* Withdraw Request Confirmation Modal */}
-        <Modal
-          show={showWithdrawRequestModal}
-          onHide={() => setShowWithdrawRequestModal(false)}
-          centered
-          style={{ borderRadius: "10px" }}
-        >
-          <Modal.Header style={{ position: "relative", padding: "20px" }}>
-            <Modal.Title>Confirm Withdraw Request</Modal.Title>
-            <FaTimes
-              onClick={() => setShowWithdrawRequestModal(false)}
-              style={{
-                fontSize: "1.5em",
-                position: "absolute",
-                top: "15px",
-                right: "15px",
-                cursor: "pointer",
-                color: "#6c757d"
-              }}
-            />
-          </Modal.Header>
-          <Modal.Body>Are you sure you want to proceed with the withdraw request for ₹ {WalletTab} ?</Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() => setShowWithdrawRequestModal(false)}
-              style={{
-                backgroundColor: "#6c757d",
-                color: "#fff",
-                border: "none",
-                padding: "10px 20px",
-                borderRadius: "5px",
-                fontSize: "1em",
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="primary"
-              onClick={handleWithdrawRequest}
-              style={{
-                backgroundColor: "#007bff",
-                color: "#fff",
-                border: "none",
-                padding: "10px 20px",
-                borderRadius: "5px",
-                fontSize: "1em",
-                marginLeft: "10px",
-              }}
-            >
-              Confirm
-            </Button>
-          </Modal.Footer>
-        </Modal>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div >
+
+{/* Withdraw Request Confirmation Modal */}
+<Modal
+  show={showWithdrawRequestModal}
+  onHide={() => setShowWithdrawRequestModal(false)}
+  centered
+  style={{
+    borderRadius: "10px",
+  }}
+>
+  <Modal.Header style={{ position: "relative", padding: "20px" }}>
+    <Modal.Title>Confirm Withdraw Request</Modal.Title>
+    <FaTimes
+      onClick={() => setShowWithdrawRequestModal(false)}
+      style={{
+        fontSize: "1.5em",
+        position: "absolute",
+        top: "15px",
+        right: "15px",
+        cursor: "pointer",
+        color: "#6c757d",
+      }}
+    />
+  </Modal.Header>
+  <Modal.Body>
+    Are you sure you want to proceed with the withdraw request for ₹ {WalletTab}?
+  </Modal.Body>
+  <Modal.Footer>
+    <Button
+      variant="secondary"
+      onClick={() => setShowWithdrawRequestModal(false)}
+      style={{
+        backgroundColor: "#6c757d",
+        color: "#fff",
+        border: "none",
+        padding: "10px 20px",
+        borderRadius: "5px",
+        fontSize: "1em",
+      }}
+    >
+      Cancel
+    </Button>
+    <Button
+      variant="primary"
+      onClick={handleWithdrawRequest}
+      style={{
+        backgroundColor: "#007bff",
+        color: "#fff",
+        border: "none",
+        padding: "10px 20px",
+        borderRadius: "5px",
+        fontSize: "1em",
+        marginLeft: "10px",
+      }}
+    >
+      Confirm
+    </Button>
+  </Modal.Footer>
+</Modal>
+
+
+</div>
 
 
 
