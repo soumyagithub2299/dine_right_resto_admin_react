@@ -45,7 +45,7 @@ const TableGuest = () => {
         }));
         setGuestData(formattedData);
       } else {
-        const errorMsg = response?.data?.error_msg || "No Bookings Made";
+        const errorMsg = response?.data?.error_msg || "No Guests Found.";
         toast.info(errorMsg);
       }
     } catch (error) {
@@ -92,7 +92,7 @@ const TableGuest = () => {
               {guestData.length === 0 ? (
                 <tr>
                   <td colSpan="6" className="text-center">
-                    No matching results found.
+                    No guests found.
                   </td>
                 </tr>
               ) : (
@@ -102,11 +102,11 @@ const TableGuest = () => {
                     <td>
                       <div className="container-guest">
                         <div className="pic-email-guest">
-                          <img
+                          {/* <img
                             className="img-guest"
                             src={guest.customer_profile_image || "default-image.png"}
                             alt={guest.customer_name}
-                          />
+                          /> */}
                           <div>
                             <div className="name-guest">{guest.customer_name}</div>
                           </div>

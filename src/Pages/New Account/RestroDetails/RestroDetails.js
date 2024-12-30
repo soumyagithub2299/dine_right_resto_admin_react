@@ -100,6 +100,31 @@ const RestroDetails = ({ handleNext, handleBack }) => {
     
 
 
+    if (!restroname) {
+      toast.error("Please enter the restaurant name.");
+      return;
+    }
+    
+    if (!address) {
+      toast.error("Please enter the restaurant address.");
+      return;
+    }
+    
+    if (!restaurantLocation) {
+      toast.error("Please select a city.");
+      return;
+    }
+    
+    if (!selectedRestaurantTypes || selectedRestaurantTypes.length === 0) {
+      toast.error("Please choose at least one restaurant type.");
+      return;
+    }
+    
+    if (!selectedCuisines || selectedCuisines.length === 0) {
+      toast.error("Please choose at least one cuisine.");
+      return;
+    }
+    
 
     const postData = {
       restaurantName: restroname,
@@ -180,7 +205,9 @@ const RestroDetails = ({ handleNext, handleBack }) => {
       {loading && <Loader />}
       <div className="container">
         <div className="new-verify-form">
-          <form className="login-form" onSubmit={handleFormSubmit}>
+          <div className="login-form"
+          //  onSubmit={handleFormSubmit}
+            >
             <h2 className="login-head">
               {/* <FaAngleLeft onClick={handleBack} style={{ cursor: "pointer" }} /> */}
               Add restaurant details
@@ -194,6 +221,8 @@ const RestroDetails = ({ handleNext, handleBack }) => {
 
 
             <RestroBackgroundImg_Register userId={userId}/>
+
+
             <hr style={{ height: "3px", border: "none", backgroundColor: "gray" }} />
 
 
@@ -259,12 +288,12 @@ const RestroDetails = ({ handleNext, handleBack }) => {
               required
               style={{cursor:'pointer'}}
             >
-              <option value="" disabled>
+              <option value=""    style={{cursor:'pointer'}}  disabled>
                 Select Location
               </option>
               {restaurantLocations.map((location) => (
-                <option key={location.city_id} value={location.city_id}>
-                  {location.city_name} {/* Display the city name */}
+                <option     style={{cursor:'pointer'}} key={location.city_id} value={location.city_id}>
+                  {location.city_name}
                 </option>
               ))}
             </select>
@@ -282,11 +311,13 @@ const RestroDetails = ({ handleNext, handleBack }) => {
                           <label
                             key={index}
                             className="checkbox-label checkbox-label-restaurantcheckbox"
+                            style={{cursor:'pointer'}}
                           >
                             <input
                               type="checkbox"
                               value={option.restaurant_type_id}
                               onChange={handleRestaurantTypeChange}
+                              style={{cursor:'pointer'}}
                             />
                             {option.restaurant_type_name}
                           </label>
@@ -314,12 +345,14 @@ const RestroDetails = ({ handleNext, handleBack }) => {
                                 .map((option, index) => (
                                   <label
                                     key={index}
+                                    style={{cursor:'pointer'}}
                                     className="checkbox-label checkbox-label-restaurantcheckbox"
                                   >
                                     <input
                                       type="checkbox"
                                       value={option.cuisine_id}
                                       onChange={handleCuisineChange}
+                                      style={{cursor:'pointer'}}
                                     />
                                     {option.cuisine_name}
                                   </label>
@@ -332,11 +365,13 @@ const RestroDetails = ({ handleNext, handleBack }) => {
                                   <label
                                     key={index}
                                     className="checkbox-label checkbox-label-restaurantcheckbox"
+                                    style={{cursor:'pointer'}}
                                   >
                                     <input
                                       type="checkbox"
                                       value={option.cuisine_id}
                                       onChange={handleCuisineChange}
+                                      style={{cursor:'pointer'}}
                                     />
                                     {option.cuisine_name}
                                   </label>
@@ -349,6 +384,8 @@ const RestroDetails = ({ handleNext, handleBack }) => {
                                   <label
                                     key={index}
                                     className="checkbox-label checkbox-label-restaurantcheckbox"
+                                    style={{cursor:'pointer'}}
+
                                   >
                                     <input
                                       type="checkbox"
@@ -367,6 +404,8 @@ const RestroDetails = ({ handleNext, handleBack }) => {
                                   <label
                                     key={index}
                                     className="checkbox-label checkbox-label-restaurantcheckbox"
+                                    style={{cursor:'pointer'}}
+
                                   >
                                     <input
                                       type="checkbox"
@@ -391,7 +430,7 @@ const RestroDetails = ({ handleNext, handleBack }) => {
 
             <div className="submit-btn-container">
 
-              <button type="submit" className="login-btn">
+              <button  onClick={handleFormSubmit} className="login-btn">
                 Next
               </button>
 
@@ -439,7 +478,7 @@ const RestroDetails = ({ handleNext, handleBack }) => {
 
 
 
-          </form>
+          </div>
         </div>
       </div>
     </>

@@ -239,17 +239,8 @@ const BookingTable = () => {
                     <td>
                       <div className="container container-guest">
                         <div className="pic-email-guest">
-                          <div className="col-6 col-md-2">
-                            <img
-                              className="img-guest"
-                              src={
-                                guest.details?.customer_profile_image ||
-                                "default-image-url.jpg"
-                              }
-                              alt={guest.details?.booking_name}
-                            />
-                          </div>
-                          <div className="col-6 col-md-4">
+                       
+                     
                             <div className="row name-email-guest">
                               <div className="name-guest">
                                 {guest.details?.booking_name}
@@ -258,7 +249,7 @@ const BookingTable = () => {
                                 {guest.details?.booking_email}
                               </div>
                             </div>
-                          </div>
+                         
                         </div>
                       </div>
                     </td>

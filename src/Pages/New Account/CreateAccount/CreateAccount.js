@@ -149,6 +149,8 @@ const CreateAccount = ({ handleNext }) => {
     setLiquorLicense(null); // Remove file
     setLiquorLicenseType(""); // Reset file type
   };
+
+  
   const handleMultipleFileUpload = (files) => {
     const allowedTypes = ["image/png", "image/jpeg", "application/pdf"];
     const newImages = Array.from(files)

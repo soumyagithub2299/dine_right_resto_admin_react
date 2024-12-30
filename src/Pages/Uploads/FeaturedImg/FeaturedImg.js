@@ -129,7 +129,9 @@ const FeaturedImg = () => {
         toast.success(
           response.data.success_msg || "Gallery images uploaded successfully!"
         );
-        handleGetGallery(); // Refresh gallery after successful upload
+        handleGetGallery();
+        window.location.reload();
+
       } else {
         toast.error(response.data.error_msg || "Please try again.");
       }
