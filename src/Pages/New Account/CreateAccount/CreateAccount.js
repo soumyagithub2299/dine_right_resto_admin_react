@@ -358,14 +358,28 @@ const CreateAccount = ({ handleNext }) => {
           </label>
 
           <div style={{ margin: "20px" }}>
-            <input
+            {/* <input
               type="file"
               id="file-upload"
               style={{ display: "none" }}
               onChange={(e) => handleMultipleFileUpload(e.target.files)}
               required
               multiple
-            />
+            /> */}
+
+<input
+  type="file"
+  id="file-upload"
+  style={{ display: "none" }}
+  onChange={(e) => {
+    handleMultipleFileUpload(e.target.files);
+    e.target.value = null; // Reset the input value to allow re-selection of the same file
+  }}
+  required
+  multiple
+/>
+
+
             <label
               htmlFor="file-upload"
               style={{
@@ -499,13 +513,25 @@ const CreateAccount = ({ handleNext }) => {
           </label>
 
           <div style={{ margin: "20px" }}>
-            <input
+            {/* <input
               type="file"
               id="liquor-license-upload"
               style={{ display: "none" }}
               onChange={(e) => handleFileUpload(e.target.files)}
               // required
-            />
+            /> */}
+
+
+<input
+  type="file"
+  id="liquor-license-upload"
+  style={{ display: "none" }}
+  onChange={(e) => {
+    handleFileUpload(e.target.files);
+    e.target.value = null; // Reset the input value to allow re-selection of the same file
+  }}
+/>
+
             <label
               htmlFor="liquor-license-upload"
               style={{

@@ -443,18 +443,29 @@ const CommissionTable = () => {
     padding: "15px",
     flex: "1",
     textAlign: "center",
-    cursor: WalletTab < 0 ? "not-allowed" : "pointer",
+    cursor: WalletTab < 0 ? "pointer" : "not-allowed",
     border: "1px solid #ddd",
     borderRadius: "25px",
     transition: "transform 0.2s ease-in-out",
-    opacity: WalletTab < 0 ? 0.5 : 1,
+    opacity: WalletTab < 0 ? 1 : 0.5,
     pointerEvents: WalletTab < 0 ? "none" : "auto",
   }}
   onClick={() => {
-    if (WalletTab >= 0) handleWithdrawRequestClick();
+    if (WalletTab >= 0) {
+      console.log("first");
+    } else {
+      handleWithdrawRequestClick();
+
+    }
   }}
-  onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-  onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+  
+  onMouseEnter={(e) => {
+    if (WalletTab > 0) e.currentTarget.style.transform = "scale(1.05)";
+  }}
+  onMouseLeave={(e) => {
+    if (WalletTab > 0) e.currentTarget.style.transform = "scale(1)";
+  }}
+  
 >
   {DoWithdrawRequest}
 </div>

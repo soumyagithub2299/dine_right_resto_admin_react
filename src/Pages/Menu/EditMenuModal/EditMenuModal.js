@@ -475,16 +475,21 @@ const EditMenuModal = ({
               required
               sx={{ mb: 2 }}
             />
-            <TextField
-              fullWidth
-              label="Cost in ₹"
-              variant="outlined"
-              type="number"
-              value={cost}
-              onChange={(e) => setCost(e.target.value)}
-              required
-              sx={{ mb: 2 }}
-            />
+         <TextField
+       fullWidth
+       label="Cost in ₹"
+       variant="outlined"
+       type="number"
+       value={cost}
+       onChange={(e) => {
+         const value = e.target.value;
+         if (value === "" || (Number(value) > 0 && !value.includes("-"))) {
+           setCost(value);
+         }
+       }}
+       required
+       sx={{ mb: 2 }}
+     />
             <TextField
               fullWidth
               label="Description"
