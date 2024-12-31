@@ -660,7 +660,7 @@ const CreateAccount = ({ handleNext }) => {
 
           <hr />
 
-          <button type="submit" className="login-btn">
+          <button type="submit"  onClick={handleFormSubmit} className="login-btn">
             Create account
           </button>
 
