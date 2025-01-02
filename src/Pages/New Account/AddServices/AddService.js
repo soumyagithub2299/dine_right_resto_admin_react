@@ -4,6 +4,7 @@ import { FaRegClock } from "react-icons/fa";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Loader from "../../../../src/Loader/Loader/Loader";
+import ScrollToTop from "../../../utils/scrollToTop/ScrollToTop";
 
 const initialHours = (days) => {
   const hours = {};
@@ -179,6 +180,9 @@ const AddService = ({ handleNext, handleBack }) => {
 
   return (
     <>
+      <ScrollToTop />
+
+
       {loading && <Loader />}
 
       <div className="service-container my-5">

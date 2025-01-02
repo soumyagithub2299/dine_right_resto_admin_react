@@ -5,6 +5,7 @@ import axios from "axios";
 import "./DinningArea.css";
 import Loader from "./../../../Loader/Loader/Loader";
 import { toast } from "react-toastify";
+import ScrollToTop from "../../../utils/scrollToTop/ScrollToTop";
 
 const DinningArea = ({ handleNext, handleBack }) => {
   const userId = sessionStorage.getItem("newSignUpRestoUserId");
@@ -89,6 +90,8 @@ const DinningArea = ({ handleNext, handleBack }) => {
 
   return (
     <>
+      <ScrollToTop />
+
       {loading && <Loader />}
       <div className="new-verify-form">
         <div className="verify-form-container">

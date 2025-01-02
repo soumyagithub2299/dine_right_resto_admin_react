@@ -443,20 +443,21 @@ const CommissionTable = () => {
     padding: "15px",
     flex: "1",
     textAlign: "center",
-    cursor: WalletTab < 0 ? "pointer" : "not-allowed",
+    cursor: WalletTab > 0 ? "pointer" : "not-allowed",
     border: "1px solid #ddd",
     borderRadius: "25px",
     transition: "transform 0.2s ease-in-out",
-    opacity: WalletTab < 0 ? 1 : 0.5,
-    pointerEvents: WalletTab < 0 ? "none" : "auto",
+    opacity: WalletTab > 0 ? 1 : 0.5,
+    pointerEvents: WalletTab > 0 ? "none" : "auto",
   }}
   onClick={() => {
-    if (WalletTab >= 0) {
+    if (WalletTab < 0) {
       console.log("first");
     } else {
       handleWithdrawRequestClick();
-
     }
+    // handleWithdrawRequestClick();
+
   }}
   
   onMouseEnter={(e) => {
@@ -683,36 +684,40 @@ const CommissionTable = () => {
             />
           </Modal.Header>
           <Modal.Body>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-    <thead>
-      <tr>
-        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Sr. No</th>
-        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Transaction ID</th>
-        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Date</th>
-        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Deposit Amount</th>
-        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Withdraw Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      {PreviousWithdrawHistoryData.map((entry, index) => {
-        const formattedDate = new Date(entry.created_at).toLocaleDateString("en-GB");
+  {PreviousWithdrawHistoryData.length === 0 ? (
+    <p style={{ textAlign: "center", fontWeight: "bold", color: "red" }}>No data found</p>
+  ) : (
+    <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <thead>
+        <tr>
+          <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Sr. No</th>
+          <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Transaction ID</th>
+          <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Date</th>
+          <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Deposit Amount</th>
+          <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Withdraw Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {PreviousWithdrawHistoryData.map((entry, index) => {
+          const formattedDate = new Date(entry.created_at).toLocaleDateString("en-GB");
 
-        return (
-          <tr key={entry.id}>
-            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{index + 1}.</td>
-            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>
-  {entry.transaction_id ? entry.transaction_id : <span style={{ color: "red", fontWeight: "bold" }}>TBA</span>}
-</td>
+          return (
+            <tr key={entry.id}>
+              <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{index + 1}.</td>
+              <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>
+                {entry.transaction_id ? entry.transaction_id : <span style={{ color: "red", fontWeight: "bold" }}>TBA</span>}
+              </td>
+              <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{formattedDate}</td>
+              <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>₹ {entry.account_no}</td>
+              <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{entry.status}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  )}
+</Modal.Body>
 
-            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{formattedDate}</td>
-            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>₹ {entry.account_no}</td>
-            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{entry.status}</td>
-          </tr>
-        );
-      })}
-    </tbody>
-  </table>
-          </Modal.Body>
           <Modal.Footer>
             <Button
               variant="secondary"
@@ -758,33 +763,38 @@ const CommissionTable = () => {
             />
           </Modal.Header>
           <Modal.Body>
-  <table style={{ width: "100%", borderCollapse: "collapse" }}>
-    <thead>
-      <tr>
-        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Sr. No</th>
-        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Payment ID</th>
-        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Date</th>
-        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Deposit Amount</th>
-        <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Payment Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      {PreviousPaidCommissionHistoryData.map((entry, index) => {
-        const formattedDate = new Date(entry.created_at).toLocaleDateString("en-GB");
+  {PreviousPaidCommissionHistoryData.length === 0 ? (
+    <p style={{ textAlign: "center", fontWeight: "bold", color: "red" }}>No data found</p>
+  ) : (
+    <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <thead>
+        <tr>
+          <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Sr. No</th>
+          <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Payment ID</th>
+          <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Date</th>
+          <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Deposit Amount</th>
+          <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Payment Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {PreviousPaidCommissionHistoryData.map((entry, index) => {
+          const formattedDate = new Date(entry.created_at).toLocaleDateString("en-GB");
 
-        return (
-          <tr key={entry.id}>
-            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{index + 1}.</td>
-            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{entry.razorpay_payment_id}</td>
-            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{formattedDate}</td>
-            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>₹ {entry.deposit_amount}</td>
-            <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{entry.razorpay_status}</td>
-          </tr>
-        );
-      })}
-    </tbody>
-  </table>
+          return (
+            <tr key={entry.id}>
+              <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{index + 1}.</td>
+              <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{entry.razorpay_payment_id}</td>
+              <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{formattedDate}</td>
+              <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>₹ {entry.deposit_amount}</td>
+              <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{entry.razorpay_status}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  )}
 </Modal.Body>
+
 
           <Modal.Footer>
             <Button
@@ -806,67 +816,46 @@ const CommissionTable = () => {
 
 
 
-
-
-
-
-        
-
         <div className="table-responsive mb-5">
-          <table className="table table-bordered table-guest">
-            <thead className="heading_guest">
-              <tr>
+        <table className="table table-bordered table-guest">
+  <thead className="heading_guest">
+    <tr>
+      <th scope="col">Sr No.</th>
+      <th scope="col">Booking ID</th>
+      <th scope="col">Payment Mode</th>
+      <th scope="col">Billing Amount ( in ₹ )</th>
+      <th scope="col">Commission ( in ₹  )</th>
+      <th scope="col">Payment Balance ( in ₹ )</th>
+      <th scope="col">Transaction Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {guestData.length === 0 ? (
+      <tr>
+        <td colSpan="7" className="text-center">
+          No results found.
+        </td>
+      </tr>
+    ) : (
+      guestData.map((guest, index) => (
+        <tr key={guest.customer_id}>
+          <th scope="row">{index + 1}.</th>
+          <td>{guest?.booking_id}</td>
+          <td><strong>{guest?.payment_mod}</strong></td>
+          <td>{guest?.billing_amount}</td>
+          <td>{guest?.commition_amount}</td>
+          <td>
+            <strong style={{ color: guest?.payout_balance < 0 ? 'red' : '#006400' }}>
+              {guest?.payout_balance}
+            </strong>
+          </td>
+          <td>{guest?.status}</td>
+        </tr>
+      ))
+    )}
+  </tbody>
+</table>
 
-                <th scope="col">Sr No.</th>
-                <th scope="col">Booking ID</th>
-                <th scope="col">Payment Mode</th>
-                <th scope="col">Billing Amount ( in ₹ )</th>
-                <th scope="col">Commission ( in ₹  )</th>
-                <th scope="col">Payment Balance ( in ₹ )</th>
-                <th scope="col">Booking Status</th>
-
-              </tr>
-            </thead>
-            <tbody>
-              {guestData.length === 0 ? (
-                <tr>
-                  <td colSpan="6" className="text-center">
-                    No results found.
-                  </td>
-                </tr>
-              ) : (
-                guestData.map((guest, index) => (
-                  <tr key={guest.customer_id}>
-
-                    <th scope="row">{index + 1}.</th>
-                    <td>{guest?.booking_id}</td>
-                  <td>  <strong>{guest?.payment_mod}</strong>  </td>
-                    <td>{guest?.billing_amount}</td>
-                    <td>{guest?.commition_amount}</td>
-
-
-                    <td>
-  <strong style={{ color: guest?.payout_balance < 0 ? 'red' : '#006400' }}>
-    {guest?.payout_balance}
-  </strong>
-</td>
-
-
-
-
-                    <td>{guest?.status}</td>
-
-                    {/* <td>
-                      <Button variant="link" onClick={() => handleOrdersClick(guest)}>
-                        Orders
-                      </Button>
-                    </td> */}
-
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
         </div>
 
         {/* {showOrdersModal && selectedOrderDetails && (

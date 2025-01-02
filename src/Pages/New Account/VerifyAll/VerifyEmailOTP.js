@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import "./VerifyNumber.css";
 import Loader from "../../../Loader/Loader/Loader";
+import ScrollToTop from "../../../utils/scrollToTop/ScrollToTop";
 
 const VerifyEmailOTP = ({ isOpen, handleNext, handleBack }) => {
   
@@ -156,6 +157,10 @@ const VerifyEmailOTP = ({ isOpen, handleNext, handleBack }) => {
 
   return (
     <>
+
+<ScrollToTop />
+
+
       {loading && <Loader />} 
 
       <div className="new-verify-form">

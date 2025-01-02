@@ -64,36 +64,28 @@ const BeverageMenuListingDynamic = ({ AllData, handleGetAllData,handleGetBaverga
               border: "1px solid #dee2e6",
               borderRadius: "5px",
               cursor: "pointer",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
+              // display: "flex",
+              // justifyContent: "space-between",
+              // alignItems: "center",
             }}
           >
-            <div
-              className="Header-flex-Course"
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <div style={{ flex: 1 }}>{menu_name}</div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginLeft: "auto",
-                }}
-              >
-                <span className="icon" style={{ marginRight: "10px" }}>
-                  {activeKey === "0" ? (
-                    <MdKeyboardArrowUp />
-                  ) : (
-                    <MdKeyboardArrowDown />
-                  )}
-                </span>
-              </div>
-            </div>
+
+
+
+
+
+
+<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+  <div style={{ width: "1000px", textAlign: "left" }}> {/* Left-align the menu_name */}
+    {menu_name}
+  </div>
+
+  <div className="icon" style={{ width: "30px" }}>
+    {activeKey === "0" ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+  </div>
+</div>
+
+
           </Accordion.Header>
 
           <Accordion.Body>
@@ -196,6 +188,8 @@ const BeverageMenuListingDynamic = ({ AllData, handleGetAllData,handleGetBaverga
                                     fontWeight: "bold",
                                     color: "#28a745",
                                     fontSize: "1.1rem",
+                                    marginLeft:"15px",
+                                    
                                   }}
                                 >
                                   Price: ₹{item.master_item_price}

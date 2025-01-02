@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import Loader from "../../../Loader/Loader/Loader";
 import SignUpSuccessModal from "../../SignUpSuccessModal";
+import ScrollToTop from "../../../utils/scrollToTop/ScrollToTop";
 
 const AddTable = ({ handleBack }) => {
   const userId = sessionStorage.getItem("newSignUpRestoUserId");
@@ -148,6 +149,8 @@ const AddTable = ({ handleBack }) => {
 
   return (
     <>
+      <ScrollToTop />
+
     
     {loading && <Loader />}
     

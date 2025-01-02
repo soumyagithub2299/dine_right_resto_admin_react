@@ -28,7 +28,8 @@ const EventTable = ({ ChoosenDate,initialBookings, handleGetAllBookingMainData }
     } else if (initialBookings) {
       setAPI_Bookings(initialBookings);
     }
-  }, [initialBookings]);
+  
+  }, [initialBookings,ChoosenDate]);
   
 
   // const [selectedTimeZone, setSelectedTimeZone] = useState("Morning");
@@ -112,17 +113,30 @@ const EventTable = ({ ChoosenDate,initialBookings, handleGetAllBookingMainData }
         bookingStartTime
       ); // Pass bookingStartTime as timeSlot
 
-      if (booking) {
-        setSelectedBooking({
-          ...booking,
-          startTime: bookingStartTime,
-          endTime: bookingEndTime,
-        });
-        setOpenDialog(true);
-      } else {
-        setNewSelectedBookingTable({ table, bookingStartTime, bookingEndTime });
-        setNewBookingModal(true);
-      }
+
+
+const today = new Date();
+const isSameDay = ChoosenDate.toDateString() === today.toDateString();
+
+if (isSameDay) {
+  toast.info("You cannot book for past dates!");
+  setNewBookingModal(false);
+} else {
+  if (booking) {
+    setSelectedBooking({
+      ...booking,
+      startTime: bookingStartTime,
+      endTime: bookingEndTime,
+    });
+    setOpenDialog(true);
+  } else {
+    setNewSelectedBookingTable({ table, bookingStartTime, bookingEndTime });
+    setNewBookingModal(true);
+  }
+}
+
+
+
     } else {
       console.error("Table or timeSlot is missing or invalid.");
     }

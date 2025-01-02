@@ -8,8 +8,12 @@ import { toast } from "react-toastify";
 import "./RestroDetails.css";
 import Loader from "../../../../src/Loader/Loader/Loader";
 import RestroBackgroundImg_Register from "../../Uploads/RestroBackgroundImg/RestroBackgroundImg_Register";
+import ScrollToTop from "../../../utils/scrollToTop/ScrollToTop";
 
 const RestroDetails = ({ handleNext, handleBack }) => {
+
+
+
 
   const userId = sessionStorage.getItem("newSignUpRestoUserId");
 
@@ -202,6 +206,8 @@ const RestroDetails = ({ handleNext, handleBack }) => {
 
   return (
     <>
+      <ScrollToTop />
+
       {loading && <Loader />}
       <div className="container">
         <div className="new-verify-form">

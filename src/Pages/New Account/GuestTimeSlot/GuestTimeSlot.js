@@ -7,6 +7,7 @@ import { BiMinus } from "react-icons/bi";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Loader from "../../../../src/Loader/Loader/Loader";
+import ScrollToTop from "../../../utils/scrollToTop/ScrollToTop";
 
 const GuestTimeSlot = ({ handleNext, handleBack }) => {
 
@@ -143,6 +144,8 @@ const GuestTimeSlot = ({ handleNext, handleBack }) => {
 
   return (
     <>
+      <ScrollToTop />
+
       {loading && <Loader />}
       <div className="container Main_AddTable my-5">
         <p className="Heading_AddTable mb-4">Add Guest Time</p>
