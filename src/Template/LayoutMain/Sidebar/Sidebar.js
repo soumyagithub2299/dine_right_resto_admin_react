@@ -22,7 +22,7 @@ const Sidebar = ({ isOpen }) => {
   const location = useLocation(); // Get the current location
 
   useEffect(() => {
-    console.log("Component updated, current value:", isOpen);
+    // console.log("Component updated, current value:", isOpen);
   }, [isOpen]);
 
   // Set active item based on the current path

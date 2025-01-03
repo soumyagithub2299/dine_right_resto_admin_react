@@ -30,8 +30,8 @@ import EmailModal from "./Pages/Credentials/Login/EmailModal";
 import OtpModal from "./Pages/Credentials/Login/OtpModal";
 import Uploads from "./Pages/Uploads/Uploads";
 import Commission from "./Pages/Commission/Commission";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import { ToastContainer } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -137,7 +137,7 @@ function AppContent({ isOffline, loggedIn }) {
         </Route>
       </Routes>
       {/* <Footer /> */}
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </>
   );
 }

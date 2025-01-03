@@ -520,11 +520,11 @@ const bookingsssssssssssss = [
 
 <div>
       {/* <EventTable initialBookings={bookingsssssssssssss} /> */}
-      {console.log(AllDataOfAPI,"wefiuhwug")}
-      <EventTable initialBookings={AllDataOfAPI} 
+
+      <EventTable 
+      initialBookings={AllDataOfAPI} 
       ChoosenDate={ChoosenDate}
-            handleGetAllBookingMainData={() => handleGetAllData(ChoosenDate)}
-      
+      handleGetAllBookingMainData={() => handleGetAllData(ChoosenDate)}
       />
 
     </div>

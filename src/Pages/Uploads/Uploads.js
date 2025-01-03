@@ -35,7 +35,7 @@ const Uploads = () => {
   }, [value]);
 
   useEffect(() => {
-    console.log("Component updated, current value:", value);
+    // console.log("Component updated, current value:", value);
   }, [value]);
 
   return (

@@ -9,10 +9,13 @@ import {
   Paper,
 } from "@mui/material";
 import BookingModal from "../BookingModal/BookingModal";
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import axios from "axios";
 import Loader from "../../../Loader/Loader/Loader";
 import OrdersModal from "../../Bookings/BookingTable/OrdersModal/OrdersModal";
+import CommonModal from "../../CommonModal";
 
 const EventTable = ({ ChoosenDate,initialBookings, handleGetAllBookingMainData }) => {
 
@@ -96,51 +99,81 @@ const EventTable = ({ ChoosenDate,initialBookings, handleGetAllBookingMainData }
     date2.setHours(hours2, minutes2);
 
     const diffInMs = date2 - date1;
-    return Math.round(diffInMs / 60000); // Convert milliseconds to minutes
+    return Math.round(diffInMs / 60000);
   }
 
-  const handleCellClick = (table, bookingStartTime, bookingEndTime) => {
 
 
-    console.log(table, "table");
-    console.log(bookingStartTime, "bookingStartTime");
-    console.log(bookingEndTime, "bookingEndTime");
+  const [isCommonMassageModalOpen, setIsCommonMassageModalOpen] = useState(false);
+
+
+
+
+
+  const handleCellClick = (e,table, bookingStartTime, bookingEndTime) => {
+
+
+    e.preventDefault();
+
+
+    const today = new Date();
+    const isSameDay = 
+      ChoosenDate.getFullYear() === today.getFullYear() &&
+      ChoosenDate.getMonth() === today.getMonth() &&
+      ChoosenDate.getDate() === today.getDate();
+
 
     if (table?.table_id && table?.table_name && bookingStartTime) {
       const booking = isTableBooked(
         table?.table_id,
         table?.table_name,
         bookingStartTime
-      ); // Pass bookingStartTime as timeSlot
+      ); 
 
+      if (booking) {
+        setSelectedBooking({
+          ...booking,
+          startTime: bookingStartTime,
+          endTime: bookingEndTime,
+        });
+        setOpenDialog(true);
+      }
 
+      else if (isSameDay || !booking) {
+        if (isSameDay) {
+      
+          setNewSelectedBookingTable({ table, bookingStartTime, bookingEndTime });
+          setNewBookingModal(true);
 
-const today = new Date();
-const isSameDay = ChoosenDate.toDateString() === today.toDateString();
-
-if (isSameDay) {
-  toast.info("You cannot book for past dates!");
-  setNewBookingModal(false);
-} else {
-  if (booking) {
-    setSelectedBooking({
-      ...booking,
-      startTime: bookingStartTime,
-      endTime: bookingEndTime,
-    });
-    setOpenDialog(true);
-  } else {
-    setNewSelectedBookingTable({ table, bookingStartTime, bookingEndTime });
-    setNewBookingModal(true);
-  }
-}
-
-
-
+        } else {
+          setIsCommonMassageModalOpen(true);
+          setNewBookingModal(false);
+        }
+      }
+    
     } else {
       console.error("Table or timeSlot is missing or invalid.");
     }
+
+
+
   };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const handleCloseNewBookingModal = () => {
     setNewBookingModal(false);
@@ -937,13 +970,16 @@ if (isSameDay) {
     position: "relative",
     padding: "0px",
   }}
-  onClick={() =>
+
+  onClick={(e) =>
     handleCellClick(
+      e,
       table,
       bookingStartTime,
       bookingEndTime
     )
   }
+
   onMouseEnter={(e) => {
     if (!booking) e.currentTarget.style.backgroundColor = "lightyellow";
   }}
@@ -1100,6 +1136,18 @@ if (isSameDay) {
         />
 
       )}
+
+
+
+{isCommonMassageModalOpen && (
+<CommonModal
+        isOpen={isCommonMassageModalOpen}
+        message="You cannot book for past dates!"
+        onClose={() => setIsCommonMassageModalOpen(false)}
+      />
+)}
+
+
     </>
   );
 };
