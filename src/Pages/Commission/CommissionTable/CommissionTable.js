@@ -448,7 +448,7 @@ const CommissionTable = () => {
     borderRadius: "25px",
     transition: "transform 0.2s ease-in-out",
     opacity: WalletTab > 0 ? 1 : 0.5,
-    pointerEvents: WalletTab > 0 ? "none" : "auto",
+    pointerEvents: WalletTab < 0 ? "none" : "auto",
   }}
   onClick={() => {
     if (WalletTab < 0) {
@@ -456,7 +456,6 @@ const CommissionTable = () => {
     } else {
       handleWithdrawRequestClick();
     }
-    // handleWithdrawRequestClick();
 
   }}
   
