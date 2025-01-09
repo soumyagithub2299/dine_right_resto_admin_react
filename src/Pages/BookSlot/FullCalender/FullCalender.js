@@ -8,6 +8,7 @@ import EventTable from "./EventTable";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Loader from "../../../Loader/Loader/Loader";
+import CommonModal from "../../CommonModal";
 
 const FullCalender = () => {
 
@@ -91,6 +92,7 @@ const FullCalender = () => {
 
 
 
+  const [isCommonMassageModalOpen, setIsCommonMassageModalOpen] = useState(false);
 
 
   const [AllDataOfAPI, setAllDataOfAPI] = useState([]);
@@ -122,14 +124,23 @@ const FullCalender = () => {
 
       if (Array.isArray(response?.data) && response?.data) {
         setAllDataOfAPI(response?.data);
+
         if(response.data.length === 0){
-          const errorMsg = "No Bookings Made";
-          toast.info(errorMsg);
-          }
+
+ 
+          setIsCommonMassageModalOpen(true);
+
+
+          } else{      setIsCommonMassageModalOpen(false);}
+
+
+
+
       } else {
         
-        const errorMsg = response?.data?.error_msg || "No Bookings Made";
+        const errorMsg = response?.data?.error_msg || "An error occurred.";
         toast.info(errorMsg);
+
       }
 
       
@@ -679,6 +690,13 @@ const bookingsssssssssssss = [
 
 
 
+{isCommonMassageModalOpen && (
+<CommonModal
+        isOpen={isCommonMassageModalOpen}
+        message="No new bookings made!"
+        onClose={() => setIsCommonMassageModalOpen(false)}
+      />
+)}
 
       
     </div>

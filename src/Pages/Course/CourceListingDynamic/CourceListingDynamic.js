@@ -128,6 +128,7 @@ const CourceListingDynamic = ({ AllData }) => {
                                   borderBottom: "1px solid #ddd",
                                   paddingBottom: "10px",
                                   width: "100%",
+                                  gap:"18px",
                                 }}
                               >
                                 <div

@@ -211,3 +211,7 @@
 .pagination .page-item {
   /* margin: 0 0.25rem; */
 }
+
+.table-bordered thead th {
+font-size: 16px;
+}

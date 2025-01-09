@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import Loader from "../../../Loader/Loader/Loader";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CommonModal from "../../CommonModal";
 
 const BookingTable = () => {
   const [loading, setLoading] = useState(false);
@@ -91,6 +92,7 @@ const BookingTable = () => {
     });
   };
 
+  const [isCommonMassageModalOpen, setIsCommonMassageModalOpen] = useState(false);
 
 
 
@@ -124,14 +126,19 @@ const BookingTable = () => {
       if (Array.isArray(response?.data) && response?.data) {
         setGuestData(response?.data);
         setNoDataMessage(false); // Hide no data message
+  
         if(response.data.length === 0){
-          const errorMsg = "No Bookings Made";
-          toast.info(errorMsg);
-          }
+
+ 
+          setIsCommonMassageModalOpen(true);
+
+
+          } else{      setIsCommonMassageModalOpen(false);}
+
       } else {
         setGuestData([]); // Clear the previous data
         setNoDataMessage(true); // Show no data message
-        const errorMsg = response?.data?.error_msg || "No Bookings Made";
+        const errorMsg = response?.data?.error_msg || "An error occurred.";
         toast.info(errorMsg);
       }
 
@@ -209,12 +216,21 @@ const BookingTable = () => {
 
 
         {/* Conditionally show the no data message */}
-        {noDataMessage ? (
-          <div className="no-data-message">
-            <strong style={{ color: "red", fontSize: "20px" }}>
-              No bookings available for this date.
-            </strong>
-          </div>
+        {isCommonMassageModalOpen ? (
+     <div
+     className="no-data-message"
+     style={{
+       display: "flex",
+       justifyContent: "center",
+       alignItems: "center",
+       height: "50vh" // Adjust as needed
+     }}
+   >
+     <strong style={{ color: "red", fontSize: "20px" }}>
+       No bookings available for this date.
+     </strong>
+   </div>
+   
         ) : (
           <div className="table-responsive mb-5">
             <table className="table table-bordered table-guest">
@@ -298,12 +314,7 @@ const BookingTable = () => {
 
                     <td className="text-guest">{guest.booking_no_of_guest}</td>
                     <td className="text-guest">{guest.tables}</td>
-                    {/* <td
-                      className="edit_guests"
-                      onClick={() => handleOrdersClick(guest)}
-                    >
-                      <span className="material-icons">edit</span>
-                    </td> */}
+                
                   </tr>
                 ))}
               </tbody>
@@ -319,6 +330,17 @@ const BookingTable = () => {
             handleGetAllData={() => handleGetAllData(ChoosenDate)}
           />
         )}
+
+
+
+{/* {isCommonMassageModalOpen && (
+<CommonModal
+        isOpen={isCommonMassageModalOpen}
+        message="No new bookings made!"
+        onClose={() => setIsCommonMassageModalOpen(false)}
+      />
+)} */}
+
 
         
       </div>

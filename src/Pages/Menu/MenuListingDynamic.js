@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import {
   MdKeyboardArrowDown,
@@ -11,14 +11,20 @@ import EditMenuModal from "./EditMenuModal/EditMenuModal";
 
 import "./MainCourse/MainCourse.css";
 
-const MenuListingDynamic = ({ AllData, handleGetAllData ,handleGetBavergaesAllData}) => {
+const MenuListingDynamic = ({ AllData, handleGetAllData, handleGetBavergaesAllData }) => {
   const [activeKey, setActiveKey] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const accordionRef = useRef(null);
 
   const handleToggle = (key) => {
-    setActiveKey(activeKey === key ? null : key);
+    const newKey = activeKey === key ? null : key;
+    setActiveKey(newKey);
+
+    if (newKey !== null && accordionRef.current) {
+      accordionRef.current.scrollIntoView({ behavior: "smooth" }); // Scroll to the accordion
+    }
   };
 
   const handleDeleteIconClick = (item) => {
@@ -55,7 +61,7 @@ const MenuListingDynamic = ({ AllData, handleGetAllData ,handleGetBavergaesAllDa
   return (
     <div className="container">
       <Accordion activeKey={activeKey}>
-        <Accordion.Item eventKey="0">
+      <Accordion.Item eventKey="0" ref={accordionRef}>
 
 
 
@@ -63,7 +69,7 @@ const MenuListingDynamic = ({ AllData, handleGetAllData ,handleGetBavergaesAllDa
 
 
           <Accordion.Header
-            onClick={() => handleToggle("0")}
+          onClick={() => handleToggle("0")}
             className="AccordionHeader"
             style={{
               backgroundColor: "#f8f9fa",
@@ -83,15 +89,15 @@ const MenuListingDynamic = ({ AllData, handleGetAllData ,handleGetBavergaesAllDa
 
 
 
-<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-  <div style={{ width: "1000px", textAlign: "left" }}> {/* Left-align the menu_name */}
-    {menu_name}
-  </div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+              <div style={{ width: "1000px", textAlign: "left" }}> {/* Left-align the menu_name */}
+                {menu_name}
+              </div>
 
-  <div className="icon" style={{ width: "30px" }}>
-    {activeKey === "0" ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
-  </div>
-</div>
+              <div className="icon" style={{ width: "30px" }}>
+                {activeKey === "0" ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+              </div>
+            </div>
 
 
 
@@ -196,7 +202,7 @@ const MenuListingDynamic = ({ AllData, handleGetAllData ,handleGetBavergaesAllDa
                               fontWeight: "bold",
                               color: "#28a745",
                               fontSize: "1.1rem", // Adjusted font size for better visibility
-                              marginLeft:"15px"
+                              marginLeft: "15px"
 
                             }}
                           >
@@ -246,15 +252,15 @@ const MenuListingDynamic = ({ AllData, handleGetAllData ,handleGetBavergaesAllDa
                       ))
                     ) : (
                       <span
-                      style={{
+                        style={{
                           color: "red", // Bootstrap danger red color
-                          fontWeight: "bold", 
+                          fontWeight: "bold",
                           fontSize: "1rem", // Optional: sets the font size
                           margin: "10px 0", // Optional: adds margin
-                      }}
-                  >
-                      No items available for {menu_name}.
-                  </span>
+                        }}
+                      >
+                        No items available for {menu_name}.
+                      </span>
                     )}
                   </div>
                 </div>

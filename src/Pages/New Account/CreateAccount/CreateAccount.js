@@ -62,68 +62,72 @@ const CreateAccount = ({ handleNext }) => {
   };
 
   const handleFormSubmit = async (e) => {
-
-    //  handleNext();
-
     e.preventDefault();
+  
+    // Email validation regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+    // Validate email
+    if (!emailRegex.test(email)) {
+      setErrors((prev) => ({
+        ...prev,
+        email: "Please enter a valid email address.",
+      }));
+      toast.error("Please enter a valid email address.");
+      return; // Stop form submission if email is invalid
+    } else {
+      setErrors((prev) => ({ ...prev, email: "" })); // Clear error if valid
+    }
+  
+    // Additional validation
     const validationErrors = validateForm();
-
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       Object.values(validationErrors).forEach((error) => toast.error(error));
-    } else {
-      setErrors({});
-
-      try {
-        setLoading(true);
-
-        const formData = new FormData();
-        formData.append("username", name);
-        formData.append("email", email);
-        formData.append("phone", phone);
-        formData.append("pancard", panno);
-        formData.append("gst_no", gstno);
-
-        formData.append("license_image", liquorLicense);
-
-        const imageFiles = uploadedImages.map(image => image.file);
-
-        imageFiles.forEach(file => {
-          formData.append('image', file);
-        });
-
-
-
-        const response = await axios.post(
-          `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/createOrUpdate`,
-          formData
+      return; // Stop form submission if other validations fail
+    }
+  
+    setErrors({}); // Clear all errors if validations pass
+  
+    try {
+      setLoading(true);
+  
+      const formData = new FormData();
+      formData.append("username", name);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("pancard", panno);
+      formData.append("gst_no", gstno);
+      formData.append("license_image", liquorLicense);
+  
+      const imageFiles = uploadedImages.map((image) => image.file);
+      imageFiles.forEach((file) => {
+        formData.append('image', file);
+      });
+  
+      const response = await axios.post(
+        `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/createOrUpdate`,
+        formData
+      );
+  
+      setLoading(false);
+  
+      if (response.data.response === true) {
+        toast.success(response.data.success_msg || "Submitted successfully!");
+        sessionStorage.setItem("newSignUpRestoUserId", response?.data?.userId);
+        handleNext();
+      } else {
+        toast.error(
+          response.data.error_msg || "Error creating account. Please try again."
         );
-
-        setLoading(false);
-
-        if (response.data.response === true) {
-
-          toast.success(response.data.success_msg || "Submitted successfully!");
-
-          sessionStorage.setItem("newSignUpRestoUserId",response?.data?.userId);
-
-         handleNext();
-
-
-        } else {
-          toast.error(
-            response.data.error_msg ||
-              "Error creating account. Please try again."
-          );
-        }
-      } catch (error) {
-        setLoading(false);
-        console.error("Error during account creation:", error);
-        toast.error("An error occurred during account creation.");
       }
+    } catch (error) {
+      setLoading(false);
+      console.error("Error during account creation:", error);
+      toast.error("An error occurred during account creation.");
     }
   };
-
+  
   const handleFileUpload = (files) => {
     const file = files[0];
     const allowedTypes = ["image/png", "image/jpeg", "application/pdf"];
@@ -150,7 +154,7 @@ const CreateAccount = ({ handleNext }) => {
     setLiquorLicenseType(""); // Reset file type
   };
 
-  
+
   const handleMultipleFileUpload = (files) => {
     const allowedTypes = ["image/png", "image/jpeg", "application/pdf"];
     const newImages = Array.from(files)
@@ -232,18 +236,7 @@ const CreateAccount = ({ handleNext }) => {
               const { value } = e.target;
               setEmail(value);
 
-              // Email validation regex
-              const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-              // Validate email
-              if (emailRegex.test(value)) {
-                setErrors((prev) => ({ ...prev, email: "" })); // Clear error if valid
-              } else {
-                setErrors((prev) => ({
-                  ...prev,
-                  email: "Please enter a valid email address.",
-                }));
-              }
+             
             }}
             required
           />
@@ -367,17 +360,17 @@ const CreateAccount = ({ handleNext }) => {
               multiple
             /> */}
 
-<input
-  type="file"
-  id="file-upload"
-  style={{ display: "none" }}
-  onChange={(e) => {
-    handleMultipleFileUpload(e.target.files);
-    e.target.value = null; // Reset the input value to allow re-selection of the same file
-  }}
-  required
-  multiple
-/>
+            <input
+              type="file"
+              id="file-upload"
+              style={{ display: "none" }}
+              onChange={(e) => {
+                handleMultipleFileUpload(e.target.files);
+                e.target.value = null; // Reset the input value to allow re-selection of the same file
+              }}
+              required
+              multiple
+            />
 
 
             <label
@@ -522,15 +515,15 @@ const CreateAccount = ({ handleNext }) => {
             /> */}
 
 
-<input
-  type="file"
-  id="liquor-license-upload"
-  style={{ display: "none" }}
-  onChange={(e) => {
-    handleFileUpload(e.target.files);
-    e.target.value = null; // Reset the input value to allow re-selection of the same file
-  }}
-/>
+            <input
+              type="file"
+              id="liquor-license-upload"
+              style={{ display: "none" }}
+              onChange={(e) => {
+                handleFileUpload(e.target.files);
+                e.target.value = null; // Reset the input value to allow re-selection of the same file
+              }}
+            />
 
             <label
               htmlFor="liquor-license-upload"
@@ -660,7 +653,7 @@ const CreateAccount = ({ handleNext }) => {
 
           <hr />
 
-          <button type="submit"  onClick={handleFormSubmit} className="login-btn">
+          <button type="submit" onClick={handleFormSubmit} className="login-btn">
             Create account
           </button>
 

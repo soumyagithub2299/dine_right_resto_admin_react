@@ -36,41 +36,50 @@ const BookingModal = ({
     }
   }, [show, newSelectedBookingTable]);
   const handleSave = async () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const phoneRegex = /^[0-9]{10}$/;
+  
     if (!name || !guests || !time || !table || !email || !phone) {
       toast.error("Please fill all fields!");
       return;
     }
   
-    const formattedTime = time.includes(":") && time.split(":").length === 2 
-      ? `${time}:00` // Add seconds (00) if not already included
-      : time; // Keep the original format if it already includes seconds
-
- 
-  // Manually format the date to avoid timezone issues
-  const year = ChoosenDate.getFullYear();
-  const month = String(ChoosenDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-  const day = String(ChoosenDate.getDate()).padStart(2, '0');
-  const bookingDate = `${year}-${month}-${day}`;
-
-
-
+    if (!emailRegex.test(email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+  
+    if (!phoneRegex.test(phone)) {
+      toast.error("Please enter a valid phone number.");
+      return;
+    }
+  
+    const formattedTime = time.includes(":") && time.split(":").length === 2
+      ? `${time}:00`
+      : time;
+  
+    const year = ChoosenDate.getFullYear();
+    const month = String(ChoosenDate.getMonth() + 1).padStart(2, '0'); 
+    const day = String(ChoosenDate.getDate()).padStart(2, '0');
+    const bookingDate = `${year}-${month}-${day}`;
   
     const bookingData = {
       booking_name: name,
       booking_email: email,
       booking_no_of_guest: guests,
       booking_date: bookingDate,
-      booking_time: formattedTime, // Use the formatted time
-      dining_area_id: newSelectedBookingTable?.table?.dining_area_id, // Default to 1 if no dining area id
+      booking_time: formattedTime,
+      dining_area_id: newSelectedBookingTable?.table?.dining_area_id,
       booking_comment: comment,
-      table_ids: [newSelectedBookingTable?.table?.table_id], // Default to 1 if no table id
+      table_ids: [newSelectedBookingTable?.table?.table_id],
     };
   
     try {
       setLoading(true);
       const response = await axios.post(
         `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/insertNewBooking`,
-        bookingData, // Send the data as the request body
+        bookingData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -81,7 +90,6 @@ const BookingModal = ({
       setLoading(false);
   
       if (response?.data?.response === true) {
-
         toast.success("Booking done successfully!");
         // Clear the form
         setName("");
@@ -93,10 +101,7 @@ const BookingModal = ({
         setComment("");
   
         handleClose(); // Close the modal
-
         handleGetAllData();
-
-
       } else {
         const errorMsg = response.data?.message || "Failed.";
         toast.error(errorMsg);
