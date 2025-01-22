@@ -6,16 +6,18 @@ import { toast } from "react-toastify";
 import Loader from "../../../Loader/Loader/Loader";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { RxCross2 } from "react-icons/rx";
 
 const TableGuest = () => {
   const [loading, setLoading] = useState(false);
   const [guestData, setGuestData] = useState([]);
+  const [filteredGuestData, setFilteredGuestData] = useState([]);
   const [showOrdersModal, setShowOrdersModal] = useState(false);
   const [selectedOrderDetails, setSelectedOrderDetails] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const token = sessionStorage.getItem("TokenForDineRightRestoAdmin");
 
-  // Fetch data from API
   const handleGetAllData = async () => {
     try {
       setLoading(true);
@@ -44,6 +46,7 @@ const TableGuest = () => {
           }),
         }));
         setGuestData(formattedData);
+        setFilteredGuestData(formattedData);
       } else {
         const errorMsg = response?.data?.error_msg || "No Guests Found.";
         toast.info(errorMsg);
@@ -55,27 +58,56 @@ const TableGuest = () => {
     }
   };
 
-  // Fetch data on component mount
   useEffect(() => {
     handleGetAllData();
   }, []);
 
-  // Send the complete guest object to the modal
+  const handleSearch = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+    if (term) {
+      const filteredData = guestData.filter((guest) =>
+        guest.customer_name.toLowerCase().includes(term.toLowerCase())
+      );
+      setFilteredGuestData(filteredData);
+    } else {
+      setFilteredGuestData(guestData);
+    }
+  };
+
+  const clearSearch = () => {
+    setSearchTerm("");
+    setFilteredGuestData(guestData);
+  };
+
   const handleOrdersClick = (guest) => {
-    setSelectedOrderDetails(guest); // Store the entire guest object
-    setShowOrdersModal(true); // Show the modal
+    setSelectedOrderDetails(guest);
+    setShowOrdersModal(true);
   };
 
   const handleCloseOrdersModal = () => {
     setShowOrdersModal(false);
-    setSelectedOrderDetails(null); // Clear the selected guest object
+    setSelectedOrderDetails(null);
   };
 
   return (
     <>
       {loading && <Loader />}
       <div className="p-3">
-        {/* Table for displaying guest data */}
+        <div className="d-flex justify-content-end mb-3">
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search by Guest Name"
+              value={searchTerm}
+              onChange={handleSearch}
+              className="form-control search-input"
+            />
+            {searchTerm && (
+              <RxCross2 className="clear-icon" onClick={clearSearch} />
+            )}
+          </div>
+        </div>
         <div className="table-responsive mb-5">
           <table className="table table-bordered table-guest">
             <thead className="heading_guest">
@@ -85,28 +117,22 @@ const TableGuest = () => {
                 <th scope="col">Email</th>
                 <th scope="col">Booking Date</th>
                 <th scope="col">Booking Time</th>
-                {/* <th scope="col">Orders</th> */}
               </tr>
             </thead>
             <tbody>
-              {guestData.length === 0 ? (
+              {filteredGuestData.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="text-center">
+                  <td colSpan="5" className="text-center">
                     No guests found.
                   </td>
                 </tr>
               ) : (
-                guestData.map((guest, index) => (
+                filteredGuestData.map((guest, index) => (
                   <tr key={guest.customer_id}>
-                    <th scope="row">{index + 1}</th> {/* Serial number */}
+                    <th scope="row">{index + 1}</th>
                     <td>
                       <div className="container-guest">
                         <div className="pic-email-guest">
-                          {/* <img
-                            className="img-guest"
-                            src={guest.customer_profile_image || "default-image.png"}
-                            alt={guest.customer_name}
-                          /> */}
                           <div>
                             <div className="name-guest">{guest.customer_name}</div>
                           </div>
@@ -116,15 +142,6 @@ const TableGuest = () => {
                     <td className="text-guest">{guest.customer_email}</td>
                     <td className="text-guest">{guest.bookingDate}</td>
                     <td className="text-guest">{guest.bookingTime}</td>
-
-                    {/* <td
-                      className="edit_guests"
-                      onClick={() => handleOrdersClick(guest)}
-                    >
-                      Orders
-                    </td> */}
-
-
                   </tr>
                 ))
               )}
@@ -139,8 +156,6 @@ const TableGuest = () => {
             selectedGuest={selectedOrderDetails}
           />
         )}
-
-
       </div>
       <ToastContainer />
     </>

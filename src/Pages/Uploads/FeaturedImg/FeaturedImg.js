@@ -176,7 +176,7 @@ const FeaturedImg = () => {
     } catch (error) {
       setLoading(false);
       console.error("Error fetching gallery files:", error);
-      toast.error("An error occurred. Please try again later.");
+      // toast.error("An error occurred. Please try again later.");
     }
   };
 

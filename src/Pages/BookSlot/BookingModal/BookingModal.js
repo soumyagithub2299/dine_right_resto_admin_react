@@ -193,6 +193,7 @@ const BookingModal = ({
                     fontSize: "18px",
                     margin: "0 10px",
                   }}
+                  
                 >
                   {guests}
                 </div>
@@ -238,7 +239,7 @@ const BookingModal = ({
               `}</style>
             </Form.Group>
 
-            <Form.Group controlId="formName">
+            <Form.Group controlId="formName" className="mb-2">
               <Form.Label>Name</Form.Label>
               <Form.Control
                 type="text"
@@ -248,7 +249,7 @@ const BookingModal = ({
               />
             </Form.Group>
 
-            <Form.Group controlId="formEmail">
+            <Form.Group controlId="formEmail" className="mb-2">
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
@@ -258,7 +259,7 @@ const BookingModal = ({
               />
             </Form.Group>
 
-            <Form.Group controlId="formPhone">
+            <Form.Group controlId="formPhone" className="mb-2">
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
                 type="tel"
@@ -268,7 +269,7 @@ const BookingModal = ({
               />
             </Form.Group>
 
-            <Form.Group controlId="formComment">
+            <Form.Group controlId="formComment" className="mb-2">
               <Form.Label>Booking Comment</Form.Label>
               <Form.Control
                 as="textarea"

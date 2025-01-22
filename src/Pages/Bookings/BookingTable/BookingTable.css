@@ -211,4 +211,17 @@
   .pagination .page-item {
     /* margin: 0 0.25rem; */
   }
+  .search-container {
+    position: relative;
+  }
+  
+  .clear-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #aaa;
+    font-size: 18px;
+  }
   

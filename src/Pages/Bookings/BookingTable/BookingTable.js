@@ -1,48 +1,34 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Loader from "../../../Loader/Loader/Loader";
 import "./BookingTable.css";
 import OrdersModal from "./OrdersModal/OrdersModal";
-import axios from "axios";
-import { toast } from "react-toastify";
-import Loader from "../../../Loader/Loader/Loader";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import CommonModal from "../../CommonModal";
+import { RxCross2 } from "react-icons/rx";
 
 const BookingTable = () => {
   const [loading, setLoading] = useState(false);
   const [guestData, setGuestData] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [showOrdersModal, setShowOrdersModal] = useState(false);
-  const [selectedGuest, setSelectedGuest] = useState(null); // To hold the selected guest object
-  const [noDataMessage, setNoDataMessage] = useState(false); // Flag for no data message
-
+  const [selectedGuest, setSelectedGuest] = useState(null);
+  const [noDataMessage, setNoDataMessage] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const [ChoosenDate, setChoosenDate] = useState();
-
-
 
   const token = sessionStorage.getItem("TokenForDineRightRestoAdmin");
 
-  const formatDate = (date) => {
-    return date.toLocaleDateString("en-US", {
+  const formatDate = (date) =>
+    date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
     });
-  };
 
-  // const formatTime = (time) => {
-  //   const date = new Date(`1970-01-01T${time}Z`);
-  //   return date.toLocaleTimeString("en-US", {
-  //     hour: "2-digit",
-  //     minute: "2-digit",
-  //     hour12: true,
-  //   });
-  // };
-
-  // Function to format the start time from 24-hour to 12-hour format
   const formatTime = (time) => {
     const [hours, minutes] = time.split(":");
-    const date = new Date(); // Using the current date
+    const date = new Date();
     date.setHours(hours);
     date.setMinutes(minutes);
     return date.toLocaleTimeString("en-US", {
@@ -52,31 +38,12 @@ const BookingTable = () => {
     });
   };
 
-  // const handlePrevDay = () => {
-  //   setCurrentDate((prevDate) => {
-  //     const today = new Date();
-  //     today.setHours(0, 0, 0, 0); // Reset the time to 00:00:00 for accurate comparison
-
-  //     const newDate = new Date(prevDate);
-  //     newDate.setDate(newDate.getDate() - 1); // Decrement day by 1
-
-  //     // Check if newDate is before today, prevent update if so
-  //     if (newDate < today) {
-  //       return prevDate; // Return the previous date without changing it
-  //     }
-  //     handleGetAllData(newDate);
-
-  //     return newDate;
-  //   });
-  // };
-
   const handlePrevDay = () => {
     setCurrentDate((prevDate) => {
       const newDate = new Date(prevDate);
-      newDate.setDate(newDate.getDate() - 1); 
-      handleGetAllData(newDate); 
-     setChoosenDate(newDate);
-
+      newDate.setDate(newDate.getDate() - 1);
+      handleGetAllData(newDate);
+      setChoosenDate(newDate);
       return newDate;
     });
   };
@@ -84,36 +51,24 @@ const BookingTable = () => {
   const handleNextDay = () => {
     setCurrentDate((prevDate) => {
       const newDate = new Date(prevDate);
-      newDate.setDate(newDate.getDate() + 1); // Increment day by 1
+      newDate.setDate(newDate.getDate() + 1);
       handleGetAllData(newDate);
-     setChoosenDate(newDate);
-
+      setChoosenDate(newDate);
       return newDate;
     });
   };
 
-  const [isCommonMassageModalOpen, setIsCommonMassageModalOpen] = useState(false);
-
-
-
   const handleGetAllData = async (date) => {
     setChoosenDate(date);
-  // Manually format the date to avoid timezone issues
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-  const day = String(date.getDate()).padStart(2, '0');
-  const bookingDate = `${year}-${month}-${day}`;
-
-
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const bookingDate = `${year}-${month}-${day}`;
 
     try {
       setLoading(true);
       const response = await axios.get(
-
-        // `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getAllocatedTables?booking_date=${bookingDate}`,
-
         `${process.env.REACT_APP_DINE_RIGHT_RESTAURANT_ADMIN_BASE_API_URL}/api/auth/getAllDiningAreaBookingAndAllocatedTables?booking_date=${bookingDate}`,
-
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -125,25 +80,17 @@ const BookingTable = () => {
 
       if (Array.isArray(response?.data) && response?.data) {
         setGuestData(response?.data);
-        setNoDataMessage(false); // Hide no data message
-  
-        if(response.data.length === 0){
+        setNoDataMessage(false);
 
- 
-          setIsCommonMassageModalOpen(true);
-
-
-          } else{      setIsCommonMassageModalOpen(false);}
-
+        if (response.data.length === 0) {
+          setNoDataMessage(true);
+        }
       } else {
-        setGuestData([]); // Clear the previous data
-        setNoDataMessage(true); // Show no data message
+        setGuestData([]);
+        setNoDataMessage(true);
         const errorMsg = response?.data?.error_msg || "An error occurred.";
         toast.info(errorMsg);
       }
-
-
-
     } catch (error) {
       setLoading(false);
       console.error("Verification failed:", error);
@@ -156,172 +103,158 @@ const BookingTable = () => {
     setChoosenDate(currentDate);
   }, [currentDate]);
 
-  // Send the complete guest object to the modal
   const handleOrdersClick = (guest) => {
-    setSelectedGuest(guest); // Store the entire guest object
-    setShowOrdersModal(true); // Show the modal
+    setSelectedGuest(guest);
+    setShowOrdersModal(true);
   };
 
   const handleCloseOrdersModal = () => {
     setShowOrdersModal(false);
-    setSelectedGuest(null); // Clear the selected guest object
+    setSelectedGuest(null);
   };
+
+  const handleClearSearch = () => setSearchTerm("");
+
+  const filteredGuests = guestData.filter((guest) =>
+    guest.booking_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <>
       {loading && <Loader />}
-
       <div className="p-3">
-      <div
-  style={{
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "15px",
-    color: "black", // Set all text to black
-    fontWeight: "bold",
-    fontSize: "20px", // Adjust font size for date text if needed
-  }}
->
-  <button
-    style={{
-      background: "none",
-      border: "none",
-      fontSize: "36px", // Larger font size for bigger arrows
-      color: "black", // Set arrows color to black
-      cursor: "pointer",
-      fontWeight: "bold",
-    }}
-    onClick={handlePrevDay}
-  >
-    &#8592;
-  </button>
-  
-  <span>{formatDate(currentDate)}</span>
-  
-  <button
-    style={{
-      background: "none",
-      border: "none",
-      fontSize: "36px", // Larger font size for bigger arrows
-      color: "black", // Set arrows color to black
-      cursor: "pointer",
-      fontWeight: "bold",
-    }}
-    onClick={handleNextDay}
-  >
-    &#8594;
-  </button>
-</div>
-
-
-        {/* Conditionally show the no data message */}
-        {isCommonMassageModalOpen ? (
-     <div
-     className="no-data-message"
-     style={{
-       display: "flex",
-       justifyContent: "center",
-       alignItems: "center",
-       height: "50vh" // Adjust as needed
-     }}
-   >
-     <strong style={{ color: "red", fontSize: "20px" }}>
-       No bookings available for this date.
-     </strong>
-   </div>
-   
-        ) : (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "15px",
+            color: "black",
+            fontWeight: "bold",
+            fontSize: "20px",
+          }}
+        >
+          <button
+            style={{
+              background: "none",
+              border: "none",
+              fontSize: "36px",
+              color: "black",
+              cursor: "pointer",
+              fontWeight: "bold",
+            }}
+            onClick={handlePrevDay}
+          >
+            &#8592;
+          </button>
+          <span>{formatDate(currentDate)}</span>
+          <button
+            style={{
+              background: "none",
+              border: "none",
+              fontSize: "36px",
+              color: "black",
+              cursor: "pointer",
+              fontWeight: "bold",
+            }}
+            onClick={handleNextDay}
+          >
+            &#8594;
+          </button>
+        </div>
+        <div className="d-flex justify-content-end mb-3">
+          <div className="search-container mb-3">
+            <input
+              type="text"
+              placeholder="Search by Guest Name"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="form-control search-input"
+            />
+            {searchTerm && (
+              <RxCross2 className="clear-icon" onClick={handleClearSearch} />
+            )}
+          </div>
+        </div>
+        {filteredGuests.length === 0 && (
+          <div
+            className="no-data-message"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "50vh",
+            }}
+          >
+            <strong style={{ color: "red", fontSize: "20px" }}>
+              {searchTerm.trim()
+                ? "No results found for your search."
+                : "No bookings available for this date."}
+            </strong>
+          </div>
+        )}
+        {filteredGuests.length > 0 && (
           <div className="table-responsive mb-5">
             <table className="table table-bordered table-guest">
               <thead className="heading_guest">
-              <tr>
-  <th scope="col" style={{ width: "7%" }}>Sr.</th> {/* 1/12 */}
-  <th scope="col" style={{ width: "15%" }}>Guest</th> {/* 2/12 */}
-  <th scope="col" style={{ width: "15%" }}>Time</th> {/* 2/12 */}
-  <th scope="col" style={{ width: "10%" }}>Total Payment</th> {/* 3/12 */}
-  <th scope="col" style={{ width: "7%" }}>Payment Mode</th> {/* 2/12 */}
-  <th scope="col" style={{ width: "7%" }}>Payment Status</th> {/* 3/12 */}
-  <th scope="col" style={{ width: "7%" }}>Booking Status</th> {/* 2/12 */}
-  <th scope="col" style={{ width: "7%" }}>Guests Count</th> {/* 2/12 */}
-  <th scope="col" style={{ width: "20%" }}>Table</th> {/* 2/12 */}
-  {/* <th scope="col" style={{ width: "5%" }}>Action</th> */} {/* Uncomment if needed */}
-</tr>
-
+                <tr>
+                  <th scope="col" style={{ width: "7%" }}>
+                    Sr.
+                  </th>
+                  <th scope="col" style={{ width: "15%" }}>
+                    Guest
+                  </th>
+                  <th scope="col" style={{ width: "15%" }}>
+                    Time
+                  </th>
+                  <th scope="col" style={{ width: "10%" }}>
+                    Total Payment
+                  </th>
+                  <th scope="col" style={{ width: "7%" }}>
+                    Payment Mode
+                  </th>
+                  <th scope="col" style={{ width: "7%" }}>
+                    Payment Status
+                  </th>
+                  <th scope="col" style={{ width: "7%" }}>
+                    Booking Status
+                  </th>
+                  <th scope="col" style={{ width: "7%" }}>
+                    Guests Count
+                  </th>
+                  <th scope="col" style={{ width: "20%" }}>
+                    Table
+                  </th>
+                </tr>
               </thead>
               <tbody>
-                {guestData.map((guest, index) => (
+                {filteredGuests.map((guest, index) => (
                   <tr key={guest.table_id}>
                     <th scope="row" className="id-guest">
                       {index + 1}
                     </th>
-                    <td>
-                      <div className="container container-guest">
-                        <div className="pic-email-guest">
-                       
-                     
-                            <div className="row name-email-guest">
-                              <div className="name-guest">
-                                {guest?.booking_name}
-                              </div>
-                              <div className="email-guest">
-                                {guest?.booking_email}
-                              </div>
-
-
-
-                              <div style={{color:"blue"}} className="email-guest">
-                                {guest?.booking_id}
-                              </div>
-
-
-                            </div>
-                         
-                        </div>
-                      </div>
-                    </td>
-                    <td className="text-guest">
-                      {formatTime(guest.booking_time)}
-                    </td>
-
-                    <td className="text-guest">
-                      ₹{guest.billing_amount}
-                    </td>
-
-                    
-                    <td className="text-guest">
-                      {guest.payment_mod}
-                    </td>
-
-                    <td className="text-guest">
-                      {guest.payment_status}
-                    </td>
-
+                    <td>{guest?.booking_name}</td>
+                    <td>{formatTime(guest.booking_time)}</td>
+                    <td>₹{guest.billing_amount}</td>
+                    <td>{guest.payment_mod}</td>
+                    <td>{guest.payment_status}</td>
                     <td
                       className={`status ${guest.booking_status}`}
-                      style={{ fontWeight: "bold", textTransform: "uppercase" }}
+                      style={{
+                        fontWeight: "bold",
+                        textTransform: "uppercase",
+                      }}
                     >
-                      <div
-                        className={`status-background-${guest.booking_status}`}
-                        style={{
-                          fontWeight: "bold",
-                          textTransform: "uppercase",
-                        }}
-                      >
-                        {guest.booking_status}
-                      </div>
+                      {guest.booking_status}
                     </td>
-
-                    <td className="text-guest">{guest.booking_no_of_guest}</td>
-                    <td className="text-guest">{guest.tables}</td>
-                
+                    <td>{guest.booking_no_of_guest}</td>
+                    <td>{guest.tables}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         )}
-
         {selectedGuest && (
           <OrdersModal
             show={showOrdersModal}
@@ -330,19 +263,6 @@ const BookingTable = () => {
             handleGetAllData={() => handleGetAllData(ChoosenDate)}
           />
         )}
-
-
-
-{/* {isCommonMassageModalOpen && (
-<CommonModal
-        isOpen={isCommonMassageModalOpen}
-        message="No new bookings made!"
-        onClose={() => setIsCommonMassageModalOpen(false)}
-      />
-)} */}
-
-
-        
       </div>
       <ToastContainer />
     </>
