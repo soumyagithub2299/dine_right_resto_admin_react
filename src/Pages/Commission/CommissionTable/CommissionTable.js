@@ -443,7 +443,7 @@ const CommissionTable = () => {
     padding: "15px",
     flex: "1",
     textAlign: "center",
-    cursor: WalletTab > 0 ? "pointer" : "not-allowed",
+    cursor: WalletTab > 0 ? "pointer" : "default",
     border: "1px solid #ddd",
     borderRadius: "25px",
     transition: "transform 0.2s ease-in-out",
@@ -451,8 +451,8 @@ const CommissionTable = () => {
     pointerEvents: WalletTab < 0 ? "none" : "auto",
   }}
   onClick={() => {
-    if (WalletTab < 0) {
-      console.log("first");
+    if (WalletTab <= 0) {
+      // console.log("first");
     } else {
       handleWithdrawRequestClick();
     }
@@ -692,7 +692,7 @@ const CommissionTable = () => {
           <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Sr. No</th>
           <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Transaction ID</th>
           <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Date</th>
-          <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Deposit Amount</th>
+          <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Withdrawal Amount</th>
           <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Withdraw Status</th>
         </tr>
       </thead>
@@ -707,7 +707,7 @@ const CommissionTable = () => {
                 {entry.transaction_id ? entry.transaction_id : <span style={{ color: "red", fontWeight: "bold" }}>TBA</span>}
               </td>
               <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{formattedDate}</td>
-              <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>₹ {entry.account_no}</td>
+              <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>₹ {entry.withdrawal_amount}</td>
               <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{entry.status}</td>
             </tr>
           );
@@ -771,7 +771,7 @@ const CommissionTable = () => {
           <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Sr. No</th>
           <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Payment ID</th>
           <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Date</th>
-          <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Deposit Amount</th>
+          <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Commision Amount</th>
           <th style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>Payment Status</th>
         </tr>
       </thead>
