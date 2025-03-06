@@ -708,7 +708,9 @@ const CommissionTable = () => {
               </td>
               <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{formattedDate}</td>
               <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>₹ {entry.withdrawal_amount}</td>
-              <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>{entry.status}</td>
+              <td style={{ padding: "10px", borderBottom: "1px solid #ddd" }}>
+  {entry.status?.charAt(0).toUpperCase() + entry.status?.slice(1) || '-'}
+</td>
             </tr>
           );
         })}
